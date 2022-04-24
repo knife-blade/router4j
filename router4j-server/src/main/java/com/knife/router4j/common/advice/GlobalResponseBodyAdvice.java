@@ -1,39 +1,38 @@
 package com.knife.router4j.common.advice;
- 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.knife.router4j.common.entity.Result;
+import com.knife.common.constant.WhiteList;
+import com.knife.common.entity.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
- 
-@RestControllerAdvice
-// 也可以：类上加@ControllerAdvice + 方法上加@ResponseBody
+
+@Slf4j
+@ControllerAdvice
 public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
- 
+
     @Override
     public boolean supports(MethodParameter returnType,
                             Class<? extends HttpMessageConverter<?>> converterType) {
         // 若接口返回的类型本身就是ResultWrapper，则无需操作，返回false
         // return !returnType.getParameterType().equals(ResultWrapper.class);
-        System.out.println("GlobalResponseBodyAdvice#supports");
         return true;
     }
- 
+
     @Override
+    @ResponseBody
     public Object beforeBodyWrite(Object body, MethodParameter returnType,
                                   MediaType selectedContentType,
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
-        System.out.println("GlobalResponseBodyAdvice#beforeBodyWrite");
         if (body instanceof String) {
             // 若返回值为String类型，需要包装为String类型返回。否则会报错
             try {
@@ -51,14 +50,14 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         }
         return new Result<>().data(body);
     }
- 
+
     private boolean isKnife4jUrl(String uri) {
-        // AntPathMatcher pathMatcher = new AntPathMatcher();
-        // for (String s : WhiteList.KNIFE4J) {
-        //     if (pathMatcher.match(s, uri)) {
-        //         return true;
-        //     }
-        // }
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        for (String s : WhiteList.KNIFE4J) {
+            if (pathMatcher.match(s, uri)) {
+                return true;
+            }
+        }
         return false;
     }
 }

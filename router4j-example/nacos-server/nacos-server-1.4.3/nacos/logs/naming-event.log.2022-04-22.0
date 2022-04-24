@@ -1,0 +1,16 @@
+2022-04-22 23:39:15,558 INFO DEFAULT_GROUP@@gateway {SYNC} {IP-NEW} cluster: DEFAULT, new ips size: 1, content: [192.168.0.102:6001:unknown:DEFAULT_1.0_true_false_DEFAULT]
+
+2022-04-22 23:39:15,561 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@gateway, ips: 192.168.0.102:6001_true,
+
+2022-04-22 23:39:44,693 INFO DEFAULT_GROUP@@order {SYNC} {IP-NEW} cluster: DEFAULT, new ips size: 1, content: [192.168.0.102:9011:unknown:DEFAULT_1.0_true_false_DEFAULT]
+
+2022-04-22 23:39:44,693 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@order, ips: 192.168.0.102:9011_true,
+
+2022-04-22 23:44:18,147 INFO DEFAULT_GROUP@@gateway {SYNC} {IP-DEAD} cluster: DEFAULT, dead ips size: 1, content: [192.168.0.102:6001:unknown:DEFAULT_1.0_true_false_DEFAULT]
+
+2022-04-22 23:44:18,147 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@gateway, ips: 
+
+2022-04-22 23:48:03,535 INFO DEFAULT_GROUP@@order {SYNC} {IP-DEAD} cluster: DEFAULT, dead ips size: 1, content: [192.168.0.102:9011:unknown:DEFAULT_1.0_true_false_DEFAULT]
+
+2022-04-22 23:48:03,536 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@order, ips: 
+

@@ -1,0 +1,12 @@
+server:
+  port: 9031
+
+spring:
+  application:
+    name: account
+  profiles:
+    include: common
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
