@@ -2,8 +2,6 @@ server:
   port: 9031
 
 spring:
-  application:
-    name: account
   profiles:
     include: common
   cloud:

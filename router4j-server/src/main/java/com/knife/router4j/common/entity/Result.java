@@ -1,6 +1,6 @@
 package com.knife.router4j.common.entity;
 
-import com.knife.common.constant.ResultCode;
+import com.knife.router4j.common.constant.ResultCode;
 import lombok.Data;
 
 @Data

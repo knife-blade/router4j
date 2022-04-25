@@ -2,8 +2,8 @@ package com.knife.router4j.common.advice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.knife.common.constant.WhiteList;
-import com.knife.common.entity.Result;
+import com.knife.router4j.common.constant.WhiteList;
+import com.knife.router4j.common.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

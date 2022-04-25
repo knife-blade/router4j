@@ -1,8 +1,8 @@
 package com.knife.router4j.common.advice;
 
-import com.knife.common.entity.Result;
-import com.knife.common.exception.BusinessException;
-import com.knife.common.exception.SystemException;
+import com.knife.router4j.common.entity.Result;
+import com.knife.router4j.common.exception.BusinessException;
+import com.knife.router4j.common.exception.SystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
