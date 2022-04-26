@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -65,26 +65,6 @@
                 <version>2.5.12</version>
             </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-
-            <resource>
-                <directory>../../common/src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-
-        </resources>
-
     </build>
 
 </project>
