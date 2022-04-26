@@ -1,34 +1,48 @@
 package com.knife.router4j.business.application.util;
 
-import com.alibaba.nacos.api.naming.listener.Event;
-import com.alibaba.nacos.api.naming.listener.EventListener;
-import com.alibaba.nacos.client.naming.NacosNamingService;
-import com.alibaba.nacos.client.naming.core.HostReactor;
-import com.knife.router4j.common.util.ApplicationContextHolder;
-import com.knife.router4j.common.util.JsonUtil;
-import lombok.SneakyThrows;
+import com.knife.router4j.business.application.vo.Instance;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
+@Component
 public class NacosUtil {
 
-    private static NacosNamingService namingService;
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
-    private HostReactor hostReactor;
-
-    @SneakyThrows
-    public static void onEvent(Event event) {
-        log.info("nacos监听到事件消息:{}", JsonUtil.getStringFromObject(event));
-
-        namingService = ApplicationContextHolder.getContext().getBean(NacosNamingService.class);
-        Class<?> cls = Class.forName("com.alibaba.nacos.client.naming.NacosNamingService");
-        Field field = cls.getDeclaredField("hostReactor");
-        field.setAccessible(true);
-        Object hostReactorValue = field.get(namingService);
-        // this.hostReactor = (HostReactor) hostReactorValue;
-        // this.hostReactor.updateServiceNow("服务名", "");
-
+    /**
+     * 获得所有的服务
+     * @return 所有的服务
+     */
+    public List<String> getServices() {
+        return discoveryClient.getServices();
     }
+
+    /**
+     * 根据服务ID获得实例
+     * @param serviceId 服务ID，一般是服务名字
+     * @return 服务对应的所有实例
+     */
+    public List<Instance> getInstances(String serviceId) {
+        List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceId);
+
+        List<Instance> instances = new ArrayList<>();
+        for (ServiceInstance serviceInstance : serviceInstances) {
+            Instance instance = new Instance();
+            instance.setServiceId(serviceInstance.getServiceId());
+            instance.setHost(serviceInstance.getHost());
+            instance.setPort(serviceInstance.getPort());
+            instances.add(instance);
+        }
+        return instances;
+    }
+
 }
