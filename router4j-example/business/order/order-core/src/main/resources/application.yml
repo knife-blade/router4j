@@ -4,8 +4,6 @@ server:
 spring:
   application:
     name: order
-  profiles:
-    include: common
   cloud:
     nacos:
       discovery:

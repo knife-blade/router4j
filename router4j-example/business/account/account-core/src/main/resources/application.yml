@@ -2,8 +2,8 @@ server:
   port: 9031
 
 spring:
-  profiles:
-    include: common
+  application:
+    name: account
   cloud:
     nacos:
       discovery:
