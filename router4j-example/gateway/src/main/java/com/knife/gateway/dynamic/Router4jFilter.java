@@ -24,7 +24,6 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
-// @Order(5000)  这里不能用注解，必须实现Ordered接口
 public class Router4jFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -40,7 +39,7 @@ public class Router4jFilter implements GlobalFilter, Ordered {
         // todo 从redis中取出所有url，然后用rawPath去匹配
 
         String host = "localhost";
-        int port = 9011;
+        int port = 9012;
 
         URI originUri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
 
@@ -66,8 +65,14 @@ public class Router4jFilter implements GlobalFilter, Ordered {
         //         }));
     }
 
+    /**
+     * 这里不能用@Order，必须实现Ordered接口
+     * 值必须大于10150。原因：Gateway有自己的过滤器，两个比较重要的如下：
+     *      RouteToRequestUrlFilter：将根据Route将网关请求转为真实的请求。order = 10000
+     *      ReactiveLoadBalancerClientFilter：负载均衡。order = 10150
+     */
     @Override
     public int getOrder() {
-        return 5000;
+        return 15000;
     }
 }
