@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
-@Order(100)
+@Order(10000)
 public class Router4jFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
