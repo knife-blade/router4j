@@ -3,6 +3,7 @@ package com.knife.dynamic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -29,6 +30,9 @@ public class Router4jClientFilter implements GlobalFilter, Ordered {
 
         //获取域名+端口后的path
         String rawPath = originalRequest.getURI().getRawPath();
+
+        // 这里可以拿到请求的服务名
+        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
 
         // todo 从redis中取出所有url，然后用rawPath去匹配
 
