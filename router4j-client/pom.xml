@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.knife</groupId>
-    <artifactId>router4j-client</artifactId>
+    <artifactId>router4j-client-boot-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>router4j-client</name>
+    <name>router4j-client-boot-starter</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -36,9 +36,9 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
-            <groupId> org.springframework.boot </groupId>
-            <artifactId> spring-boot-configuration-processor </artifactId>
-            <optional> true </optional>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
