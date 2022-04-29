@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.knife</groupId>
-    <artifactId>router4j-client-boot-starter</artifactId>
+    <artifactId>router4j-client-gateway-boot-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>router4j-client-boot-starter</name>
+    <name>router4j-client-gateway-boot-starter</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
