@@ -23,10 +23,7 @@ import static feign.Util.*;
 import static java.lang.String.format;
 
 /**
- * 本方法是在如下类的基础上进行了修改
- *
- * @see Client.Default
- * <p>
+ * 对此类的进行了修改：{@link Client.Default}
  * 修改的方法是：{@link Router4jDefaultModifiedClient#execute(Request, Request.Options)}
  */
 public class Router4jDefaultModifiedClient implements Client {
