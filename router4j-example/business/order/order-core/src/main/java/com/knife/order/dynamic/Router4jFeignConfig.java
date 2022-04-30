@@ -3,19 +3,24 @@ package com.knife.order.dynamic;
 import com.knife.order.dynamic.client.Router4jDefaultModifiedClient;
 import feign.Client;
 import feign.Request;
+import feign.okhttp.OkHttpClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerProperties;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.cloud.openfeign.loadbalancer.FeignBlockingLoadBalancerClient;
 import org.springframework.cloud.openfeign.loadbalancer.OnRetryNotEnabledCondition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
+/**
+ * 重要的类：
+ *      Feign自动配置：{@link FeignAutoConfiguration}
+ *      Feign的Client接口：{@link Client}
+ */
 @Configuration
 public class Router4jFeignConfig {
     /**
@@ -29,8 +34,7 @@ public class Router4jFeignConfig {
      *      那么：我们就可以手动构造一个替换它！
      */
     @Bean
-    @Primary
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingClass({"feign.okhttp.OkHttpClient", "feign.httpclient.ApacheHttpClient"})
     @Conditional(OnRetryNotEnabledCondition.class)
     public Client feignClient(LoadBalancerClient loadBalancerClient,
                               LoadBalancerProperties properties,
@@ -38,5 +42,16 @@ public class Router4jFeignConfig {
         return new FeignBlockingLoadBalancerClient(
                 new Router4jDefaultModifiedClient(null, null),
                 loadBalancerClient, properties, loadBalancerClientFactory);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @Conditional(OnRetryNotEnabledCondition.class)
+    public Client feignClient(okhttp3.OkHttpClient okHttpClient,
+                              LoadBalancerClient loadBalancerClient,
+                              LoadBalancerProperties properties,
+                              LoadBalancerClientFactory loadBalancerClientFactory) {
+        OkHttpClient delegate = new OkHttpClient(okHttpClient);
+        return new FeignBlockingLoadBalancerClient(delegate, loadBalancerClient, properties, loadBalancerClientFactory);
     }
 }

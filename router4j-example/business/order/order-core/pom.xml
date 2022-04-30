@@ -26,6 +26,13 @@
             <artifactId>storage-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <!--    todo 删掉这个依赖  -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+            <version>11.8</version>
+        </dependency>
     </dependencies>
 
 </project>
