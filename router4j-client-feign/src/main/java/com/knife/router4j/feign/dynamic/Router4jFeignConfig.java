@@ -1,4 +1,4 @@
-package com.knife.order.dynamic;
+package com.knife.router4j.feign.dynamic;
 
 import com.knife.order.dynamic.client.Router4jDefaultModifiedClient;
 import feign.Client;
@@ -44,6 +44,9 @@ public class Router4jFeignConfig {
                 loadBalancerClient, properties, loadBalancerClientFactory);
     }
 
+    /**
+     * 重要的类：OkHttpFeignLoadBalancerConfiguration#feignClient(xxx)}
+     */
     @Bean
     @ConditionalOnMissingBean
     @Conditional(OnRetryNotEnabledCondition.class)

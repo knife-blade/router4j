@@ -1,4 +1,4 @@
-package com.knife.order.dynamic.client;
+package com.knife.router4j.feign.dynamic.client;
 
 import feign.Client;
 import feign.Request;
