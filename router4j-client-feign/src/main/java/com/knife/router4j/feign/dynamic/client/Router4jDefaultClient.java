@@ -24,9 +24,9 @@ import static java.lang.String.format;
 
 /**
  * 对此类的进行了修改：{@link Client.Default}
- * 修改的方法是：{@link Router4jDefaultModifiedClient#execute(Request, Request.Options)}
+ * 修改的方法是：{@link Router4jDefaultClient#execute(Request, Request.Options)}
  */
-public class Router4jDefaultModifiedClient implements Client {
+public class Router4jDefaultClient implements Client {
 
     private final SSLSocketFactory sslContextFactory;
     private final HostnameVerifier hostnameVerifier;
@@ -46,7 +46,7 @@ public class Router4jDefaultModifiedClient implements Client {
      * @param sslContextFactory SSLSocketFactory for secure https URL connections.
      * @param hostnameVerifier  the host name verifier.
      */
-    public Router4jDefaultModifiedClient(SSLSocketFactory sslContextFactory, HostnameVerifier hostnameVerifier) {
+    public Router4jDefaultClient(SSLSocketFactory sslContextFactory, HostnameVerifier hostnameVerifier) {
         this.sslContextFactory = sslContextFactory;
         this.hostnameVerifier = hostnameVerifier;
         this.disableRequestBuffering = true;
@@ -60,8 +60,8 @@ public class Router4jDefaultModifiedClient implements Client {
      * @param disableRequestBuffering Disable the request body internal buffering for
      *                                {@code HttpURLConnection}.
      */
-    public Router4jDefaultModifiedClient(SSLSocketFactory sslContextFactory, HostnameVerifier hostnameVerifier,
-                                         boolean disableRequestBuffering) {
+    public Router4jDefaultClient(SSLSocketFactory sslContextFactory, HostnameVerifier hostnameVerifier,
+                                 boolean disableRequestBuffering) {
         super();
         this.sslContextFactory = sslContextFactory;
         this.hostnameVerifier = hostnameVerifier;
