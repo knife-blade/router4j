@@ -1,6 +1,6 @@
-package com.knife.config;
+package com.knife.router4j.gateway;
 
-import com.knife.dynamic.Router4jClientFilter;
+import com.knife.router4j.gateway.filter.Router4jClientFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
