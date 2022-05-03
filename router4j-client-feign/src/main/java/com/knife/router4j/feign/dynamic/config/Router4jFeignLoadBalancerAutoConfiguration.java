@@ -27,11 +27,11 @@ import org.springframework.context.annotation.Import;
 // 这行是自己加的
 @AutoConfigureBefore({FeignLoadBalancerAutoConfiguration.class})
 
-@ConditionalOnClass(Feign.class)
-@ConditionalOnBean({LoadBalancerClient.class, LoadBalancerClientFactory.class})
-@AutoConfigureAfter({BlockingLoadBalancerClientAutoConfiguration.class,
-        LoadBalancerAutoConfiguration.class})
-@EnableConfigurationProperties(FeignHttpClientProperties.class)
+// @ConditionalOnClass(Feign.class)
+// @ConditionalOnBean({LoadBalancerClient.class, LoadBalancerClientFactory.class})
+// @AutoConfigureAfter({BlockingLoadBalancerClientAutoConfiguration.class,
+//         LoadBalancerAutoConfiguration.class})
+// @EnableConfigurationProperties(FeignHttpClientProperties.class)
 @Configuration(proxyBeanMethods = false)
 
 // 上边的直接拷贝自FeignLoadBalancerAutoConfiguration.class

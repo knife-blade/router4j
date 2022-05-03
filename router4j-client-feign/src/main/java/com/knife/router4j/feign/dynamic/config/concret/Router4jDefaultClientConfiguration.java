@@ -1,14 +1,10 @@
 package com.knife.router4j.feign.dynamic.config.concret;
 
 import com.knife.router4j.feign.dynamic.client.Router4jDefaultClient;
-import com.knife.router4j.feign.dynamic.client.Router4jOkHttpClient;
 import feign.Client;
 import feign.Request;
-import feign.okhttp.OkHttpClient;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerProperties;
@@ -28,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 // 没有OkHttpClient和ApacheHttpClient时才生效
 @ConditionalOnMissingClass({"feign.okhttp.OkHttpClient", "feign.httpclient.ApacheHttpClient"})
-@EnableConfigurationProperties(LoadBalancerProperties.class)
 public class Router4jDefaultClientConfiguration {
     /**
      * 自己实现了一个Client：{@link Router4jDefaultClient}

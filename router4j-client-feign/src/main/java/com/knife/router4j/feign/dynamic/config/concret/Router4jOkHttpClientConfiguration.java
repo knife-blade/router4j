@@ -3,23 +3,17 @@ package com.knife.router4j.feign.dynamic.config.concret;
 import com.knife.router4j.feign.dynamic.client.Router4jOkHttpClient;
 import feign.Client;
 import feign.Request;
-import feign.okhttp.OkHttpClient;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerProperties;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
-import org.springframework.cloud.openfeign.clientconfig.OkHttpFeignConfiguration;
 import org.springframework.cloud.openfeign.loadbalancer.FeignBlockingLoadBalancerClient;
 import org.springframework.cloud.openfeign.loadbalancer.OnRetryNotEnabledCondition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * 重要的类：
@@ -27,11 +21,7 @@ import org.springframework.context.annotation.Import;
  *      Feign的Client接口：{@link Client}
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(OkHttpClient.class)
 @ConditionalOnProperty("feign.okhttp.enabled")
-@ConditionalOnBean({ LoadBalancerClient.class, LoadBalancerClientFactory.class })
-@Import(OkHttpFeignConfiguration.class)
-@EnableConfigurationProperties(LoadBalancerProperties.class)
 public class Router4jOkHttpClientConfiguration {
     /**
      * 重要的类：
