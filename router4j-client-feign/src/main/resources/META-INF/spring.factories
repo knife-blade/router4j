@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.knife.router4j.feign.dynamic.Router4jClientConfig
+    com.knife.router4j.feign.dynamic.config.Router4jFeignLoadBalancerAutoConfiguration
