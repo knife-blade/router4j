@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
  * 重要的类：
  * Feign自动配置：{@link FeignAutoConfiguration}
  * Feign的Client接口：{@link Client}
+ * LoadBalancer的自动配置：{@link FeignLoadBalancerAutoConfiguration}
  */
 // 这行是自己加的
 @AutoConfigureBefore({FeignLoadBalancerAutoConfiguration.class})

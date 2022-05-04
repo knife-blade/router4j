@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
  * 重要的类：
  *      Feign自动配置：{@link FeignAutoConfiguration}
  *      Feign的Client接口：{@link Client}
+ *      LoadBalancer配置：DefaultFeignLoadBalancerConfiguration
  */
 @Configuration(proxyBeanMethods = false)
 // 没有OkHttpClient和ApacheHttpClient时才生效

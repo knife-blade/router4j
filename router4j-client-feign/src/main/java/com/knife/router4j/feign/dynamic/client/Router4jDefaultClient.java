@@ -23,8 +23,9 @@ import static feign.Util.*;
 import static java.lang.String.format;
 
 /**
- * 对此类的进行了修改：{@link Client.Default}
- * 修改的方法是：{@link Router4jDefaultClient#execute(Request, Request.Options)}
+ * Router4j提供的基于Default的客户端
+ *   对此类的进行了修改：{@link Client.Default}
+ *   修改的方法是：{@link Router4jDefaultClient#execute(Request, Request.Options)}
  */
 public class Router4jDefaultClient implements Client {
 

@@ -19,8 +19,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 对此类的进行了修改：{@link OkHttpClient}
- * 修改的方法是：{@link Router4jOkHttpClient#execute(feign.Request, feign.Request.Options)}
+ * Router4j提供的基于OkHttpClient的客户端
+ *   对此类的进行了修改：{@link OkHttpClient}
+ *   修改的方法是：{@link Router4jOkHttpClient#execute(feign.Request, feign.Request.Options)}
  */
 public final class Router4jOkHttpClient implements Client {
     private final okhttp3.OkHttpClient delegate;
