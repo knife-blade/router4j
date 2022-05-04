@@ -12,6 +12,7 @@ import okhttp3.Request.Builder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Iterator;
@@ -150,6 +151,14 @@ public final class Router4jOkHttpClient implements Client {
                     .readTimeout((long)options.readTimeoutMillis(), TimeUnit.MILLISECONDS)
                     .followRedirects(options.isFollowRedirects()).build();
         }
+
+        // URL url = new URL(input.url());
+        // String path = url.getPath();
+        // // todo 通过path与Redis的已有规则进行匹配
+        //
+        // URL newUrl = new URL()
+        //
+        // feign.Request.create(input.httpMethod(),)
 
         Request request = toOkHttpRequest(input);
         okhttp3.Response response = requestScoped.newCall(request).execute();
