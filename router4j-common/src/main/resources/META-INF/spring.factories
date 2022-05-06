@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.knife.router4j.common.config.PathRuleConfiguration,\
+  com.knife.router4j.common.config.UrlUtilConfiguration
