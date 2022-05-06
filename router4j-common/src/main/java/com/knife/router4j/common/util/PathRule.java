@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,11 +46,20 @@ public class PathRule {
     }
 
     /**
+     * 获取实例地址已经绑定的规则
+     * @param instanceAddress 实例地址。例如：127.0.0.1:8080
+     * @return 路径规则列表
+     */
+    public List<String> findPathPatterns(String instanceAddress) {
+        return redissonClient.getList(prefix + instanceAddress);
+    }
+
+    /**
      * 通过路径找到规则中的实例
      * @param path 路径。例如：/order/add
      * @return 实例地址。例如：127.0.0.1:8080
      */
-    public String findMatchedHostAndPort(String path) {
+    public String findMatchedInstanceAddress(String path) {
         // key：实例地址  value：最具体的pattern
         Map<String, String> matchedMap = new HashMap<>();
 
@@ -85,4 +95,5 @@ public class PathRule {
 
         return matchedInstanceAddress;
     }
+
 }

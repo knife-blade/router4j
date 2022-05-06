@@ -1,4 +1,4 @@
-package com.knife.router4j.business.application;
+package com.knife.router4j.business.application.controller;
 
 import com.knife.router4j.business.application.util.NacosUtil;
 import com.knife.router4j.business.application.vo.Instance;
