@@ -1,6 +1,6 @@
 package com.knife.router4j.common.util;
 
-import com.knife.router4j.common.entity.InstanceInformation;
+import com.knife.router4j.common.entity.InstanceAddress;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
 import org.redisson.api.RedissonClient;
@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.AntPathMatcher;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +28,13 @@ public class PathRule {
 
     /**
      * 将实例和路径绑定
-     * @param instanceInformation 实例地址
-     * @param pathPattern 路径匹配符。例如：/order/add；/order/**
+     *
+     * @param instanceAddress 实例地址
+     * @param pathPattern     路径匹配符。例如：/order/add；/order/**
      */
-    public void bind(InstanceInformation instanceInformation, String pathPattern) {
+    public void bind(InstanceAddress instanceAddress, String pathPattern) {
         RList<String> list = redissonClient.getList(
-                prefix + instanceInformation.addressWithProtocol());
+                prefix + instanceAddress.addressWithProtocol());
         if (!list.contains(pathPattern)) {
             list.add(pathPattern);
         }
@@ -39,30 +42,33 @@ public class PathRule {
 
     /**
      * 将实例地址和路径解除绑定
-     * @param instanceInformation 实例地址
-     * @param pathPattern 路径匹配符。例如：/order/add；/order/**
+     *
+     * @param instanceAddress 实例地址
+     * @param pathPattern     路径匹配符。例如：/order/add；/order/**
      */
-    public void unbind(InstanceInformation instanceInformation, String pathPattern) {
+    public void unbind(InstanceAddress instanceAddress, String pathPattern) {
         RList<String> list = redissonClient.getList(
-                prefix + instanceInformation.addressWithProtocol());
+                prefix + instanceAddress.addressWithProtocol());
         list.remove(pathPattern);
     }
 
     /**
      * 获取实例地址已经绑定的规则
-     * @param instanceInformation 实例信息
+     *
+     * @param instanceAddress 实例信息
      * @return 路径规则列表
      */
-    public List<String> findPathPatterns(InstanceInformation instanceInformation) {
-        return redissonClient.getList(prefix + instanceInformation.addressWithProtocol());
+    public List<String> findPathPatterns(InstanceAddress instanceAddress) {
+        return redissonClient.getList(prefix + instanceAddress.addressWithProtocol());
     }
 
     /**
      * 通过路径找到规则中的实例
+     *
      * @param path 路径。例如：/order/add
      * @return 实例地址。例如：127.0.0.1:8080
      */
-    public String findMatchedInstanceAddress(String path) {
+    public InstanceAddress findMatchedInstanceAddress(String path) {
         // key：实例地址  value：最具体的pattern
         Map<String, String> matchedMap = new HashMap<>();
 
@@ -86,6 +92,7 @@ public class PathRule {
             }
         }
 
+        //找出匹配的最长的实例
         String matchedInstanceAddress = null;
         String longestPath = "";
 
@@ -96,7 +103,17 @@ public class PathRule {
             }
         }
 
-        return matchedInstanceAddress;
-    }
+        URL url = null;
+        try {
+            url = new URL(matchedInstanceAddress);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        InstanceAddress instanceAddress = new InstanceAddress();
+        instanceAddress.setProtocol(url.getProtocol());
+        instanceAddress.setHost(url.getHost());
+        instanceAddress.setPort(url.getPort());
 
+        return instanceAddress;
+    }
 }

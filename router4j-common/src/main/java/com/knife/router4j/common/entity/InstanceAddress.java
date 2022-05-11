@@ -1,12 +1,13 @@
 package com.knife.router4j.common.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 实例的信息
  */
 @Data
-public class InstanceInformation {
+public class InstanceAddress {
     private String protocol = "http";
 
     private String host;
