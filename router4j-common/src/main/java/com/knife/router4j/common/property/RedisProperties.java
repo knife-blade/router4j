@@ -9,15 +9,13 @@ import java.time.Duration;
  */
 @Data
 public class RedisProperties {
-    private int database = 0;
-
-    private String url;
-
     private String host = "localhost";
 
     private String password;
 
     private int port = 6379;
+
+    private int database = 0;
 
     private boolean ssl;
 

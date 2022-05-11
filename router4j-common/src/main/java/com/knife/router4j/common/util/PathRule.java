@@ -1,6 +1,8 @@
 package com.knife.router4j.common.util;
 
 import com.knife.router4j.common.entity.InstanceAddress;
+import com.knife.router4j.common.property.RuleProperties;
+import com.knife.router4j.common.redis.RedissonHolder;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
 import org.redisson.api.RedissonClient;
@@ -19,10 +21,7 @@ import java.util.Map;
  */
 public class PathRule {
     @Autowired
-    private RedissonClient redissonClient;
-
-    @Value("${router4j.rule.prefix:router4j:rule:prefix:")
-    private String prefix;
+    private RuleProperties ruleProperties;
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -33,8 +32,8 @@ public class PathRule {
      * @param pathPattern     路径匹配符。例如：/order/add；/order/**
      */
     public void bind(InstanceAddress instanceAddress, String pathPattern) {
-        RList<String> list = redissonClient.getList(
-                prefix + instanceAddress.addressWithProtocol());
+        RList<String> list = RedissonHolder.getRedissonClient().getList(
+                ruleProperties.getPrefix() + instanceAddress.addressWithProtocol());
         if (!list.contains(pathPattern)) {
             list.add(pathPattern);
         }
@@ -47,8 +46,8 @@ public class PathRule {
      * @param pathPattern     路径匹配符。例如：/order/add；/order/**
      */
     public void unbind(InstanceAddress instanceAddress, String pathPattern) {
-        RList<String> list = redissonClient.getList(
-                prefix + instanceAddress.addressWithProtocol());
+        RList<String> list = RedissonHolder.getRedissonClient().getList(
+                ruleProperties.getPrefix() + instanceAddress.addressWithProtocol());
         list.remove(pathPattern);
     }
 
@@ -59,7 +58,8 @@ public class PathRule {
      * @return 路径规则列表
      */
     public List<String> findPathPatterns(InstanceAddress instanceAddress) {
-        return redissonClient.getList(prefix + instanceAddress.addressWithProtocol());
+        return RedissonHolder.getRedissonClient().getList(
+                ruleProperties.getPrefix() + instanceAddress.addressWithProtocol());
     }
 
     /**
@@ -72,15 +72,15 @@ public class PathRule {
         // key：实例地址  value：最具体的pattern
         Map<String, String> matchedMap = new HashMap<>();
 
-        RKeys keys = redissonClient.getKeys();
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
         // 模糊查找出所有实例的key
-        Iterable<String> hostAndPortS = keys.getKeysByPattern(prefix + "*");
+        Iterable<String> hostAndPortS = keys.getKeysByPattern(ruleProperties.getPrefix() + "*");
 
         for (String hostAndPort : hostAndPortS) {
 
             // 取出每个实例的所有指定好的路径规则
-            RList<String> pathPatterns = redissonClient.getList(hostAndPort);
+            RList<String> pathPatterns = RedissonHolder.getRedissonClient().getList(hostAndPort);
             for (String pathPattern : pathPatterns) {
                 if (pathMatcher.match(pathPattern, path)) {
                     String patternOfMap = matchedMap.get(hostAndPort);
@@ -103,17 +103,21 @@ public class PathRule {
             }
         }
 
-        URL url = null;
-        try {
-            url = new URL(matchedInstanceAddress);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        InstanceAddress instanceAddress = new InstanceAddress();
-        instanceAddress.setProtocol(url.getProtocol());
-        instanceAddress.setHost(url.getHost());
-        instanceAddress.setPort(url.getPort());
+        if (matchedInstanceAddress == null) {
+            return null;
+        } else {
+            URL url = null;
+            try {
+                url = new URL(matchedInstanceAddress);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            InstanceAddress instanceAddress = new InstanceAddress();
+            instanceAddress.setProtocol(url.getProtocol());
+            instanceAddress.setHost(url.getHost());
+            instanceAddress.setPort(url.getPort());
 
-        return instanceAddress;
+            return instanceAddress;
+        }
     }
 }
