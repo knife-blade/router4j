@@ -1,13 +1,12 @@
 package com.knife.router4j.common.util;
 
 import com.knife.router4j.common.entity.InstanceAddress;
+import com.knife.router4j.common.property.PrefixProperties;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.AntPathMatcher;
 
 import java.net.MalformedURLException;
@@ -21,7 +20,7 @@ import java.util.Map;
  */
 public class PathRule {
     @Autowired
-    private RuleProperties ruleProperties;
+    private RuleProperties rule;
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -33,7 +32,7 @@ public class PathRule {
      */
     public void bind(InstanceAddress instanceAddress, String pathPattern) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                ruleProperties.getPrefix() + instanceAddress.addressWithProtocol());
+                rule.getPrefix().getSetting() + instanceAddress.addressWithProtocol());
         if (!list.contains(pathPattern)) {
             list.add(pathPattern);
         }
@@ -47,7 +46,7 @@ public class PathRule {
      */
     public void unbind(InstanceAddress instanceAddress, String pathPattern) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                ruleProperties.getPrefix() + instanceAddress.addressWithProtocol());
+                rule.getPrefix().getSetting() + instanceAddress.addressWithProtocol());
         list.remove(pathPattern);
     }
 
@@ -59,7 +58,7 @@ public class PathRule {
      */
     public List<String> findPathPatterns(InstanceAddress instanceAddress) {
         return RedissonHolder.getRedissonClient().getList(
-                ruleProperties.getPrefix() + instanceAddress.addressWithProtocol());
+                rule.getPrefix().getSetting() + instanceAddress.addressWithProtocol());
     }
 
     /**
@@ -69,16 +68,20 @@ public class PathRule {
      * @return 实例地址。例如：127.0.0.1:8080
      */
     public InstanceAddress findMatchedInstanceAddress(String path) {
+        // 如果没开启rule功能，则直接返回null
+        if (!rule.getEnable()) {
+            return null;
+        }
+
         // key：实例地址  value：最具体的pattern
         Map<String, String> matchedMap = new HashMap<>();
 
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
         // 模糊查找出所有实例的key
-        Iterable<String> hostAndPortS = keys.getKeysByPattern(ruleProperties.getPrefix() + "*");
+        Iterable<String> hostAndPortS = keys.getKeysByPattern(rule.getPrefix().getSetting() + "*");
 
         for (String hostAndPort : hostAndPortS) {
-
             // 取出每个实例的所有指定好的路径规则
             RList<String> pathPatterns = RedissonHolder.getRedissonClient().getList(hostAndPort);
             for (String pathPattern : pathPatterns) {
@@ -106,18 +109,21 @@ public class PathRule {
         if (matchedInstanceAddress == null) {
             return null;
         } else {
-            URL url = null;
-            try {
-                url = new URL(matchedInstanceAddress);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            InstanceAddress instanceAddress = new InstanceAddress();
-            instanceAddress.setProtocol(url.getProtocol());
-            instanceAddress.setHost(url.getHost());
-            instanceAddress.setPort(url.getPort());
-
-            return instanceAddress;
+            return assembleInstanceAddress(matchedInstanceAddress);
         }
+    }
+
+    private InstanceAddress assembleInstanceAddress(String urlAddress) {
+        URL url = null;
+        try {
+            url = new URL(urlAddress);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        InstanceAddress instanceAddress = new InstanceAddress();
+        instanceAddress.setProtocol(url.getProtocol());
+        instanceAddress.setHost(url.getHost());
+        instanceAddress.setPort(url.getPort());
+        return instanceAddress;
     }
 }

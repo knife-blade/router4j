@@ -1,6 +1,7 @@
 package com.knife.router4j.common.config;
 
 import com.knife.router4j.common.property.RedisProperties;
+import com.knife.router4j.common.property.PrefixProperties;
 import com.knife.router4j.common.property.RuleProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;

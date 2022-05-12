@@ -2,15 +2,18 @@ package com.knife.router4j.common.property;
 
 import lombok.Data;
 
-import java.time.Duration;
-
 /**
- * 规则配置
+ * 规则
  */
 @Data
 public class RuleProperties {
     /**
-     * 存放到Redis里的key的前缀
+     * 是否开启路由功能
      */
-    private String prefix = "router4j:rule:cache:prefix:";
+    private Boolean enable = true;
+
+    /**
+     * 存到Redis里的key的前缀
+     */
+    private PrefixProperties prefix;
 }
