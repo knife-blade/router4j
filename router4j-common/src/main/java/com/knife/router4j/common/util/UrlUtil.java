@@ -1,5 +1,8 @@
 package com.knife.router4j.common.util;
 
+import com.knife.router4j.common.entity.InstanceAddress;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -7,10 +10,15 @@ import java.net.URL;
  * url工具
  */
 public class UrlUtil {
+    @Autowired
+    private PathRule pathRule;
+
     /**
      * 根据规则修改URL
+     * @param url 原先的url
+     * @return 修改后的URL
      */
-    public URL modify(String url) {
+    public URL modifyWithRule(String url) {
         URL originUrl = null;
         try {
             originUrl = new URL(url);
@@ -18,19 +26,7 @@ public class UrlUtil {
             throw new RuntimeException(e);
         }
 
-        String protocol = originUrl.getProtocol();
-        String query = originUrl.getQuery();
-        String ref = originUrl.getRef();
-
-        String path = originUrl.getPath();
-        // todo 通过path与Redis的已有规则进行匹配
-
-        // todo 匹配到后，取出host和port
-        String host = "111.11.111.11";
-        int port = 5200;
-
-        String newUrlString = protocol + "://" + host + ":" + port
-                + path + "?" + query + "#" + ref;
+        String newUrlString = replaceUrlWithRule(originUrl);
 
         URL newUrl = null;
         try {
@@ -39,5 +35,26 @@ public class UrlUtil {
             throw new RuntimeException(e);
         }
         return newUrl;
+    }
+
+    /**
+     * 使用规则来替换url
+     * @param url 原先的url
+     * @return 修改好的url
+     */
+    private String replaceUrlWithRule(URL url) {
+        String protocol = url.getProtocol();
+        String query = url.getQuery();
+        String ref = url.getRef();
+
+        String path = url.getPath();
+        InstanceAddress matchedInstanceAddress =
+                pathRule.findMatchedInstanceAddress(path);
+
+        String host = matchedInstanceAddress.getHost();
+        int port = matchedInstanceAddress.getPort();
+
+        return protocol + "://" + host + ":"
+                + port + path + "?" + query + "#" + ref;
     }
 }
