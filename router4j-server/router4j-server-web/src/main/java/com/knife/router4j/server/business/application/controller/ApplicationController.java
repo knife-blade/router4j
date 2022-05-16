@@ -1,7 +1,7 @@
 package com.knife.router4j.server.business.application.controller;
 
-import com.knife.router4j.server.business.application.util.NacosUtil;
-import com.knife.router4j.server.business.application.vo.Instance;
+import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.server.service.InstanceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +17,18 @@ import java.util.List;
 @RequestMapping("application")
 public class ApplicationController {
     @Autowired
-    private NacosUtil nacosUtil;
+    private InstanceService instanceService;
 
     @ApiOperation("获取所有应用的信息")
     @GetMapping("getAllApplication")
     public List<String> getAllApplication() {
-        return nacosUtil.getServices();
+        return instanceService.findAllServices();
     }
 
     @ApiOperation("根据服务名获得实例")
     @GetMapping("getInstance")
-    public List<Instance> getInstance(@RequestParam String serviceName) {
-        return nacosUtil.getInstances(serviceName);
+    public List<InstanceInfo> getInstance(@RequestParam String serviceName) {
+        return instanceService.findInstances(serviceName);
     }
 
 }
