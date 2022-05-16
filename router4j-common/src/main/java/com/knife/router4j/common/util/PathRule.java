@@ -1,7 +1,6 @@
 package com.knife.router4j.common.util;
 
-import com.knife.router4j.common.entity.InstanceAddress;
-import com.knife.router4j.common.property.PrefixProperties;
+import com.knife.router4j.common.entity.InstanceInfo;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
 import org.redisson.api.RKeys;
@@ -27,12 +26,12 @@ public class PathRule {
     /**
      * 将实例和路径绑定
      *
-     * @param instanceAddress 实例地址
+     * @param instanceInfo 实例地址
      * @param pathPattern     路径匹配符。例如：/order/add；/order/**
      */
-    public void bind(InstanceAddress instanceAddress, String pathPattern) {
+    public void bind(InstanceInfo instanceInfo, String pathPattern) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                rule.getPrefix().getSetting() + instanceAddress.addressWithProtocol());
+                RedisKeyUtil.assembleKey(rule.getPrefix(), instanceInfo));
         if (!list.contains(pathPattern)) {
             list.add(pathPattern);
         }
@@ -41,24 +40,24 @@ public class PathRule {
     /**
      * 将实例地址和路径解除绑定
      *
-     * @param instanceAddress 实例地址
+     * @param instanceInfo 实例地址
      * @param pathPattern     路径匹配符。例如：/order/add；/order/**
      */
-    public void unbind(InstanceAddress instanceAddress, String pathPattern) {
+    public void unbind(InstanceInfo instanceInfo, String pathPattern) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                rule.getPrefix().getSetting() + instanceAddress.addressWithProtocol());
+                RedisKeyUtil.assembleKey(rule.getPrefix(), instanceInfo));
         list.remove(pathPattern);
     }
 
     /**
      * 获取实例地址已经绑定的规则
      *
-     * @param instanceAddress 实例信息
+     * @param instanceInfo 实例信息
      * @return 路径规则列表
      */
-    public List<String> findPathPatterns(InstanceAddress instanceAddress) {
+    public List<String> findPathPatterns(InstanceInfo instanceInfo) {
         return RedissonHolder.getRedissonClient().getList(
-                rule.getPrefix().getSetting() + instanceAddress.addressWithProtocol());
+                RedisKeyUtil.assembleKey(rule.getPrefix(), instanceInfo));
     }
 
     /**
@@ -67,7 +66,7 @@ public class PathRule {
      * @param path 路径。例如：/order/add
      * @return 实例地址。例如：127.0.0.1:8080
      */
-    public InstanceAddress findMatchedInstanceAddress(String path) {
+    public InstanceInfo findMatchedInstanceAddress(String path) {
         // 如果没开启rule功能，则直接返回null
         if (!rule.getEnable()) {
             return null;
@@ -79,7 +78,7 @@ public class PathRule {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
         // 模糊查找出所有实例的key
-        Iterable<String> hostAndPortS = keys.getKeysByPattern(rule.getPrefix().getSetting() + "*");
+        Iterable<String> hostAndPortS = keys.getKeysByPattern(rule.getPrefix() + "*");
 
         for (String hostAndPort : hostAndPortS) {
             // 取出每个实例的所有指定好的路径规则
@@ -113,17 +112,17 @@ public class PathRule {
         }
     }
 
-    private InstanceAddress assembleInstanceAddress(String urlAddress) {
+    private InstanceInfo assembleInstanceAddress(String urlAddress) {
         URL url = null;
         try {
             url = new URL(urlAddress);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        InstanceAddress instanceAddress = new InstanceAddress();
-        instanceAddress.setProtocol(url.getProtocol());
-        instanceAddress.setHost(url.getHost());
-        instanceAddress.setPort(url.getPort());
-        return instanceAddress;
+        InstanceInfo instanceInfo = new InstanceInfo();
+        instanceInfo.setProtocol(url.getProtocol());
+        instanceInfo.setHost(url.getHost());
+        instanceInfo.setPort(url.getPort());
+        return instanceInfo;
     }
 }

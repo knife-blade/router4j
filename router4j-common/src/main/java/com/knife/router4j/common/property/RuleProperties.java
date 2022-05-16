@@ -15,5 +15,5 @@ public class RuleProperties {
     /**
      * 存到Redis里的key的前缀
      */
-    private PrefixProperties prefix;
+    private String prefix;
 }

@@ -1,6 +1,6 @@
 package com.knife.router4j.common.util;
 
-import com.knife.router4j.common.entity.InstanceAddress;
+import com.knife.router4j.common.entity.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.MalformedURLException;
@@ -42,7 +42,7 @@ public class UrlUtil {
      * @param instanceAddress 实例地址。例：http://127.0.0.1:8080
      * @return 实例地址对象
      */
-    public InstanceAddress parse(String instanceAddress) {
+    public InstanceInfo parse(String instanceAddress) {
         URL url = null;
         try {
             url = new URL(instanceAddress);
@@ -50,7 +50,7 @@ public class UrlUtil {
             throw new RuntimeException(e);
         }
 
-        InstanceAddress instance = new InstanceAddress();
+        InstanceInfo instance = new InstanceInfo();
         instance.setProtocol(url.getProtocol());
         instance.setHost(url.getHost());
         instance.setPort(url.getPort());
@@ -69,11 +69,11 @@ public class UrlUtil {
         String ref = url.getRef();
 
         String path = url.getPath();
-        InstanceAddress matchedInstanceAddress =
+        InstanceInfo matchedInstanceInfo =
                 pathRule.findMatchedInstanceAddress(path);
 
-        String host = matchedInstanceAddress.getHost();
-        int port = matchedInstanceAddress.getPort();
+        String host = matchedInstanceInfo.getHost();
+        int port = matchedInstanceInfo.getPort();
 
         return protocol + "://" + host + ":"
                 + port + path + "?" + query + "#" + ref;
