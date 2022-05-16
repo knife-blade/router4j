@@ -17,7 +17,7 @@ public class RegulationEditReq {
      */
     @ApiModelProperty("实例地址")
     @NotBlank(message = "实例地址不能为空")
-    private String instanceAddress;
+    private String InstanceInfo;
 
     /**
      * 旧路径匹配表达式

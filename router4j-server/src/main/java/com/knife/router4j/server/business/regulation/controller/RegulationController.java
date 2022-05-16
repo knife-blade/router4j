@@ -1,6 +1,6 @@
 package com.knife.router4j.server.business.regulation.controller;
 
-import com.knife.router4j.common.entity.InstanceAddress;
+import com.knife.router4j.common.entity.InstanceInfo;
 import com.knife.router4j.common.util.PathRule;
 import com.knife.router4j.common.util.UrlUtil;
 import com.knife.router4j.server.business.regulation.request.RegulationAddReq;
@@ -25,24 +25,17 @@ public class RegulationController {
     @Autowired
     private UrlUtil urlUtil;
 
-    @ApiOperation("查找路径规则")
-    @GetMapping("findPathPatterns")
-    public List<String> findPathPatterns(@RequestParam String instanceAddress) {
-        InstanceAddress instance = urlUtil.parse(instanceAddress);
-        return pathRule.findPathPatterns(instance);
-    }
-
     @ApiOperation("添加规则")
-    @PostMapping("addRegulation")
-    public void addRegulation(@Valid @RequestBody RegulationAddReq addReq) {
-        InstanceAddress instance = urlUtil.parse(addReq.getInstanceAddress());
+    @PostMapping("add")
+    public void add(@Valid @RequestBody RegulationAddReq addReq) {
+        InstanceInfo instance = urlUtil.parse(addReq.getInstanceInfo());
         pathRule.bind(instance, addReq.getPathPattern());
     }
 
     @ApiOperation("修改规则")
-    @PostMapping("editRegulation")
-    public void editRegulation(@Valid @RequestBody RegulationEditReq editReq) {
-        InstanceAddress instance = urlUtil.parse(editReq.getInstanceAddress());
+    @PostMapping("edit")
+    public void edit(@Valid @RequestBody RegulationEditReq editReq) {
+        InstanceInfo instance = urlUtil.parse(editReq.getInstanceInfo());
 
         pathRule.unbind(instance, editReq.getOldPathPattern());
         if (StringUtils.hasText(editReq.getNewPathPattern())) {
@@ -51,9 +44,16 @@ public class RegulationController {
     }
 
     @ApiOperation("删除规则")
-    @PostMapping("deleteRegulation")
-    public void deleteRegulation(@Valid @RequestBody RegulationDeleteReq deleteReq) {
-        InstanceAddress instance = urlUtil.parse(deleteReq.getInstanceAddress());
+    @PostMapping("delete")
+    public void delete(@Valid @RequestBody RegulationDeleteReq deleteReq) {
+        InstanceInfo instance = urlUtil.parse(deleteReq.getInstanceInfo());
         pathRule.bind(instance, deleteReq.getPathPattern());
+    }
+
+    @ApiOperation("查找规则")
+    @GetMapping("find")
+    public List<String> find(@RequestParam String InstanceInfo) {
+        InstanceInfo instance = urlUtil.parse(InstanceInfo);
+        return pathRule.findPathPatterns(instance);
     }
 }
