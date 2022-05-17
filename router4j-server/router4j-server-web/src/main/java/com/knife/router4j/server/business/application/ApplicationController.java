@@ -1,4 +1,4 @@
-package com.knife.router4j.server.business.application.controller;
+package com.knife.router4j.server.business.application;
 
 import com.knife.router4j.common.entity.InstanceInfo;
 import com.knife.router4j.server.service.InstanceService;

@@ -15,5 +15,5 @@ public class RuleProperties {
     /**
      * 存到Redis里的key的前缀
      */
-    private String prefix;
+    private String prefix = "router4j:rule:prefix:";
 }
