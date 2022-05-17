@@ -17,7 +17,7 @@ router4j:
     # timeout: 3s
   rule:
     enable: true
-    # prefix: "router4j:rule:prefix:"
+    # prefix: "router4j:rule:"
 ````
 
 

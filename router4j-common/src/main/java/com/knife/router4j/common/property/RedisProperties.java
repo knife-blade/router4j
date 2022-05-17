@@ -19,5 +19,5 @@ public class RedisProperties {
 
     private boolean ssl;
 
-    private Duration timeout;
+    private Duration timeout = Duration.ofSeconds(3L);
 }

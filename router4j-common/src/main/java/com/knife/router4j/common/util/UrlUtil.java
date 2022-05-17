@@ -11,7 +11,7 @@ import java.net.URL;
  */
 public class UrlUtil {
     @Autowired
-    private PathRule pathRule;
+    private PathRuleUtil pathRuleUtil;
 
     /**
      * 根据规则修改URL
@@ -70,7 +70,7 @@ public class UrlUtil {
 
         String path = url.getPath();
         InstanceInfo matchedInstanceInfo =
-                pathRule.findMatchedInstanceAddress(path);
+                pathRuleUtil.findMatchedInstanceAddress(path);
 
         String host = matchedInstanceInfo.getHost();
         int port = matchedInstanceInfo.getPort();

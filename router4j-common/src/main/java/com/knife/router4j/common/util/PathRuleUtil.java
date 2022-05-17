@@ -1,6 +1,7 @@
 package com.knife.router4j.common.util;
 
 import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
 import org.redisson.api.RKeys;
@@ -17,7 +18,7 @@ import java.util.Map;
 /**
  * 路径的规则
  */
-public class PathRule {
+public class PathRuleUtil {
     @Autowired
     private RuleProperties rule;
 
@@ -26,38 +27,36 @@ public class PathRule {
     /**
      * 将实例和路径绑定
      *
-     * @param instanceInfo 实例地址
-     * @param pathPattern     路径匹配符。例如：/order/add；/order/**
+     * @param pathRuleRequest 路径规则请求体
      */
-    public void bind(InstanceInfo instanceInfo, String pathPattern) {
+    public void bind(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPrefix(), instanceInfo));
-        if (!list.contains(pathPattern)) {
-            list.add(pathPattern);
+                RedisKeyUtil.assembleKey(rule.getPrefix(), pathRuleRequest));
+        if (!list.contains(pathRuleRequest.getPathPattern())) {
+            list.add(pathRuleRequest.getPathPattern());
         }
     }
 
     /**
      * 将实例地址和路径解除绑定
      *
-     * @param instanceInfo 实例地址
-     * @param pathPattern     路径匹配符。例如：/order/add；/order/**
+     * @param pathRuleRequest 路径规则请求体
      */
-    public void unbind(InstanceInfo instanceInfo, String pathPattern) {
+    public void unbind(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPrefix(), instanceInfo));
-        list.remove(pathPattern);
+                RedisKeyUtil.assembleKey(rule.getPrefix(), pathRuleRequest));
+        list.remove(pathRuleRequest.getPathPattern());
     }
 
     /**
      * 获取实例地址已经绑定的规则
      *
-     * @param instanceInfo 实例信息
-     * @return 路径规则列表
+     * @param pathRuleRequest 路径规则请求体
+     * @return 路径模板列表
      */
-    public List<String> findPathPatterns(InstanceInfo instanceInfo) {
+    public List<String> findPathPatterns(PathRuleRequest pathRuleRequest) {
         return RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPrefix(), instanceInfo));
+                RedisKeyUtil.assembleKey(rule.getPrefix(), pathRuleRequest));
     }
 
     /**

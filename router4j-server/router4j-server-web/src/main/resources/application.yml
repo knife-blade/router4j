@@ -9,7 +9,7 @@ spring:
 
 router4j:
   redis:
-    host: localhost
+    host: 192.168.5.193
     password: 222333
     port: 6379
     # database: 0
@@ -17,4 +17,4 @@ router4j:
     # timeout: 3s
   rule:
     enable: true
-    # prefix: "router4j:rule:prefix:"
+    # prefix: "router4j:rule:"

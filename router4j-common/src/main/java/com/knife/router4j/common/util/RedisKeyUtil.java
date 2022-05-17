@@ -1,6 +1,6 @@
 package com.knife.router4j.common.util;
 
-import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.common.entity.PathRuleRequest;
 
 /**
  * Redis的key工具类
@@ -11,11 +11,11 @@ public class RedisKeyUtil {
     /**
      * 组装key
      * @param prefix       前缀
-     * @param instanceInfo 实例信息
+     * @param pathRuleRequest 实例信息
      * @return 组装好的key
      */
-    public static String assembleKey(String prefix, InstanceInfo instanceInfo) {
-        return prefix + separator + instanceInfo.getServiceName()
-                + separator + instanceInfo.instanceAddressWithProtocol();
+    public static String assembleKey(String prefix, PathRuleRequest pathRuleRequest) {
+        return prefix + pathRuleRequest.getServiceName()
+                + separator + pathRuleRequest.getInstanceAddress();
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 配置属性
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class PropertiesConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "router4j.redis")
