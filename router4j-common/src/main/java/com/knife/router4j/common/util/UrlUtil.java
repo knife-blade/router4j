@@ -38,27 +38,6 @@ public class UrlUtil {
     }
 
     /**
-     * 将地址解析为对象
-     * @param instanceAddress 实例地址。例：http://127.0.0.1:8080
-     * @return 实例地址对象
-     */
-    public InstanceInfo parse(String instanceAddress) {
-        URL url = null;
-        try {
-            url = new URL(instanceAddress);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-
-        InstanceInfo instance = new InstanceInfo();
-        instance.setProtocol(url.getProtocol());
-        instance.setHost(url.getHost());
-        instance.setPort(url.getPort());
-
-        return instance;
-    }
-
-    /**
      * 使用规则来替换url
      * @param url 原先的url
      * @return 修改后的url
