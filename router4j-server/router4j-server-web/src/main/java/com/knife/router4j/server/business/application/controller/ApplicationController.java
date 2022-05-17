@@ -1,4 +1,4 @@
-package com.knife.router4j.server.business.application;
+package com.knife.router4j.server.business.application.controller;
 
 import com.knife.router4j.common.entity.InstanceInfo;
 import com.knife.router4j.server.service.InstanceService;
@@ -20,14 +20,14 @@ public class ApplicationController {
     private InstanceService instanceService;
 
     @ApiOperation("获取所有应用的信息")
-    @GetMapping("getAllApplication")
-    public List<String> getAllApplication() {
+    @GetMapping("findAllApplication")
+    public List<String> findAllApplication() {
         return instanceService.findAllServices();
     }
 
     @ApiOperation("根据服务名获得实例")
-    @GetMapping("getInstance")
-    public List<InstanceInfo> getInstance(@RequestParam String serviceName) {
+    @GetMapping("findInstance")
+    public List<InstanceInfo> findInstance(@RequestParam String serviceName) {
         return instanceService.findInstances(serviceName);
     }
 
