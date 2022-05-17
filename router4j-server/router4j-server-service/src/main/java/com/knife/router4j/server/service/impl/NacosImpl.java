@@ -15,7 +15,6 @@ import java.util.List;
  * Nacos实现
  */
 @Slf4j
-@Service
 public class NacosImpl implements InstanceService {
     @Autowired
     private DiscoveryClient discoveryClient;
