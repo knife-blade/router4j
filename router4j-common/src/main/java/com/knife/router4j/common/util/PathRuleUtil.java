@@ -31,7 +31,7 @@ public class PathRuleUtil {
      */
     public void bind(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPrefix(), pathRuleRequest));
+                RedisKeyUtil.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
         if (!list.contains(pathRuleRequest.getPathPattern())) {
             list.add(pathRuleRequest.getPathPattern());
         }
@@ -44,7 +44,7 @@ public class PathRuleUtil {
      */
     public void unbind(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPrefix(), pathRuleRequest));
+                RedisKeyUtil.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
         list.remove(pathRuleRequest.getPathPattern());
     }
 
@@ -56,7 +56,7 @@ public class PathRuleUtil {
      */
     public List<String> findPathPatterns(PathRuleRequest pathRuleRequest) {
         return RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPrefix(), pathRuleRequest));
+                RedisKeyUtil.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
     }
 
     /**
@@ -77,17 +77,18 @@ public class PathRuleUtil {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
         // 模糊查找出所有实例的key
-        Iterable<String> hostAndPortS = keys.getKeysByPattern(rule.getPrefix() + "*");
+        Iterable<String> instanceAddresses = keys.getKeysByPattern(rule.getPathPatternPrefix() + "*");
 
-        for (String hostAndPort : hostAndPortS) {
+        for (String instanceAddress : instanceAddresses) {
             // 取出每个实例的所有指定好的路径规则
-            RList<String> pathPatterns = RedissonHolder.getRedissonClient().getList(hostAndPort);
+            RList<String> pathPatterns = RedissonHolder.getRedissonClient()
+                    .getList(instanceAddress);
             for (String pathPattern : pathPatterns) {
                 if (pathMatcher.match(pathPattern, path)) {
-                    String patternOfMap = matchedMap.get(hostAndPort);
+                    String patternOfMap = matchedMap.get(instanceAddress);
                     if (patternOfMap == null
                             || pathPattern.length() > patternOfMap.length()) {
-                        matchedMap.put(hostAndPort, pathPattern);
+                        matchedMap.put(instanceAddress, pathPattern);
                     }
                 }
             }
@@ -109,6 +110,43 @@ public class PathRuleUtil {
         } else {
             return assembleInstanceAddress(matchedInstanceAddress);
         }
+    }
+
+    /**
+     * 清除所有规则
+     */
+    public void clearAllRule() {
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        keys.deleteByPattern(rule.getPathPatternPrefix() + "*");
+    }
+
+    /**
+     * 标记为默认实例
+     * @param instanceAddresses 实例地址
+     */
+    public void markAsDefaultInstance(List<String> instanceAddresses) {
+        RedissonHolder.getRedissonClient()
+                .getList(rule.getDefaultInstancePrefix())
+                .addAll(instanceAddresses);
+    }
+
+    /**
+     * 取消默认实例
+     * @param instanceAddresses 实例地址
+     */
+    public void cancelDefaultInstance(List<String> instanceAddresses) {
+        RedissonHolder.getRedissonClient()
+                .getList(rule.getDefaultInstancePrefix())
+                .removeAll(instanceAddresses);
+    }
+
+    /**
+     * 查找所有的默认实例
+     * @return 实例地址列表
+     */
+    public List<String> findAllDefaultInstance() {
+        return RedissonHolder.getRedissonClient()
+                .getList(rule.getDefaultInstancePrefix());
     }
 
     private InstanceInfo assembleInstanceAddress(String urlAddress) {

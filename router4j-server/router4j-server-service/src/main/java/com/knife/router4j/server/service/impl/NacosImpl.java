@@ -36,4 +36,23 @@ public class NacosImpl implements InstanceService {
         }
         return instanceInfos;
     }
+
+    @Override
+    public List<String> findAllInstanceAddresses() {
+        List<String> instanceAddresses = new ArrayList<>();
+
+        List<String> allServices = findAllServices();
+
+        for (String serviceName : allServices) {
+            List<InstanceInfo> instances = findInstances(serviceName);
+            for (InstanceInfo instance : instances) {
+                String instanceAddress = instance.instanceAddressWithoutProtocol();
+                if (!instanceAddresses.contains(instanceAddress)) {
+                    instanceAddresses.add(instanceAddress);
+                }
+            }
+        }
+
+        return instanceAddresses;
+    }
 }

@@ -13,7 +13,12 @@ public class RuleProperties {
     private Boolean enable = true;
 
     /**
-     * 存到Redis里的key的前缀
+     * 存到Redis里的路径规则的key的前缀
      */
-    private String prefix = "router4j:rule:";
+    private String pathPatternPrefix = "router4j:rule:pathPattern";
+
+    /**
+     * 存到Redis里的默认实例的key的前缀
+     */
+    private String defaultInstancePrefix = "router4j:rule:defaultInstance";
 }

@@ -18,4 +18,10 @@ public interface InstanceService {
      * @return 服务对应的所有实例
      */
     List<InstanceInfo> findInstances(String serviceId);
+
+    /**
+     * 获得所有的实例
+     * @return 实例地址列表
+     */
+    List<String> findAllInstanceAddresses();
 }
