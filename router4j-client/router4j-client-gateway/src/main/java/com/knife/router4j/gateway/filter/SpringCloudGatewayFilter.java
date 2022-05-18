@@ -1,6 +1,9 @@
 package com.knife.router4j.gateway.filter;
 
+import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.common.util.PathRuleUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.route.Route;
@@ -18,6 +21,9 @@ import java.net.URI;
  */
 @Slf4j
 public class SpringCloudGatewayFilter implements GlobalFilter, Ordered {
+    @Autowired
+    private PathRuleUtil pathRuleUtil;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest originalRequest = exchange.getRequest();
@@ -26,22 +32,22 @@ public class SpringCloudGatewayFilter implements GlobalFilter, Ordered {
         // Map<String, String> cachedRequestBody = exchange
         // .getAttribute(ServerWebExchangeUtils.CACHED_REQUEST_BODY_ATTR);
 
-        //获取域名+端口后的path
+        // 例：http://abc.com:8080/public/example?id=1&name=Tony#ge
+        // 则返回：/public/example
         String rawPath = originalRequest.getURI().getRawPath();
 
-        // 这里可以拿到请求的服务名
+        // 拿到请求的服务名。route.getUri()示例值：lb://order
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
+        String serviceName = route.getUri().getHost();
 
-        // todo 从redis中取出所有url，然后用rawPath去匹配
-
-        String host = "localhost";
-        int port = 9012;
+        // 从redis中取出对应服务的url，然后用rawPath去匹配
+        InstanceInfo matchedInstance = pathRuleUtil.findMatchedInstance(serviceName, rawPath);
 
         URI originUri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
 
         URI newUri = UriComponentsBuilder.fromUri(originUri)
-                .host(host)
-                .port(port)
+                .host(matchedInstance.getHost())
+                .port(matchedInstance.getPort())
                 .build()
                 .toUri();
 

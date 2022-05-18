@@ -49,7 +49,7 @@ public class UrlUtil {
 
         String path = url.getPath();
         InstanceInfo matchedInstanceInfo =
-                pathRuleUtil.findMatchedInstanceAddress(path);
+                pathRuleUtil.findMatchedInstance(path);
 
         String host = matchedInstanceInfo.getHost();
         int port = matchedInstanceInfo.getPort();

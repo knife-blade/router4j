@@ -2,7 +2,6 @@ package com.knife.router4j.server.business.rule.controller;
 
 import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.util.PathRuleUtil;
-import com.knife.router4j.common.util.UrlUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteReq;

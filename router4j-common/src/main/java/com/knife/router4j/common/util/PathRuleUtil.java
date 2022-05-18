@@ -2,6 +2,8 @@ package com.knife.router4j.common.util;
 
 import com.knife.router4j.common.entity.InstanceInfo;
 import com.knife.router4j.common.entity.PathRuleRequest;
+import com.knife.router4j.common.helper.InstanceInfoHelper;
+import com.knife.router4j.common.helper.RedisKeyHelper;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
 import org.redisson.api.RKeys;
@@ -9,8 +11,6 @@ import org.redisson.api.RList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class PathRuleUtil {
      */
     public void bind(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
+                RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
         if (!list.contains(pathRuleRequest.getPathPattern())) {
             list.add(pathRuleRequest.getPathPattern());
         }
@@ -44,7 +44,7 @@ public class PathRuleUtil {
      */
     public void unbind(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
+                RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
         list.remove(pathRuleRequest.getPathPattern());
     }
 
@@ -56,7 +56,7 @@ public class PathRuleUtil {
      */
     public List<String> findPathPatterns(PathRuleRequest pathRuleRequest) {
         return RedissonHolder.getRedissonClient().getList(
-                RedisKeyUtil.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
+                RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
     }
 
     /**
@@ -65,7 +65,18 @@ public class PathRuleUtil {
      * @param path 路径。例如：/order/add
      * @return 实例地址。例如：127.0.0.1:8080
      */
-    public InstanceInfo findMatchedInstanceAddress(String path) {
+    public InstanceInfo findMatchedInstance(String path) {
+        return findMatchedInstance(null, path);
+    }
+
+    /**
+     * 通过路径找到规则中的实例
+     *
+     * @param serviceName 服务名
+     * @param path 路径。例如：/order/add
+     * @return 实例信息
+     */
+    public InstanceInfo findMatchedInstance(String serviceName, String path) {
         // 如果没开启rule功能，则直接返回null
         if (!rule.getEnable()) {
             return null;
@@ -76,8 +87,10 @@ public class PathRuleUtil {
 
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
+        String prefix = RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), serviceName);
+
         // 模糊查找出所有实例的key
-        Iterable<String> instanceAddresses = keys.getKeysByPattern(rule.getPathPatternPrefix() + "*");
+        Iterable<String> instanceAddresses = keys.getKeysByPattern(prefix + "*");
 
         for (String instanceAddress : instanceAddresses) {
             // 取出每个实例的所有指定好的路径规则
@@ -108,29 +121,36 @@ public class PathRuleUtil {
         if (matchedInstanceAddress == null) {
             return null;
         } else {
-            return assembleInstanceAddress(matchedInstanceAddress);
+            return InstanceInfoHelper.assembleInstanceAddress(matchedInstanceAddress);
         }
     }
 
     /**
      * 清除所有规则
      */
-    public void clearAllRule() {
+    public void clearRuleAll() {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
         keys.deleteByPattern(rule.getPathPatternPrefix() + "*");
     }
 
-    private InstanceInfo assembleInstanceAddress(String urlAddress) {
-        URL url = null;
-        try {
-            url = new URL(urlAddress);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        InstanceInfo instanceInfo = new InstanceInfo();
-        instanceInfo.setProtocol(url.getProtocol());
-        instanceInfo.setHost(url.getHost());
-        instanceInfo.setPort(url.getPort());
-        return instanceInfo;
+    /**
+     * 清除服务的所有规则
+     * @param serviceName 服务名字
+     */
+    public void clearRule(String serviceName) {
+        clearRule(serviceName, "*");
+    }
+
+    /**
+     * 清除实例的所有规则
+     * @param serviceName 服务名字
+     * @param instanceAddress 实例地址
+     */
+    public void clearRule(String serviceName, String instanceAddress) {
+        String prefix = RedisKeyHelper.assembleKey(
+                rule.getPathPatternPrefix(), serviceName, instanceAddress);
+
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        keys.deleteByPattern(prefix + "*");
     }
 }
