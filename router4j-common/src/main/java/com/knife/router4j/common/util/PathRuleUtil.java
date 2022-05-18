@@ -120,35 +120,6 @@ public class PathRuleUtil {
         keys.deleteByPattern(rule.getPathPatternPrefix() + "*");
     }
 
-    /**
-     * 标记为默认实例
-     * @param instanceAddresses 实例地址
-     */
-    public void markAsDefaultInstance(List<String> instanceAddresses) {
-        RedissonHolder.getRedissonClient()
-                .getList(rule.getDefaultInstancePrefix())
-                .addAll(instanceAddresses);
-    }
-
-    /**
-     * 取消默认实例
-     * @param instanceAddresses 实例地址
-     */
-    public void cancelDefaultInstance(List<String> instanceAddresses) {
-        RedissonHolder.getRedissonClient()
-                .getList(rule.getDefaultInstancePrefix())
-                .removeAll(instanceAddresses);
-    }
-
-    /**
-     * 查找所有的默认实例
-     * @return 实例地址列表
-     */
-    public List<String> findAllDefaultInstance() {
-        return RedissonHolder.getRedissonClient()
-                .getList(rule.getDefaultInstancePrefix());
-    }
-
     private InstanceInfo assembleInstanceAddress(String urlAddress) {
         URL url = null;
         try {
