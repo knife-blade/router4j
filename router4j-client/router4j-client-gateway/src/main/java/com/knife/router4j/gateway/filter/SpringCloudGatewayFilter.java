@@ -36,12 +36,12 @@ public class SpringCloudGatewayFilter implements GlobalFilter, Ordered {
         // 则返回：/public/example
         String rawPath = originalRequest.getURI().getRawPath();
 
-        // 拿到请求的服务名。route.getUri()示例值：lb://order
-        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-        String serviceName = route.getUri().getHost();
+        // 获取请求的服务名。route.getUri()示例值：lb://order
+        // Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
+        // String serviceName = route.getUri().getHost();
 
         // 从redis中取出对应服务的url，然后用rawPath去匹配
-        InstanceInfo matchedInstance = pathRuleUtil.findMatchedInstance(serviceName, rawPath);
+        InstanceInfo matchedInstance = pathRuleUtil.findMatchedInstance(rawPath);
 
         URI originUri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
 

@@ -1,11 +1,10 @@
-package com.knife.router4j.feign.dynamic.config.concret;
+package com.knife.router4j.feign.config.concret;
 
-import com.knife.router4j.feign.dynamic.client.Router4jDefaultClient;
+import com.knife.router4j.feign.client.Router4jDefaultClient;
 import feign.Client;
 import feign.Request;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerProperties;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;

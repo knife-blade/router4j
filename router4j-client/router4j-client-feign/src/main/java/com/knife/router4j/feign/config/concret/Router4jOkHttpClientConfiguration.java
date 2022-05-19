@@ -1,6 +1,6 @@
-package com.knife.router4j.feign.dynamic.config.concret;
+package com.knife.router4j.feign.config.concret;
 
-import com.knife.router4j.feign.dynamic.client.Router4jOkHttpClient;
+import com.knife.router4j.feign.client.Router4jOkHttpClient;
 import feign.Client;
 import feign.Request;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

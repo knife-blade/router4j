@@ -1,4 +1,4 @@
-package com.knife.router4j.feign.dynamic.client;
+package com.knife.router4j.feign.client;
 
 import feign.Client;
 import feign.Request.HttpMethod;
@@ -12,7 +12,6 @@ import okhttp3.Request.Builder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Iterator;

@@ -1,8 +1,11 @@
-package com.knife.router4j.feign.dynamic.client;
+package com.knife.router4j.feign.client;
 
+import com.knife.router4j.common.util.PathRuleUtil;
+import com.knife.router4j.common.util.UrlUtil;
 import feign.Client;
 import feign.Request;
 import feign.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -28,9 +31,11 @@ import static java.lang.String.format;
  *   修改的方法是：{@link Router4jDefaultClient#execute(Request, Request.Options)}
  */
 public class Router4jDefaultClient implements Client {
-
     private final SSLSocketFactory sslContextFactory;
     private final HostnameVerifier hostnameVerifier;
+
+    @Autowired
+    private UrlUtil urlUtil;
 
     /**
      * Disable the request body internal buffering for {@code HttpURLConnection}.
@@ -74,14 +79,14 @@ public class Router4jDefaultClient implements Client {
      */
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
-        URL url = new URL(request.url());
+        // URL url = new URL(request.url());
+        // String path = url.getPath();
+        // 根据path与Redis中的设置进行匹配，获得域名+端口号
+        // String hostAndPort = "192.168.0.102:9021";
+        // String query = url.getQuery();
+        // String newUrl = "http://" + hostAndPort + path + "?" + query;
 
-        String path = url.getPath();
-        // todo 根据path与Redis中的设置进行匹配，获得域名+端口号
-        String hostAndPort = "192.168.0.102:9021";
-
-        String query = url.getQuery();
-        String newUrl = "http://" + hostAndPort + path + "?" + query;
+        String newUrl = urlUtil.modifyWithRule(request.url()).toString();
 
         Request newRequest = Request.create(request.httpMethod(),
                 newUrl,

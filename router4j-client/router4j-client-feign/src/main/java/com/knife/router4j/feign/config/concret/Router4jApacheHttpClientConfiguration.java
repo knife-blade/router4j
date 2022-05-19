@@ -1,6 +1,5 @@
-package com.knife.router4j.feign.dynamic.config.concret;
+package com.knife.router4j.feign.config.concret;
 
-import com.knife.router4j.feign.dynamic.client.Router4jOkHttpClient;
 import feign.Client;
 import feign.Request;
 import feign.httpclient.ApacheHttpClient;

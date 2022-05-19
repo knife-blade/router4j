@@ -67,6 +67,13 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-httpclient</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.knife</groupId>
+            <artifactId>router4j-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
