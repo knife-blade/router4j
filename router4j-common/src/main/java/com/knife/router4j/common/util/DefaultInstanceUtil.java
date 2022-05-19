@@ -19,19 +19,17 @@ public class DefaultInstanceUtil {
     /**
      * 标记为默认实例
      *
-     * @param pathRuleRequests 路径规则请求列表
+     * @param instanceAddresses 实例地址列表
      */
-    public void markAsDefaultInstance(List<PathRuleRequest> pathRuleRequests) {
-        List<String> instanceAddresses = pathRuleRequests.stream()
-                .map(PathRuleRequest::getInstanceAddress)
-                .distinct()
-                .collect(Collectors.toList());
-
+    public void markAsDefaultInstance(List<String> instanceAddresses) {
         RedissonHolder.getRedissonClient()
                 .getList(rule.getDefaultInstancePrefix())
                 .addAll(instanceAddresses);
 
-        for (PathRuleRequest pathRuleRequest : pathRuleRequests) {
+        for (String instanceAddress : instanceAddresses) {
+            PathRuleRequest pathRuleRequest = new PathRuleRequest();
+            pathRuleRequest.setServiceName("*");
+            pathRuleRequest.setInstanceAddress(instanceAddress);
             pathRuleRequest.setPathPattern(PathPatternConstant.DEFAULT_PATTERN);
             pathRuleUtil.bind(pathRuleRequest);
         }
@@ -40,19 +38,18 @@ public class DefaultInstanceUtil {
     /**
      * 取消默认实例
      *
-     * @param pathRuleRequests 路径规则请求列表
+     * @param instanceAddresses 实例地址列表
      */
-    public void cancelDefaultInstance(List<PathRuleRequest> pathRuleRequests) {
-        List<String> instanceAddresses = pathRuleRequests.stream()
-                .map(PathRuleRequest::getInstanceAddress)
-                .distinct()
-                .collect(Collectors.toList());
+    public void cancelDefaultInstance(List<String> instanceAddresses) {
 
         RedissonHolder.getRedissonClient()
                 .getList(rule.getDefaultInstancePrefix())
                 .removeAll(instanceAddresses);
 
-        for (PathRuleRequest pathRuleRequest : pathRuleRequests) {
+        for (String instanceAddress : instanceAddresses) {
+            PathRuleRequest pathRuleRequest = new PathRuleRequest();
+            pathRuleRequest.setServiceName("*");
+            pathRuleRequest.setInstanceAddress(instanceAddress);
             pathRuleRequest.setPathPattern(PathPatternConstant.DEFAULT_PATTERN);
             pathRuleUtil.unbind(pathRuleRequest);
         }

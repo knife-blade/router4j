@@ -5,7 +5,7 @@ import com.knife.router4j.common.entity.InstanceInfo;
 import java.util.List;
 
 public interface ApplicationService {
-    List<String> getAllApplication();
+    List<String> findAllServices();
 
     List<InstanceInfo> findInstance(String serviceName);
 }

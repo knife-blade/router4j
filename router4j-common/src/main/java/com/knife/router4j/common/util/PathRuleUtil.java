@@ -90,18 +90,18 @@ public class PathRuleUtil {
         String prefix = RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), serviceName);
 
         // 模糊查找出所有实例的key
-        Iterable<String> instanceAddresses = keys.getKeysByPattern(prefix + "*");
+        Iterable<String> ruleKeys = keys.getKeysByPattern(prefix + "*");
 
-        for (String instanceAddress : instanceAddresses) {
+        for (String ruleKey : ruleKeys) {
             // 取出每个实例的所有指定好的路径规则
             RList<String> pathPatterns = RedissonHolder.getRedissonClient()
-                    .getList(instanceAddress);
+                    .getList(ruleKey);
             for (String pathPattern : pathPatterns) {
                 if (pathMatcher.match(pathPattern, path)) {
-                    String patternOfMap = matchedMap.get(instanceAddress);
+                    String patternOfMap = matchedMap.get(ruleKey);
                     if (patternOfMap == null
                             || pathPattern.length() > patternOfMap.length()) {
-                        matchedMap.put(instanceAddress, pathPattern);
+                        matchedMap.put(ruleKey, pathPattern);
                     }
                 }
             }

@@ -48,6 +48,12 @@ public class RuleController {
         pathRuleUtil.bind(pathRuleRequest);
     }
 
+    @ApiOperation("删除所有规则")
+    @PostMapping("deleteAll")
+    public void deleteAll() {
+        pathRuleUtil.clearRuleAll();
+    }
+
     @ApiOperation("查找规则")
     @GetMapping("find")
     public List<String> find(@NotBlank String serviceName,
