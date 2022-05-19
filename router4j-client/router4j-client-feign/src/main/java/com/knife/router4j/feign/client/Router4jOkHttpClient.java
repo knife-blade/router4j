@@ -1,5 +1,6 @@
 package com.knife.router4j.feign.client;
 
+import com.knife.router4j.common.util.UrlUtil;
 import feign.Client;
 import feign.Request.HttpMethod;
 import feign.Request.Options;
@@ -8,6 +9,7 @@ import feign.Response.Body;
 import feign.okhttp.OkHttpClient;
 import okhttp3.*;
 import okhttp3.Request.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +27,9 @@ import java.util.concurrent.TimeUnit;
  */
 public final class Router4jOkHttpClient implements Client {
     private final okhttp3.OkHttpClient delegate;
+
+    @Autowired
+    private UrlUtil urlUtil;
 
     public Router4jOkHttpClient() {
         this(new okhttp3.OkHttpClient());
@@ -151,16 +156,12 @@ public final class Router4jOkHttpClient implements Client {
                     .followRedirects(options.isFollowRedirects()).build();
         }
 
-        // URL url = new URL(input.url());
-        // String path = url.getPath();
-        // // todo 通过path与Redis的已有规则进行匹配
-        //
-        // URL newUrl = new URL()
-        //
-        // feign.Request.create(input.httpMethod(),)
+        String newUrl = urlUtil.modifyWithRule(input.url()).toString();
+        feign.Request newRequest = feign.Request.create(input.httpMethod(), newUrl, input.headers(),
+                feign.Request.Body.create(input.body()), input.requestTemplate());
 
-        Request request = toOkHttpRequest(input);
+        Request request = toOkHttpRequest(newRequest);
         okhttp3.Response response = requestScoped.newCall(request).execute();
-        return toFeignResponse(response, input).toBuilder().request(input).build();
+        return toFeignResponse(response, newRequest).toBuilder().request(newRequest).build();
     }
 }

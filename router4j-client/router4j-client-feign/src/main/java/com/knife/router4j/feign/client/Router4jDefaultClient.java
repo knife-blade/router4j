@@ -79,13 +79,6 @@ public class Router4jDefaultClient implements Client {
      */
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
-        // URL url = new URL(request.url());
-        // String path = url.getPath();
-        // 根据path与Redis中的设置进行匹配，获得域名+端口号
-        // String hostAndPort = "192.168.0.102:9021";
-        // String query = url.getQuery();
-        // String newUrl = "http://" + hostAndPort + path + "?" + query;
-
         String newUrl = urlUtil.modifyWithRule(request.url()).toString();
 
         Request newRequest = Request.create(request.httpMethod(),

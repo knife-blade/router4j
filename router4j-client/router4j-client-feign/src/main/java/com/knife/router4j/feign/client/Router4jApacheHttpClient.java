@@ -1,5 +1,6 @@
 package com.knife.router4j.feign.client;
 
+import com.knife.router4j.common.util.UrlUtil;
 import feign.Client;
 import feign.Request;
 import feign.Response;
@@ -18,6 +19,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +42,9 @@ public class Router4jApacheHttpClient implements Client {
 
     private final HttpClient client;
 
+    @Autowired
+    private UrlUtil urlUtil;
+
     public Router4jApacheHttpClient() {
         this(HttpClientBuilder.create().build());
     }
@@ -50,14 +55,18 @@ public class Router4jApacheHttpClient implements Client {
 
     @Override
     public Response execute(Request request, Request.Options options) throws IOException {
+        String newUrl = urlUtil.modifyWithRule(request.url()).toString();
+        Request newRequest = Request.create(request.httpMethod(), newUrl, request.headers(),
+                Request.Body.create(request.body()), request.requestTemplate());
+
         HttpUriRequest httpUriRequest;
         try {
-            httpUriRequest = toHttpUriRequest(request, options);
+            httpUriRequest = toHttpUriRequest(newRequest, options);
         } catch (URISyntaxException e) {
-            throw new IOException("URL '" + request.url() + "' couldn't be parsed into a URI", e);
+            throw new IOException("URL '" + newRequest.url() + "' couldn't be parsed into a URI", e);
         }
         HttpResponse httpResponse = client.execute(httpUriRequest);
-        return toFeignResponse(httpResponse, request);
+        return toFeignResponse(httpResponse, newRequest);
     }
 
     HttpUriRequest toHttpUriRequest(Request request, Request.Options options)
