@@ -4,6 +4,8 @@ import com.knife.router4j.common.entity.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -54,7 +56,14 @@ public class UrlUtil {
         String host = matchedInstanceInfo.getHost();
         int port = matchedInstanceInfo.getPort();
 
-        return protocol + "://" + host + ":"
-                + port + path + "?" + query + "#" + ref;
+        String resultUrl = null;
+        try {
+            URI uri = new URI(protocol, null, host, port, path, query, ref);
+            resultUrl = uri.toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        return resultUrl;
     }
 }

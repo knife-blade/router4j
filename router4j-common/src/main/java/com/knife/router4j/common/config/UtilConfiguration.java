@@ -1,6 +1,7 @@
 package com.knife.router4j.common.config;
 
 import com.knife.router4j.common.util.DefaultInstanceUtil;
+import com.knife.router4j.common.util.InstructionUtil;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.common.util.UrlUtil;
 import com.knife.router4j.common.util.spring.ApplicationContextHolder;
@@ -12,6 +13,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 public class UtilConfiguration {
+    @Bean
+    public ApplicationContextHolder applicationContextHolder() {
+        return new ApplicationContextHolder();
+    }
+
     @Bean
     public PathRuleUtil pathRuleUtil() {
         return new PathRuleUtil();
@@ -28,7 +34,7 @@ public class UtilConfiguration {
     }
 
     @Bean
-    public ApplicationContextHolder applicationContextHolder() {
-        return new ApplicationContextHolder();
+    public InstructionUtil instructionUtil() {
+        return new InstructionUtil();
     }
 }

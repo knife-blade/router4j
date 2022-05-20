@@ -7,9 +7,6 @@ import lombok.Data;
 @ApiModel("添加默认实例")
 @Data
 public class InstanceVO {
-    @ApiModelProperty("服务名")
-    private String serviceName;
-
     @ApiModelProperty("实例地址")
     private String instanceAddress;
 
