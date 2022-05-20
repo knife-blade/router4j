@@ -1,6 +1,5 @@
 package com.knife.router4j.common.helper;
 
-import com.knife.router4j.common.constant.RedisKeySeparator;
 import com.knife.router4j.common.entity.PathRuleRequest;
 import org.springframework.util.StringUtils;
 
@@ -8,6 +7,7 @@ import org.springframework.util.StringUtils;
  * Redis的key工具类
  */
 public class RedisKeyHelper {
+    public static final String SEPARATOR = ":";
 
     /**
      * 组装key
@@ -17,8 +17,9 @@ public class RedisKeyHelper {
      * @return 组装好的key
      */
     public static String assembleKey(String prefix, PathRuleRequest pathRuleRequest) {
-        return prefix + RedisKeySeparator.SEPARATOR + pathRuleRequest.getServiceName()
-                + RedisKeySeparator.INSTANCE_ADDRESS_SEPARATOR + pathRuleRequest.getInstanceAddress();
+        return prefix
+                + SEPARATOR + pathRuleRequest.getServiceName()
+                + SEPARATOR + pathRuleRequest.getInstanceAddress();
     }
 
     /**
@@ -34,7 +35,7 @@ public class RedisKeyHelper {
             tmpServiceName = "*";
         }
 
-        return prefix + RedisKeySeparator.SEPARATOR + tmpServiceName;
+        return prefix + SEPARATOR + tmpServiceName;
     }
 
     /**
@@ -56,8 +57,7 @@ public class RedisKeyHelper {
             tmpInstanceAddress = "*";
         }
 
-        return prefix + RedisKeySeparator.SEPARATOR + tmpServiceName
-                + RedisKeySeparator.INSTANCE_ADDRESS_SEPARATOR + tmpInstanceAddress;
+        return prefix + SEPARATOR + tmpServiceName + SEPARATOR + tmpInstanceAddress;
     }
 
     /**
@@ -66,7 +66,19 @@ public class RedisKeyHelper {
      * @return 实例地址
      */
     public static String parseInstanceAddress(String redisKey) {
-        String[] strings = redisKey.split(RedisKeySeparator.INSTANCE_ADDRESS_SEPARATOR);
-        return strings[1];
+        String[] strings = redisKey.split(SEPARATOR);
+        int length = strings.length;
+        return strings[length - 1];
+    }
+
+    /**
+     * 解析出服务名
+     * @param redisKey redis的key
+     * @return 实例地址
+     */
+    public static String parseServiceName(String redisKey) {
+        String[] strings = redisKey.split(SEPARATOR);
+        int length = strings.length;
+        return strings[length - 2];
     }
 }
