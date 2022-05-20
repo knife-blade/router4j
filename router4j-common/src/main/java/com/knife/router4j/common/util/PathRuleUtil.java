@@ -96,6 +96,8 @@ public class PathRuleUtil {
             // 取出每个实例的所有指定好的路径规则
             RList<String> pathPatterns = RedissonHolder.getRedissonClient()
                     .getList(ruleKey);
+
+            // 找出每个实例里匹配的最长的pathPattern
             for (String pathPattern : pathPatterns) {
                 if (pathMatcher.match(pathPattern, path)) {
                     String patternOfMap = matchedMap.get(ruleKey);
@@ -107,21 +109,22 @@ public class PathRuleUtil {
             }
         }
 
-        //找出匹配的最长的实例
-        String matchedInstanceAddress = null;
+        // 找出所有的pathPattern里最长的
+        String matchedKey = null;
         String longestPath = "";
 
         for (Map.Entry<String, String> entry : matchedMap.entrySet()) {
             if (entry.getValue().length() > longestPath.length()) {
                 longestPath = entry.getValue();
-                matchedInstanceAddress = entry.getKey();
+                matchedKey = entry.getKey();
             }
         }
 
-        if (matchedInstanceAddress == null) {
+        if (matchedKey == null) {
             return null;
         } else {
-            return InstanceInfoHelper.assembleInstanceAddress(matchedInstanceAddress);
+            String instanceAddress = RedisKeyHelper.parseInstanceAddress(matchedKey);
+            return InstanceInfoHelper.assembleInstanceAddress(instanceAddress);
         }
     }
 
