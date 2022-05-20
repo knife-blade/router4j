@@ -17,10 +17,10 @@ router4j:
     # timeout: 3s
   rule:
     enable: true
-    # pathPatternPrefix: "router4j:rule:pathPattern" 
+    # pathPatternPrefix: "router4j:rule:pathPattern"
     # defaultInstancePrefix: "router4j:rule:defaultInstance"
-  instruction:
-    # cacheKey: "router4j:instruction"
+  # instruction:
+  #   cacheKey: "router4j:instruction"
 ````
 
 
