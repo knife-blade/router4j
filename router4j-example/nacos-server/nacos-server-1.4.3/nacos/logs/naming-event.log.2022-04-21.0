@@ -1,8 +1,0 @@
-2022-04-21 23:21:24,552 INFO DEFAULT_GROUP@@order {SYNC} {IP-NEW} cluster: DEFAULT, new ips size: 1, content: [192.168.0.102:9011:unknown:DEFAULT_1.0_true_false_DEFAULT]
-
-2022-04-21 23:21:24,554 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@order, ips: 192.168.0.102:9011_true,
-
-2022-04-21 23:38:57,046 INFO DEFAULT_GROUP@@order {SYNC} {IP-DEAD} cluster: DEFAULT, dead ips size: 1, content: [192.168.0.102:9011:unknown:DEFAULT_1.0_true_false_DEFAULT]
-
-2022-04-21 23:38:57,046 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@order, ips: 
-
