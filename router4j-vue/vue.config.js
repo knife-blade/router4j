@@ -7,7 +7,7 @@ module.exports = {
     outputDir: 'dist',
     assetsDir: 'static',
     configureWebpack: {
-        name: 'vue Element Admin',
+        name: 'router4j-vue',
         resolve: {
             alias: {
                 '@': resolve('src')
