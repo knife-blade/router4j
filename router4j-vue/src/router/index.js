@@ -9,13 +9,13 @@ const routes = [
     {
         path: '/',
         component: Layout,
-        redirect: '/dashboard',
+        redirect: '/home',
         children: [
             {
-                path: 'dashboard',
-                component: () => import('@/views/dashboard/index'),
+                path: 'home',
+                component: () => import('@/views/Home'),
                 name: 'Dashboard',
-                meta: {title: 'Dashboard', icon: 'dashboard', affix: true}
+                meta: {title: 'Home', icon: 'home', affix: true}
             }
         ]
     },
