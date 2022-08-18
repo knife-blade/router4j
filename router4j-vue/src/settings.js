@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: 'router4j-vue',
 
   /**
    * @type {boolean} true | false

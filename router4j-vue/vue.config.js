@@ -2,12 +2,27 @@
 const path = require('path')
 const resolve = dir => path.join(__dirname, dir)
 
+// 这里无法使用@代替./src
+const defaultSettings = require('./src/settings.js')
+
+const port = process.env.port || process.env.npm_config_port || 10001 // dev port
+
+const name = defaultSettings.title || 'router4j' // page title
+
 module.exports = {
     publicPath: '/',
     outputDir: 'dist',
     assetsDir: 'static',
+    devServer: {
+        port: port,
+        open: false,
+        overlay: {
+            warnings: false,
+            errors: true
+        }
+    },
     configureWebpack: {
-        name: 'router4j-vue',
+        name: name,
         resolve: {
             alias: {
                 '@': resolve('src')

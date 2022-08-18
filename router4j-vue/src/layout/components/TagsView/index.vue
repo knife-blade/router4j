@@ -28,6 +28,7 @@
 <script>
 import ScrollPane from './ScrollPane'
 import path from 'path'
+import router from "@/router"
 
 export default {
   components: { ScrollPane },
@@ -45,7 +46,7 @@ export default {
       return this.$store.state.tagsView.visitedViews
     },
     routes() {
-      return this.$store.state.permission.routes
+      return router.options.routes
     }
   },
   watch: {
