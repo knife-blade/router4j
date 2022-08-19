@@ -7,6 +7,9 @@ import './icons' // icon
 import ElementUI  from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 
+import '@/styles/index.scss' // global css
+
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 
