@@ -24,5 +24,7 @@ router4j:
 ````
 ### 底层数据存放格式
 #### 规则数据
-router4j:rule:pathPattern:服务名:ip:端口=路径
+router4j:rule:pathPattern:路径=服务名:ip:端口
+
+其中：路径支持ant格式的通配符
 

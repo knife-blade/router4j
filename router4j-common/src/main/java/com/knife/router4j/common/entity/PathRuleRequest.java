@@ -18,7 +18,7 @@ public class PathRuleRequest {
     private String instanceAddress;
 
     /**
-     * 路径模板
+     * 路径模板（ant格式）
      */
     private String pathPattern;
 }
