@@ -4,7 +4,7 @@ import com.knife.router4j.common.entity.InstanceInfo;
 
 import java.util.List;
 
-public interface InstanceService {
+public interface ApplicationInfoService {
     /**
      * 获得所有的服务
      * @return 服务的名字列表

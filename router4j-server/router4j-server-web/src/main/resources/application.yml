@@ -1,3 +1,6 @@
+server:
+  port: 8100
+
 spring:
   application:
     name: router4j-server

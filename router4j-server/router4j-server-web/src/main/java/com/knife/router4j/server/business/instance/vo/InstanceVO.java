@@ -4,9 +4,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@ApiModel("添加默认实例")
+@ApiModel("实例")
 @Data
 public class InstanceVO {
+    @ApiModelProperty("服务名字")
+    private String serviceName;
+
     @ApiModelProperty("实例地址")
     private String instanceAddress;
 

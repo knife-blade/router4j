@@ -31,7 +31,7 @@ public class DefaultInstanceUtil {
             pathRuleRequest.setServiceName("*");
             pathRuleRequest.setInstanceAddress(instanceAddress);
             pathRuleRequest.setPathPattern(PathPatternConstant.DEFAULT_PATTERN);
-            pathRuleUtil.bind(pathRuleRequest);
+            pathRuleUtil.addRule(pathRuleRequest);
         }
     }
 
@@ -51,7 +51,7 @@ public class DefaultInstanceUtil {
             pathRuleRequest.setServiceName("*");
             pathRuleRequest.setInstanceAddress(instanceAddress);
             pathRuleRequest.setPathPattern(PathPatternConstant.DEFAULT_PATTERN);
-            pathRuleUtil.unbind(pathRuleRequest);
+            pathRuleUtil.deleteRule(pathRuleRequest);
         }
     }
 

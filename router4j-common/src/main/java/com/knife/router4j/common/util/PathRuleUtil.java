@@ -6,6 +6,7 @@ import com.knife.router4j.common.helper.InstanceInfoHelper;
 import com.knife.router4j.common.helper.RedisKeyHelper;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
+import org.redisson.api.RBucket;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,32 +21,21 @@ import java.util.Map;
  */
 public class PathRuleUtil {
     @Autowired
-    private RuleProperties rule;
+    private RuleProperties ruleProperties;
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     /**
-     * 将实例和路径绑定
+     * 添加规则
      *
      * @param pathRuleRequest 路径规则请求体
      */
-    public void bind(PathRuleRequest pathRuleRequest) {
+    public void addRule(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
+                RedisKeyHelper.assembleKey(ruleProperties.getPathPatternPrefix(), pathRuleRequest));
         if (!list.contains(pathRuleRequest.getPathPattern())) {
             list.add(pathRuleRequest.getPathPattern());
         }
-    }
-
-    /**
-     * 将实例地址和路径解除绑定
-     *
-     * @param pathRuleRequest 路径规则请求体
-     */
-    public void unbind(PathRuleRequest pathRuleRequest) {
-        RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
-        list.remove(pathRuleRequest.getPathPattern());
     }
 
     /**
@@ -56,7 +46,7 @@ public class PathRuleUtil {
      */
     public List<String> findPathPatterns(PathRuleRequest pathRuleRequest) {
         return RedissonHolder.getRedissonClient().getList(
-                RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), pathRuleRequest));
+                RedisKeyHelper.assembleKey(ruleProperties.getPathPatternPrefix(), pathRuleRequest));
     }
 
     /**
@@ -78,7 +68,7 @@ public class PathRuleUtil {
      */
     public InstanceInfo findMatchedInstance(String serviceName, String path) {
         // 如果没开启rule功能，则直接返回null
-        if (!rule.getEnable()) {
+        if (!ruleProperties.getEnable()) {
             return null;
         }
 
@@ -87,7 +77,7 @@ public class PathRuleUtil {
 
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
-        String prefix = RedisKeyHelper.assembleKey(rule.getPathPatternPrefix(), serviceName);
+        String prefix = RedisKeyHelper.assembleKey(ruleProperties.getPathPatternPrefix(), serviceName);
 
         // 模糊查找出所有实例的key
         Iterable<String> ruleKeys = keys.getKeysByPattern(prefix + "*");
@@ -129,31 +119,59 @@ public class PathRuleUtil {
     }
 
     /**
+     * 根据key删除规则
+     * @param key 要删除的数据的key
+     */
+    public void deleteRuleByKey(String key) {
+        RBucket<String> bucket = RedissonHolder.getRedissonClient().getBucket(key);
+        bucket.delete();
+    }
+
+    /**
+     * 根据路径匹配删除规则
+     *
+     * @param pathRuleRequest 路径规则请求体
+     */
+    public void deleteRule(PathRuleRequest pathRuleRequest) {
+        RList<String> list = RedissonHolder.getRedissonClient().getList(
+                RedisKeyHelper.assembleKey(ruleProperties.getPathPatternPrefix(), pathRuleRequest));
+        list.remove(pathRuleRequest.getPathPattern());
+    }
+
+    /**
      * 清除所有规则
      */
-    public void clearRuleAll() {
+    public void deleteAllRule() {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        keys.deleteByPattern(rule.getPathPatternPrefix() + "*");
+        keys.deleteByPattern(ruleProperties.getPathPatternPrefix() + "*");
+    }
+
+    /**
+     * 清除某个服务的实例的所有规则
+     * @param serviceName     服务名字
+     * @param instanceAddress 实例地址。例：127.0.0.1:8080
+     */
+    public void deleteRule(String serviceName, String instanceAddress) {
+        String prefix = RedisKeyHelper.assembleKey(
+                ruleProperties.getPathPatternPrefix(), serviceName, instanceAddress);
+
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        keys.deleteByPattern(prefix + "*");
     }
 
     /**
      * 清除服务的所有规则
      * @param serviceName 服务名字
      */
-    public void clearRule(String serviceName) {
-        clearRule(serviceName, "*");
+    public void deleteRuleByServiceName(String serviceName) {
+        deleteRule(serviceName, "*");
     }
 
     /**
      * 清除实例的所有规则
-     * @param serviceName 服务名字
-     * @param instanceAddress 实例地址
+     * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
-    public void clearRule(String serviceName, String instanceAddress) {
-        String prefix = RedisKeyHelper.assembleKey(
-                rule.getPathPatternPrefix(), serviceName, instanceAddress);
-
-        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        keys.deleteByPattern(prefix + "*");
+    public void deleteRuleByInstanceAddress(String instanceAddress) {
+        deleteRule("*", instanceAddress);
     }
 }

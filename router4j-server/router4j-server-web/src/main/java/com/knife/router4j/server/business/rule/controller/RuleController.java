@@ -4,6 +4,7 @@ import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
+import com.knife.router4j.server.business.rule.request.RuleDeleteByInstanceAddressReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteReq;
 import com.knife.router4j.server.business.rule.request.RuleEditReq;
 import io.swagger.annotations.Api;
@@ -26,7 +27,7 @@ public class RuleController {
     @PostMapping("add")
     public void add(@Valid @RequestBody RuleAddReq addReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(addReq);
-        pathRuleUtil.bind(pathRuleRequest);
+        pathRuleUtil.addRule(pathRuleRequest);
     }
 
     @ApiOperation("修改规则")
@@ -34,24 +35,39 @@ public class RuleController {
     public void edit(@Valid @RequestBody RuleEditReq editReq) {
         PathRuleRequest pathRuleRequestDelete = EntityConverterHelper
                 .toPathRuleRequestDelete(editReq);
-        pathRuleUtil.unbind(pathRuleRequestDelete);
+        pathRuleUtil.deleteRule(pathRuleRequestDelete);
 
         PathRuleRequest pathRuleRequestAdd = EntityConverterHelper
                 .toPathRuleRequestAdd(editReq);
-        pathRuleUtil.bind(pathRuleRequestAdd);
+        pathRuleUtil.addRule(pathRuleRequestAdd);
     }
 
-    @ApiOperation("删除规则")
+    @ApiOperation("删除规则（根据key）")
+    @PostMapping("deleteByKey")
+    public void delete(@Valid @RequestBody List<String> keys) {
+        for (String key : keys) {
+            pathRuleUtil.deleteRuleByKey(key);
+        }
+    }
+
+    @ApiOperation("删除匹配的规则")
     @PostMapping("delete")
     public void delete(@Valid @RequestBody RuleDeleteReq deleteReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(deleteReq);
-        pathRuleUtil.bind(pathRuleRequest);
+        pathRuleUtil.deleteRule(pathRuleRequest);
+    }
+
+    @ApiOperation("删除指定实例的所有规则")
+    @PostMapping("deleteByInstanceAddress")
+    public void deleteByInstanceAddress(
+            @Valid @RequestBody RuleDeleteByInstanceAddressReq deleteReq) {
+        pathRuleUtil.deleteRuleByInstanceAddress(deleteReq.getInstanceAddress());
     }
 
     @ApiOperation("删除所有规则")
     @PostMapping("deleteAll")
     public void deleteAll() {
-        pathRuleUtil.clearRuleAll();
+        pathRuleUtil.deleteAllRule();
     }
 
     @ApiOperation("查找规则")

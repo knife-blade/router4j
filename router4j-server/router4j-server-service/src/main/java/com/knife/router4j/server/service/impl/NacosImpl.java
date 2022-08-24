@@ -1,7 +1,7 @@
 package com.knife.router4j.server.service.impl;
 
 import com.knife.router4j.common.entity.InstanceInfo;
-import com.knife.router4j.server.service.InstanceService;
+import com.knife.router4j.server.service.ApplicationInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -14,7 +14,7 @@ import java.util.List;
  * Nacos实现
  */
 @Slf4j
-public class NacosImpl implements InstanceService {
+public class NacosImpl implements ApplicationInfoService {
     @Autowired
     private DiscoveryClient discoveryClient;
 

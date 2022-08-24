@@ -1,4 +1,4 @@
-package com.knife.common.config;
+package com.knife.router4j.server.common.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ public class Knife4jConfig {
                 .groupName("all")
                 .select()
                 // 这里指定Controller扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.example.demo"))
+                .apis(RequestHandlerSelectors.basePackage("com.knife"))
                 .paths(PathSelectors.any())
                 .build();
 

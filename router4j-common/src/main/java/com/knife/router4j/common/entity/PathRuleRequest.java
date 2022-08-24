@@ -13,7 +13,7 @@ public class PathRuleRequest {
     private String serviceName;
 
     /**
-     * 实例地址
+     * 实例地址。例：127.0.0.1:8080
      */
     private String instanceAddress;
 
