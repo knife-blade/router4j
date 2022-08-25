@@ -3,8 +3,7 @@ server:
 
 spring:
   application:
-    name: router4j-server
-
+    name: router4j
   cloud:
     nacos:
       discovery:

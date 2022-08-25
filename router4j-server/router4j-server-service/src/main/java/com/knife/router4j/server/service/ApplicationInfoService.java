@@ -6,18 +6,18 @@ import java.util.List;
 
 public interface ApplicationInfoService {
     /**
-     * 获得所有的服务
-     * @return 服务的名字列表
+     * 获得所有的应用
+     * @return 应用的名字列表
      */
-    List<String> findAllServices();
+    List<String> findAllApplications();
 
     /**
      * 根据服务ID获得实例
      *
-     * @param serviceId 服务ID，一般是服务名字
-     * @return 服务对应的所有实例
+     * @param applicationName 应用名字
+     * @return 应用对应的所有实例
      */
-    List<InstanceInfo> findInstances(String serviceId);
+    List<InstanceInfo> findInstances(String applicationName);
 
     /**
      * 获得所有的实例

@@ -119,6 +119,14 @@ public class PathRuleUtil {
     }
 
     /**
+     * 清除所有规则
+     */
+    public void deleteAllRule() {
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        keys.deleteByPattern(ruleProperties.getPathPatternPrefix() + "*");
+    }
+
+    /**
      * 根据key删除规则
      * @param key 要删除的数据的key
      */
@@ -133,18 +141,12 @@ public class PathRuleUtil {
      * @param pathRuleRequest 路径规则请求体
      */
     public void deleteRule(PathRuleRequest pathRuleRequest) {
-        RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RedisKeyHelper.assembleKey(ruleProperties.getPathPatternPrefix(), pathRuleRequest));
+        RList<String> list = RedissonHolder.getRedissonClient()
+                .getList(RedisKeyHelper.assembleKey(
+                        ruleProperties.getPathPatternPrefix(), pathRuleRequest));
         list.remove(pathRuleRequest.getPathPattern());
     }
 
-    /**
-     * 清除所有规则
-     */
-    public void deleteAllRule() {
-        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        keys.deleteByPattern(ruleProperties.getPathPatternPrefix() + "*");
-    }
 
     /**
      * 清除某个服务的实例的所有规则
@@ -152,11 +154,11 @@ public class PathRuleUtil {
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
     public void deleteRule(String serviceName, String instanceAddress) {
-        String prefix = RedisKeyHelper.assembleKey(
+        String key = RedisKeyHelper.assembleKey(
                 ruleProperties.getPathPatternPrefix(), serviceName, instanceAddress);
 
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        keys.deleteByPattern(prefix + "*");
+        keys.deleteByPattern(key);
     }
 
     /**

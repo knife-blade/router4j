@@ -1,5 +1,6 @@
 package com.knife.router4j.common.helper;
 
+import com.knife.router4j.common.constant.RedisConstant;
 import com.knife.router4j.common.entity.PathRuleRequest;
 import org.springframework.util.StringUtils;
 
@@ -7,7 +8,6 @@ import org.springframework.util.StringUtils;
  * Redis的key工具类
  */
 public class RedisKeyHelper {
-    public static final String SEPARATOR = ":";
 
     /**
      * 组装key
@@ -18,8 +18,8 @@ public class RedisKeyHelper {
      */
     public static String assembleKey(String prefix, PathRuleRequest pathRuleRequest) {
         return prefix
-                + SEPARATOR + pathRuleRequest.getServiceName()
-                + SEPARATOR + pathRuleRequest.getInstanceAddress();
+                + RedisConstant.SEPARATOR + pathRuleRequest.getServiceName()
+                + RedisConstant.SEPARATOR + pathRuleRequest.getInstanceAddress();
     }
 
     /**
@@ -32,10 +32,10 @@ public class RedisKeyHelper {
     public static String assembleKey(String prefix, String serviceName) {
         String tmpServiceName = serviceName;
         if (!StringUtils.hasText(tmpServiceName)) {
-            tmpServiceName = "*";
+            tmpServiceName = RedisConstant.EMPTY_PLACEHOLDER;
         }
 
-        return prefix + SEPARATOR + tmpServiceName;
+        return prefix + RedisConstant.SEPARATOR + tmpServiceName;
     }
 
     /**
@@ -50,14 +50,16 @@ public class RedisKeyHelper {
         String tmpServiceName = serviceName;
         String tmpInstanceAddress = instanceAddress;
         if (!StringUtils.hasText(tmpServiceName)) {
-            tmpServiceName = "*";
+            tmpServiceName = RedisConstant.EMPTY_PLACEHOLDER;
         }
 
         if (!StringUtils.hasText(tmpInstanceAddress)) {
-            tmpInstanceAddress = "*";
+            tmpInstanceAddress = RedisConstant.EMPTY_PLACEHOLDER;
         }
 
-        return prefix + SEPARATOR + tmpServiceName + SEPARATOR + tmpInstanceAddress;
+        return prefix +
+                RedisConstant.SEPARATOR + tmpServiceName +
+                RedisConstant.SEPARATOR + tmpInstanceAddress;
     }
 
     /**
@@ -66,7 +68,7 @@ public class RedisKeyHelper {
      * @return 实例地址
      */
     public static String parseInstanceAddress(String redisKey) {
-        String[] strings = redisKey.split(SEPARATOR);
+        String[] strings = redisKey.split(RedisConstant.SEPARATOR);
         int length = strings.length;
         return strings[length - 1];
     }
@@ -77,7 +79,7 @@ public class RedisKeyHelper {
      * @return 实例地址
      */
     public static String parseServiceName(String redisKey) {
-        String[] strings = redisKey.split(SEPARATOR);
+        String[] strings = redisKey.split(RedisConstant.SEPARATOR);
         int length = strings.length;
         return strings[length - 2];
     }

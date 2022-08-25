@@ -19,15 +19,15 @@ public class ApplicationController {
     @Autowired
     private ApplicationInfoService applicationInfoService;
 
-    @ApiOperation("获取所有应用的信息")
+    @ApiOperation("获取所有的应用")
     @GetMapping("findAllApplication")
     public List<String> findAllApplication() {
-        return applicationInfoService.findAllServices();
+        return applicationInfoService.findAllApplications();
     }
 
-    @ApiOperation("根据服务名获得实例")
+    @ApiOperation("根据应用名获得实例")
     @GetMapping("findInstance")
-    public List<InstanceInfo> findInstance(@RequestParam String serviceName) {
-        return applicationInfoService.findInstances(serviceName);
+    public List<InstanceInfo> findInstance(@RequestParam String applicationName) {
+        return applicationInfoService.findInstances(applicationName);
     }
 }

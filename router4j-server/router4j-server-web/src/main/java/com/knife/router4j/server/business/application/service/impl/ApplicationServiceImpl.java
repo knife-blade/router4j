@@ -14,12 +14,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationInfoService applicationInfoService;
 
     @Override
-    public List<String> findAllServices() {
-        return applicationInfoService.findAllServices();
+    public List<String> findAllApplications() {
+        return applicationInfoService.findAllApplications();
     }
 
     @Override
-    public List<InstanceInfo> findInstance(String serviceName) {
-        return applicationInfoService.findInstances(serviceName);
+    public List<InstanceInfo> findInstance(String applicationName) {
+        return applicationInfoService.findInstances(applicationName);
     }
 }

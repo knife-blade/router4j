@@ -19,13 +19,13 @@ public class NacosImpl implements ApplicationInfoService {
     private DiscoveryClient discoveryClient;
 
     @Override
-    public List<String> findAllServices() {
+    public List<String> findAllApplications() {
         return discoveryClient.getServices();
     }
 
     @Override
-    public List<InstanceInfo> findInstances(String serviceId) {
-        List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceId);
+    public List<InstanceInfo> findInstances(String applicationName) {
+        List<ServiceInstance> serviceInstances = discoveryClient.getInstances(applicationName);
         List<InstanceInfo> instanceInfos = new ArrayList<>();
         for (ServiceInstance serviceInstance : serviceInstances) {
             InstanceInfo instanceInfo = new InstanceInfo();
@@ -41,7 +41,7 @@ public class NacosImpl implements ApplicationInfoService {
     public List<String> findAllInstanceAddresses() {
         List<String> instanceAddresses = new ArrayList<>();
 
-        List<String> allServices = findAllServices();
+        List<String> allServices = findAllApplications();
 
         for (String serviceName : allServices) {
             List<InstanceInfo> instances = findInstances(serviceName);
