@@ -4,7 +4,6 @@ import com.knife.router4j.common.entity.InstanceInfo;
 import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.helper.InstanceInfoHelper;
 import com.knife.router4j.common.helper.RedisKeyHelper;
-import com.knife.router4j.common.helper.RedisValueHelper;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
 import org.redisson.api.RBucket;
@@ -32,14 +31,11 @@ public class PathRuleUtil {
      * @param pathRuleRequest 路径规则请求体
      */
     public void addRule(PathRuleRequest pathRuleRequest) {
-        RBucket<String> bucket = RedissonHolder.getRedissonClient().getBucket(
-                RedisKeyHelper.assembleKey(
-                        ruleProperties.getPathPatternPrefix(),
-                        pathRuleRequest.getPathPattern()));
-
-        bucket.set(RedisValueHelper.assembleValue(
-                pathRuleRequest.getServiceName(),
-                pathRuleRequest.getInstanceAddress()));
+        RList<String> list = RedissonHolder.getRedissonClient().getList(
+                RedisKeyHelper.assembleKey(ruleProperties.getPathPatternPrefix(), pathRuleRequest));
+        if (!list.contains(pathRuleRequest.getPathPattern())) {
+            list.add(pathRuleRequest.getPathPattern());
+        }
     }
 
     /**
@@ -67,7 +63,7 @@ public class PathRuleUtil {
      * 通过路径找到规则中的实例
      *
      * @param serviceName 服务名
-     * @param path        路径。例如：/order/add
+     * @param path 路径。例如：/order/add
      * @return 实例信息
      */
     public InstanceInfo findMatchedInstance(String serviceName, String path) {
@@ -117,14 +113,13 @@ public class PathRuleUtil {
         if (matchedKey == null) {
             return null;
         } else {
-            String instanceAddress = RedisValueHelper.parseInstanceAddress(matchedKey);
+            String instanceAddress = RedisKeyHelper.parseInstanceAddress(matchedKey);
             return InstanceInfoHelper.assembleInstanceAddress(instanceAddress);
         }
     }
 
     /**
      * 根据key删除规则
-     *
      * @param key 要删除的数据的key
      */
     public void deleteRuleByKey(String key) {
@@ -153,7 +148,6 @@ public class PathRuleUtil {
 
     /**
      * 清除某个服务的实例的所有规则
-     *
      * @param serviceName     服务名字
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
@@ -167,7 +161,6 @@ public class PathRuleUtil {
 
     /**
      * 清除服务的所有规则
-     *
      * @param serviceName 服务名字
      */
     public void deleteRuleByServiceName(String serviceName) {
@@ -176,7 +169,6 @@ public class PathRuleUtil {
 
     /**
      * 清除实例的所有规则
-     *
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
     public void deleteRuleByInstanceAddress(String instanceAddress) {
