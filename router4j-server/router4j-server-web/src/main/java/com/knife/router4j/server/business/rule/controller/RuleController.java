@@ -21,7 +21,7 @@ import java.util.List;
 @Api(tags = "规则配置")
 @ApiSupport(order = ApiOrder.RULE)
 @RestController
-@RequestMapping("regulation")
+@RequestMapping("rule")
 public class RuleController {
     @Autowired
     private PathRuleUtil pathRuleUtil;
