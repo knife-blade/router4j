@@ -23,3 +23,6 @@ router4j:
     # defaultInstancePrefix: "router4j:rule:defaultInstance"
   # instruction:
   #   cacheKey: "router4j:instruction"
+
+knife4j:
+  enable: true

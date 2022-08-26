@@ -1,4 +1,4 @@
-package com.knife.router4j.server.business.instruction.request;
+package com.knife.router4j.server.business.guide.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

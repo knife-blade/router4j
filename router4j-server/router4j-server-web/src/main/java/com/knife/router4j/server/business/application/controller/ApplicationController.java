@@ -1,6 +1,8 @@
 package com.knife.router4j.server.business.application.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.server.common.constant.ApiOrder;
 import com.knife.router4j.server.service.ApplicationInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(tags = "应用")
+@Api(tags = "应用管理")
+@ApiSupport(order = ApiOrder.APPLICATION)
 @RestController
 @RequestMapping("application")
 public class ApplicationController {

@@ -1,9 +1,11 @@
 package com.knife.router4j.server.business.instance.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.util.DefaultInstanceUtil;
 import com.knife.router4j.server.business.instance.request.InstanceReq;
 import com.knife.router4j.server.business.instance.service.InstanceService;
 import com.knife.router4j.server.business.instance.vo.InstanceVO;
+import com.knife.router4j.server.common.constant.ApiOrder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Api(tags = "实例管理")
+@ApiSupport(order = ApiOrder.INSTANCE)
 @RestController
 @RequestMapping("instance")
 public class InstanceController {

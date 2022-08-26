@@ -1,5 +1,6 @@
 package com.knife.router4j.server.business.rule.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
@@ -7,6 +8,7 @@ import com.knife.router4j.server.business.rule.request.RuleAddReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteByInstanceAddressReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteReq;
 import com.knife.router4j.server.business.rule.request.RuleEditReq;
+import com.knife.router4j.server.common.constant.ApiOrder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Api(tags = "规则配置")
+@ApiSupport(order = ApiOrder.RULE)
 @RestController
 @RequestMapping("regulation")
 public class RuleController {

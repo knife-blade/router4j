@@ -6,7 +6,7 @@ import lombok.Data;
  * 使用指南
  */
 @Data
-public class InstructionProperties {
+public class GuideProperties {
     /**
      * 存到Redis里的用法说明的key
      */

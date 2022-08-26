@@ -1,6 +1,6 @@
 package com.knife.router4j.common.config;
 
-import com.knife.router4j.common.property.InstructionProperties;
+import com.knife.router4j.common.property.GuideProperties;
 import com.knife.router4j.common.property.RedisProperties;
 import com.knife.router4j.common.property.RuleProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,7 +26,7 @@ public class PropertiesConfiguration {
 
     @Bean
     @ConfigurationProperties(prefix = "router4j.instruction")
-    public InstructionProperties instructionProperties() {
-        return new InstructionProperties();
+    public GuideProperties instructionProperties() {
+        return new GuideProperties();
     }
 }
