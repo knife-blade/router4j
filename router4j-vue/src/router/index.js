@@ -9,13 +9,13 @@ const routes = [
     {
         path: '/',
         component: Layout,
-        redirect: '/home1',
+        redirect: '/ruleList',
         children: [
             {
-                path: 'home1',
-                component: () => import('@/views/Home'),
-                name: 'Home1',
-                meta: {title: '第一页', icon: 'home', affix: true}
+                path: 'ruleList',
+                component: () => import('@/views/rule/RuleList'),
+                name: 'RuleList',
+                meta: {title: '规则管理', icon: 'home', affix: true}
             }
         ]
     },

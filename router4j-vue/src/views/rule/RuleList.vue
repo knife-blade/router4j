@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="rule-container">
     <HelloWorld msg="Welcome"/>
   </div>
 </template>
@@ -8,7 +8,7 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'Home',
+  name: 'RuleList',
   components: {
     HelloWorld
   }
