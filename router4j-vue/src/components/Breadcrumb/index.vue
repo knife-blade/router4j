@@ -42,13 +42,13 @@ export default {
 
       this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
     },
-    isDashboard(route) {
-      const name = route && route.name
-      if (!name) {
-        return false
-      }
-      return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase()
-    },
+    // isDashboard(route) {
+    //   const name = route && route.name
+    //   if (!name) {
+    //     return false
+    //   }
+    //   return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase()
+    // },
     pathCompile(path) {
       // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
       const { params } = this.$route

@@ -7,15 +7,16 @@ import Layout from '@/layout'
 
 const routes = [
     {
-        path: '/',
+        path: '/rule',
         component: Layout,
-        redirect: '/ruleList',
+        redirect: 'noRedirect',
+        meta: {title: '规则管理', icon: 'component'},
         children: [
             {
                 path: 'ruleList',
                 component: () => import('@/views/rule/RuleList'),
                 name: 'RuleList',
-                meta: {title: '规则管理', icon: 'home', affix: true}
+                meta: {title: '规则列表'}
             }
         ]
     },
