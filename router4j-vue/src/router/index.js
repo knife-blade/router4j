@@ -13,7 +13,7 @@ const routes = [
         children: [
             {
                 path: '/redirect/:path(.*)',
-                component: () => import('@/views/redirect/index')
+                component: () => import('@/views/misc/redirect/index')
             }
         ]
     },
@@ -24,7 +24,7 @@ const routes = [
     },
     {
         path: '/404',
-        component: () => import('@/views/error-page/404'),
+        component: () => import('@/views/misc/error-page/404'),
         hidden: true
     },
     {
@@ -35,7 +35,7 @@ const routes = [
         children: [
             {
                 path: 'ruleList',
-                component: () => import('@/views/business/rule/RuleList'),
+                component: () => import('@/views/rule/RuleList'),
                 name: 'RuleList',
                 meta: {title: '规则列表'}
             }
@@ -50,7 +50,7 @@ const routes = [
         children: [
             {
                 path: 'applicationList',
-                component: () => import('@/views/business/application/ApplicationList'),
+                component: () => import('@/views/application/ApplicationList'),
                 name: 'ApplicationList',
                 meta: {title: '应用列表'}
             }

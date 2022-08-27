@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div class="app-container">
     这是规则列表数据
   </div>
 </template>

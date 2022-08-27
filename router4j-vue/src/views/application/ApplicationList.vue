@@ -1,5 +1,5 @@
 <template>
-  <div class="application-list-container">
+  <div class="app-container">
     这是应用管理内容
   </div>
 </template>
