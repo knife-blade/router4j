@@ -19,6 +19,14 @@ module.exports = {
         overlay: {
             warnings: false,
             errors: true
+        },
+        proxy: {
+            '/dev-api': {
+                target: 'http://localhost:8100'
+            },
+            '/prod-api': {
+
+            }
         }
     },
     configureWebpack: {
