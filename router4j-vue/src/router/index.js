@@ -7,20 +7,58 @@ import Layout from '@/layout'
 
 const routes = [
     {
+        path: '/redirect',
+        component: Layout,
+        hidden: true,
+        children: [
+            {
+                path: '/redirect/:path(.*)',
+                component: () => import('@/views/redirect/index')
+            }
+        ]
+    },
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/rule'
+    },
+    {
+        path: '/404',
+        component: () => import('@/views/error-page/404'),
+        hidden: true
+    },
+    {
         path: '/rule',
         component: Layout,
-        redirect: 'noRedirect',
+        redirect: '/rule/ruleList',
         meta: {title: '规则管理', icon: 'component'},
         children: [
             {
                 path: 'ruleList',
-                component: () => import('@/views/rule/RuleList'),
+                component: () => import('@/views/business/rule/RuleList'),
                 name: 'RuleList',
                 meta: {title: '规则列表'}
             }
         ]
     },
+    {
+        path: '/application',
 
+        component: Layout,
+        redirect: '/application/applicationList',
+        meta: {title: '应用管理', icon: 'component'},
+        children: [
+            {
+                path: 'applicationList',
+                component: () => import('@/views/business/application/ApplicationList'),
+                name: 'ApplicationList',
+                meta: {title: '应用列表'}
+            }
+        ]
+    },
+
+    // 404 page must be placed at the end !!!
+    {path: '*', redirect: '/404', hidden: true}
 ]
 
 const router = new VueRouter({

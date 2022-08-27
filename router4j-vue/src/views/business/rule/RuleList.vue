@@ -1,16 +1,14 @@
 <template>
   <div class="rule-container">
-    <HelloWorld msg="Welcome"/>
+    这是规则列表数据
   </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'RuleList',
   components: {
-    HelloWorld
   }
 }
 </script>
