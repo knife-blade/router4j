@@ -75,8 +75,8 @@ public class RuleController {
 
     @ApiOperation("查找规则")
     @GetMapping("find")
-    public List<String> find(@NotBlank String serviceName,
-                             @NotBlank String instanceAddress) {
+    public List<String> find(String serviceName,
+                             String instanceAddress) {
 
         PathRuleRequest pathRuleRequest = EntityConverterHelper
                 .toPathRuleRequest(serviceName, instanceAddress);
