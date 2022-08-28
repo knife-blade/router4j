@@ -1,6 +1,8 @@
 package com.knife.router4j.server.business.rule.helper;
 
 import com.knife.router4j.common.entity.PathRuleRequest;
+import com.knife.router4j.common.entity.PathRuleRequest;
+import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteReq;
 import com.knife.router4j.server.business.rule.request.RuleEditReq;
@@ -12,17 +14,17 @@ import lombok.Data;
 @Data
 public class EntityConverterHelper {
     public static PathRuleRequest toPathRuleRequest(RuleAddReq addReq) {
-        PathRuleRequest pathRuleRequest = new PathRuleRequest();
-        pathRuleRequest.setServiceName(addReq.getServiceName());
-        pathRuleRequest.setInstanceAddress(addReq.getInstanceAddress());
-        pathRuleRequest.setPathPattern(addReq.getPathPattern());
+        PathRuleRequest pathRuleAddRequest = new PathRuleRequest();
+        pathRuleAddRequest.setApplicationName(addReq.getApplicationName());
+        pathRuleAddRequest.setInstanceAddress(addReq.getInstanceAddress());
+        pathRuleAddRequest.setPathPattern(addReq.getPathPattern());
 
-        return pathRuleRequest;
+        return pathRuleAddRequest;
     }
 
     public static PathRuleRequest toPathRuleRequest(RuleDeleteReq deleteReq) {
         PathRuleRequest pathRuleRequest = new PathRuleRequest();
-        pathRuleRequest.setServiceName(deleteReq.getServiceName());
+        pathRuleRequest.setApplicationName(deleteReq.getServiceName());
         pathRuleRequest.setInstanceAddress(deleteReq.getInstanceAddress());
         pathRuleRequest.setPathPattern(deleteReq.getPathPattern());
 
@@ -30,27 +32,27 @@ public class EntityConverterHelper {
     }
 
     public static PathRuleRequest toPathRuleRequestDelete(RuleEditReq editReq) {
-        PathRuleRequest pathRuleRequest = new PathRuleRequest();
-        pathRuleRequest.setServiceName(editReq.getServiceName());
-        pathRuleRequest.setInstanceAddress(editReq.getInstanceAddress());
-        pathRuleRequest.setPathPattern(editReq.getOldPathPattern());
+        PathRuleRequest pathRuleQueryRequest = new PathRuleRequest();
+        pathRuleQueryRequest.setApplicationName(editReq.getApplicationName());
+        pathRuleQueryRequest.setInstanceAddress(editReq.getInstanceAddress());
+        pathRuleQueryRequest.setPathPattern(editReq.getOldPathPattern());
 
-        return pathRuleRequest;
+        return pathRuleQueryRequest;
     }
 
     public static PathRuleRequest toPathRuleRequestAdd(RuleEditReq editReq) {
         PathRuleRequest pathRuleRequest = new PathRuleRequest();
-        pathRuleRequest.setServiceName(editReq.getServiceName());
+        pathRuleRequest.setApplicationName(editReq.getApplicationName());
         pathRuleRequest.setInstanceAddress(editReq.getInstanceAddress());
         pathRuleRequest.setPathPattern(editReq.getPathPattern());
 
         return pathRuleRequest;
     }
 
-    public static PathRuleRequest toPathRuleRequest(String serviceName,
-                                                       String instanceAddress) {
+    public static PathRuleRequest toPathRuleRequest(String applicationName,
+                                                    String instanceAddress) {
         PathRuleRequest pathRuleRequest = new PathRuleRequest();
-        pathRuleRequest.setServiceName(serviceName);
+        pathRuleRequest.setApplicationName(applicationName);
         pathRuleRequest.setInstanceAddress(instanceAddress);
 
         return pathRuleRequest;

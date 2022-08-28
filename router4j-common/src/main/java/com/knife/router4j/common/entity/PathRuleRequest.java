@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 public class PathRuleRequest {
     /**
-     * 服务名
+     * 应用名
      */
-    private String serviceName;
+    private String applicationName;
 
     /**
      * 实例地址。例：127.0.0.1:8080

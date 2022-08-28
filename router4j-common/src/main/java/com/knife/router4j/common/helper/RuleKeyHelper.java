@@ -21,21 +21,20 @@ public class RuleKeyHelper {
     /**
      * 组装添加key
      *
-     * @param prefix          前缀
      * @param pathRuleRequest 实例信息
      * @return 组装好的key
      */
-    public static String assembleAddKey(String prefix, PathRuleRequest pathRuleRequest) {
-        String serviceName = StringUtils.hasText(pathRuleRequest.getServiceName())
-                ? pathRuleRequest.getServiceName()
+    public static String assembleAddKey(PathRuleRequest pathRuleRequest) {
+        String applicationName = StringUtils.hasText(pathRuleRequest.getApplicationName())
+                ? pathRuleRequest.getApplicationName()
                 : RedisConstant.EMPTY_PLACEHOLDER;
 
         String instanceAddress = StringUtils.hasText(pathRuleRequest.getInstanceAddress())
                 ? pathRuleRequest.getInstanceAddress()
                 : RedisConstant.EMPTY_PLACEHOLDER;
 
-        return prefix
-                + RedisConstant.SEPARATOR + serviceName
+        return pathPatternPrefix
+                + RedisConstant.SEPARATOR + applicationName
                 + RedisConstant.SEPARATOR + instanceAddress;
     }
 
@@ -46,52 +45,46 @@ public class RuleKeyHelper {
      * @return 组装好的key
      */
     public static String assembleSearchKey(PathRuleRequest pathRuleRequest) {
-        String serviceName = StringUtils.hasText(pathRuleRequest.getServiceName())
-                ? pathRuleRequest.getServiceName()
-                : RedisConstant.SEARCH_ALL;
-
-        String instanceAddress = StringUtils.hasText(pathRuleRequest.getInstanceAddress())
-                ? pathRuleRequest.getInstanceAddress()
-                : RedisConstant.SEARCH_ALL;
-
-        return pathPatternPrefix
-                + RedisConstant.SEPARATOR + serviceName
-                + RedisConstant.SEPARATOR + instanceAddress;
+        return assembleSearchKeyInside(
+                pathRuleRequest.getApplicationName(),
+                pathRuleRequest.getInstanceAddress());
     }
 
     /**
      * 组装key
      *
-     * @param serviceName 服务名
+     * @param applicationName 服务名
      * @return 组装好的key
      */
-    public static String assembleSearchKey(String serviceName) {
-        String tmpServiceName = StringUtils.hasText(serviceName)
-                ? serviceName
-                : RedisConstant.SEARCH_ALL;
-
-        return pathPatternPrefix + RedisConstant.SEPARATOR + tmpServiceName;
+    public static String assembleSearchKey(String applicationName) {
+        return assembleSearchKeyInside(applicationName, null);
     }
 
     /**
      * 组装key
      *
-     * @param serviceName     服务名
+     * @param applicationName     服务名
      * @param instanceAddress 实例地址
      * @return 组装好的key
      */
-    public static String assembleSearchKey(String serviceName, String instanceAddress) {
-        String tmpServiceName = StringUtils.hasText(serviceName)
-                ? serviceName
+    public static String assembleSearchKey(String applicationName, String instanceAddress) {
+        return assembleSearchKeyInside(applicationName, instanceAddress);
+    }
+
+    private static String assembleSearchKeyInside(String applicationName, String instanceAddress) {
+        String applicationNamePattern = StringUtils.hasText(applicationName)
+                ? RedisConstant.SEARCH_ALL + applicationName + RedisConstant.SEARCH_ALL
                 : RedisConstant.SEARCH_ALL;
 
-        String tmpInstanceAddress = StringUtils.hasText(instanceAddress)
-                ? instanceAddress
+        String instanceAddressPattern = StringUtils.hasText(instanceAddress)
+                ? RedisConstant.SEARCH_ALL + instanceAddress + RedisConstant.SEARCH_ALL
                 : RedisConstant.SEARCH_ALL;
 
-        return pathPatternPrefix +
-                RedisConstant.SEPARATOR + tmpServiceName +
-                RedisConstant.SEPARATOR + tmpInstanceAddress;
+        return pathPatternPrefix 
+                + RedisConstant.SEPARATOR 
+                + applicationNamePattern
+                + RedisConstant.SEPARATOR 
+                + instanceAddressPattern;
     }
 
     /**
@@ -112,7 +105,7 @@ public class RuleKeyHelper {
      * @param redisKey redis的key
      * @return 实例地址
      */
-    public static String parseServiceName(String redisKey) {
+    public static String parseApplicationName(String redisKey) {
         String[] strings = redisKey.split(RedisConstant.SEPARATOR);
         int length = strings.length;
         return strings[length - 2];

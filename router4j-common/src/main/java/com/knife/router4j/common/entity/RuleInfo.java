@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class RuleInfo {
-    private String serviceName;
+    private String applicationName;
 
     private String instanceAddress;
 

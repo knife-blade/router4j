@@ -10,7 +10,7 @@ public class InstanceInfo {
     /**
      * 服务名
      */
-    private String serviceName;
+    private String applicationName;
 
     /**
      * 协议

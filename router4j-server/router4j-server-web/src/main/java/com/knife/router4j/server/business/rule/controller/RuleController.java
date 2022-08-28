@@ -2,6 +2,8 @@ package com.knife.router4j.server.business.rule.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.entity.PathRuleRequest;
+import com.knife.router4j.common.entity.PathRuleRequest;
+import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
@@ -48,9 +50,9 @@ public class RuleController {
     @ApiOperation("修改规则")
     @PostMapping("edit")
     public void edit(@Valid @RequestBody RuleEditReq editReq) {
-        PathRuleRequest pathRuleRequestDelete = EntityConverterHelper
+        PathRuleRequest pathRuleRequest = EntityConverterHelper
                 .toPathRuleRequestDelete(editReq);
-        pathRuleUtil.deleteRule(pathRuleRequestDelete);
+        pathRuleUtil.deleteRule(pathRuleRequest);
 
         PathRuleRequest pathRuleRequestAdd = EntityConverterHelper
                 .toPathRuleRequestAdd(editReq);

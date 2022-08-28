@@ -15,10 +15,10 @@ public class RuleProperties {
     /**
      * 存到Redis里的路径规则的key的前缀
      */
-    private String pathPatternPrefix = "router4j:rule:pathPattern";
+    private String pathPatternPrefix = "router4j:rule:path-pattern";
 
     /**
      * 存到Redis里的默认实例的key的前缀
      */
-    private String defaultInstancePrefix = "router4j:rule:defaultInstance";
+    private String defaultInstancePrefix = "router4j:rule:default-instance";
 }

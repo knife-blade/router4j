@@ -6,5 +6,5 @@ import com.knife.router4j.server.common.entity.PageRequest;
 import com.knife.router4j.server.common.entity.PageResponse;
 
 public interface RuleService {
-    PageResponse<RuleInfo> find(PathRuleRequest pathRuleRequest, PageRequest pageRequest);
+    PageResponse<RuleInfo> find(PathRuleRequest pathRuleQueryRequest, PageRequest pageRequest);
 }

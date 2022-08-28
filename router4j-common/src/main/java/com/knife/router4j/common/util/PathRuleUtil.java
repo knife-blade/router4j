@@ -3,14 +3,12 @@ package com.knife.router4j.common.util;
 import com.knife.router4j.common.entity.*;
 import com.knife.router4j.common.helper.InstanceInfoHelper;
 import com.knife.router4j.common.helper.RuleKeyHelper;
-import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
 import org.redisson.api.RBucket;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
-import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,14 +28,14 @@ public class PathRuleUtil {
      */
     public void addRule(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RuleKeyHelper.assembleSearchKey(pathRuleRequest));
+                RuleKeyHelper.assembleAddKey(pathRuleRequest));
         if (!list.contains(pathRuleRequest.getPathPattern())) {
             list.add(pathRuleRequest.getPathPattern());
         }
     }
 
     /**
-     * 查询规则
+     * 查询规则（用于前端查询）
      *
      * @param pathRuleRequest 路径规则请求体
      * @return 路径模板列表
@@ -50,21 +48,31 @@ public class PathRuleUtil {
         List<RuleInfo> result = new ArrayList<>();
         for (String key : keysByPattern) {
             RList<String> pathPatternList = RedissonHolder.getRedissonClient().getList(key);
-            String serviceName = RuleKeyHelper.parseServiceName(key);
+            String applicationName = RuleKeyHelper.parseApplicationName(key);
             String instanceAddress = RuleKeyHelper.parseInstanceAddress(key);
             for (String pathPattern : pathPatternList) {
-                RuleInfo ruleInfo = new RuleInfo();
-                ruleInfo.setServiceName(serviceName);
-                ruleInfo.setInstanceAddress(instanceAddress);
-                ruleInfo.setPathPattern(pathPattern);
-                result.add(ruleInfo);
+                if (StringUtils.hasText(pathRuleRequest.getPathPattern())) {
+                    if (pathMatcher.match(pathPattern, pathRuleRequest.getPathPattern())) {
+                        RuleInfo ruleInfo = new RuleInfo();
+                        ruleInfo.setApplicationName(applicationName);
+                        ruleInfo.setInstanceAddress(instanceAddress);
+                        ruleInfo.setPathPattern(pathPattern);
+                        result.add(ruleInfo);
+                    }
+                } else {
+                    RuleInfo ruleInfo = new RuleInfo();
+                    ruleInfo.setApplicationName(applicationName);
+                    ruleInfo.setInstanceAddress(instanceAddress);
+                    ruleInfo.setPathPattern(pathPattern);
+                    result.add(ruleInfo);
+                }
             }
         }
         return result;
     }
 
     /**
-     * 通过路径找到规则中的实例
+     * 通过路径找到规则中的实例（用于网关和feign）
      *
      * @param path 路径。例如：/order/add
      * @return 实例地址。例如：127.0.0.1:8080
@@ -74,13 +82,13 @@ public class PathRuleUtil {
     }
 
     /**
-     * 通过路径找到规则中的实例
+     * 通过路径找到规则中的实例（用于网关和feign）
      *
-     * @param serviceName 服务名
+     * @param applicationName 服务名
      * @param path        路径。例如：/order/add
      * @return 实例信息
      */
-    public InstanceInfo findMatchedInstance(String serviceName, String path) {
+    public InstanceInfo findMatchedInstance(String applicationName, String path) {
         // 如果没开启rule功能，则直接返回null
         // if (!ruleProperties.getEnable()) {
         //     return null;
@@ -91,7 +99,7 @@ public class PathRuleUtil {
 
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
-        String prefix = RuleKeyHelper.assembleSearchKey(serviceName);
+        String prefix = RuleKeyHelper.assembleSearchKey(applicationName);
 
         // 模糊查找出所有实例的key
         Iterable<String> ruleKeys = keys.getKeysByPattern(prefix + "*");
@@ -156,20 +164,18 @@ public class PathRuleUtil {
      */
     public void deleteRule(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient()
-                .getList(RuleKeyHelper.assembleSearchKey(
-                        pathRuleRequest));
+                .getList(RuleKeyHelper.assembleSearchKey(pathRuleRequest));
         list.remove(pathRuleRequest.getPathPattern());
     }
-
 
     /**
      * 清除某个服务的实例的所有规则
      *
-     * @param serviceName     服务名字
+     * @param applicationName     服务名字
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
-    public void deleteRule(String serviceName, String instanceAddress) {
-        String key = RuleKeyHelper.assembleSearchKey(serviceName, instanceAddress);
+    public void deleteRule(String applicationName, String instanceAddress) {
+        String key = RuleKeyHelper.assembleSearchKey(applicationName, instanceAddress);
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
         keys.deleteByPattern(key);
     }
@@ -177,10 +183,10 @@ public class PathRuleUtil {
     /**
      * 清除服务的所有规则
      *
-     * @param serviceName 服务名字
+     * @param applicationName 服务名字
      */
-    public void deleteRuleByServiceName(String serviceName) {
-        deleteRule(serviceName, "*");
+    public void deleteRuleByServiceName(String applicationName) {
+        deleteRule(applicationName, "*");
     }
 
     /**

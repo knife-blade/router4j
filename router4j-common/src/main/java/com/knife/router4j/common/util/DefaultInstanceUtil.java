@@ -7,7 +7,6 @@ import com.knife.router4j.common.redis.RedissonHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DefaultInstanceUtil {
     @Autowired
@@ -28,9 +27,9 @@ public class DefaultInstanceUtil {
 
         for (String instanceAddress : instanceAddresses) {
             PathRuleRequest pathRuleRequest = new PathRuleRequest();
-            pathRuleRequest.setServiceName("*");
+            pathRuleRequest.setApplicationName("*");
             pathRuleRequest.setInstanceAddress(instanceAddress);
-            pathRuleRequest.setPathPattern(PathPatternConstant.DEFAULT_PATTERN);
+            pathRuleRequest.setPathPattern(PathPatternConstant.MATCH_ALL);
             pathRuleUtil.addRule(pathRuleRequest);
         }
     }
@@ -47,11 +46,11 @@ public class DefaultInstanceUtil {
                 .removeAll(instanceAddresses);
 
         for (String instanceAddress : instanceAddresses) {
-            PathRuleRequest pathRuleRequest = new PathRuleRequest();
-            pathRuleRequest.setServiceName("*");
-            pathRuleRequest.setInstanceAddress(instanceAddress);
-            pathRuleRequest.setPathPattern(PathPatternConstant.DEFAULT_PATTERN);
-            pathRuleUtil.deleteRule(pathRuleRequest);
+            PathRuleRequest pathRuleQueryRequest = new PathRuleRequest();
+            pathRuleQueryRequest.setApplicationName("*");
+            pathRuleQueryRequest.setInstanceAddress(instanceAddress);
+            pathRuleQueryRequest.setPathPattern(PathPatternConstant.MATCH_ALL);
+            pathRuleUtil.deleteRule(pathRuleQueryRequest);
         }
     }
 
