@@ -19,6 +19,7 @@ public class RedissonHolder {
                 + ":" + redisProperties.getPort();
 
         //指定编码，默认编码为org.redisson.codec.JsonJacksonCodec
+
         //config.setCodec(new org.redisson.client.codec.StringCodec());
         config.useSingleServer()
                 .setAddress(address)

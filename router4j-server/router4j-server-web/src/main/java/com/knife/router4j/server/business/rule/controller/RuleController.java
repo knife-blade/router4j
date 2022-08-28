@@ -2,20 +2,23 @@ package com.knife.router4j.server.business.rule.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.entity.PathRuleRequest;
+import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteByInstanceAddressReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteReq;
 import com.knife.router4j.server.business.rule.request.RuleEditReq;
+import com.knife.router4j.server.business.rule.service.RuleService;
 import com.knife.router4j.server.common.constant.ApiOrder;
+import com.knife.router4j.server.common.entity.PageRequest;
+import com.knife.router4j.server.common.entity.PageResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Api(tags = "规则配置")
@@ -25,6 +28,15 @@ import java.util.List;
 public class RuleController {
     @Autowired
     private PathRuleUtil pathRuleUtil;
+
+    @Autowired
+    private RuleService ruleService;
+
+    @ApiOperation("查找规则")
+    @GetMapping("find")
+    public PageResponse<RuleInfo> find(PathRuleRequest pathRuleRequest, PageRequest pageRequest) {
+        return ruleService.find(pathRuleRequest, pageRequest);
+    }
 
     @ApiOperation("添加规则")
     @PostMapping("add")
@@ -71,16 +83,5 @@ public class RuleController {
     @PostMapping("deleteAll")
     public void deleteAll() {
         pathRuleUtil.deleteAllRule();
-    }
-
-    @ApiOperation("查找规则")
-    @GetMapping("find")
-    public List<String> find(String serviceName,
-                             String instanceAddress) {
-
-        PathRuleRequest pathRuleRequest = EntityConverterHelper
-                .toPathRuleRequest(serviceName, instanceAddress);
-
-        return pathRuleUtil.findPathPatterns(pathRuleRequest);
     }
 }
