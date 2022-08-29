@@ -19,7 +19,7 @@ import java.util.Map;
  * 路径的规则
  */
 public class PathRuleUtil {
-    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     /**
      * 添加规则
@@ -52,7 +52,9 @@ public class PathRuleUtil {
             String instanceAddress = RuleKeyHelper.parseInstanceAddress(key);
             for (String pathPattern : pathPatternList) {
                 if (StringUtils.hasText(pathRuleRequest.getPathPattern())) {
-                    if (pathMatcher.match(pathPattern, pathRuleRequest.getPathPattern())) {
+                    // 如果redis的路径ant匹配入参或者包含入参，则认为匹配
+                    if (antPathMatcher.match(pathPattern, pathRuleRequest.getPathPattern())
+                            || pathPattern.contains(pathRuleRequest.getPathPattern())) {
                         RuleInfo ruleInfo = new RuleInfo();
                         ruleInfo.setApplicationName(applicationName);
                         ruleInfo.setInstanceAddress(instanceAddress);
@@ -72,6 +74,56 @@ public class PathRuleUtil {
     }
 
     /**
+     * 清除所有规则
+     */
+    public void deleteAllRule() {
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        keys.deleteByPattern(RuleKeyHelper.assembleSearchKey("*", "*"));
+    }
+
+    /**
+     * 根据路径匹配删除规则
+     *
+     * @param pathRuleRequest 路径规则请求体
+     */
+    public void deleteRule(PathRuleRequest pathRuleRequest) {
+        RList<String> list = RedissonHolder.getRedissonClient().getList(
+                RuleKeyHelper.assembleSearchKey(pathRuleRequest));
+
+        list.remove(pathRuleRequest.getPathPattern());
+    }
+
+    /**
+     * 清除某个服务的实例的所有规则
+     *
+     * @param applicationName 服务名字
+     * @param instanceAddress 实例地址。例：127.0.0.1:8080
+     */
+    public void deleteRule(String applicationName, String instanceAddress) {
+        String key = RuleKeyHelper.assembleSearchKey(applicationName, instanceAddress);
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        keys.deleteByPattern(key);
+    }
+
+    /**
+     * 清除服务的所有规则
+     *
+     * @param applicationName 服务名字
+     */
+    public void deleteRuleByServiceName(String applicationName) {
+        deleteRule(applicationName, null);
+    }
+
+    /**
+     * 清除实例的所有规则
+     *
+     * @param instanceAddress 实例地址。例：127.0.0.1:8080
+     */
+    public void deleteRuleByInstanceAddress(String instanceAddress) {
+        deleteRule(null, instanceAddress);
+    }
+
+    /**
      * 通过路径找到规则中的实例（用于网关和feign）
      *
      * @param path 路径。例如：/order/add
@@ -85,7 +137,7 @@ public class PathRuleUtil {
      * 通过路径找到规则中的实例（用于网关和feign）
      *
      * @param applicationName 服务名
-     * @param path        路径。例如：/order/add
+     * @param path            路径。例如：/order/add
      * @return 实例信息
      */
     public InstanceInfo findMatchedInstance(String applicationName, String path) {
@@ -110,7 +162,7 @@ public class PathRuleUtil {
 
             // 找出每个实例里匹配的最长的pathPattern
             for (String pathPattern : pathPatterns) {
-                if (pathMatcher.match(pathPattern, path)) {
+                if (antPathMatcher.match(pathPattern, path)) {
                     String patternOfMap = matchedMap.get(ruleKey);
                     if (patternOfMap == null
                             || pathPattern.length() > patternOfMap.length()) {
@@ -137,64 +189,5 @@ public class PathRuleUtil {
             String instanceAddress = RuleKeyHelper.parseInstanceAddress(matchedKey);
             return InstanceInfoHelper.assembleInstanceAddress(instanceAddress);
         }
-    }
-
-    /**
-     * 清除所有规则
-     */
-    public void deleteAllRule() {
-        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        keys.deleteByPattern(RuleKeyHelper.assembleSearchKey("*", "*"));
-    }
-
-    /**
-     * 根据key删除规则
-     *
-     * @param key 要删除的数据的key
-     */
-    public void deleteRuleByKey(String key) {
-        RBucket<String> bucket = RedissonHolder.getRedissonClient().getBucket(key);
-        bucket.delete();
-    }
-
-    /**
-     * 根据路径匹配删除规则
-     *
-     * @param pathRuleRequest 路径规则请求体
-     */
-    public void deleteRule(PathRuleRequest pathRuleRequest) {
-        RList<String> list = RedissonHolder.getRedissonClient()
-                .getList(RuleKeyHelper.assembleSearchKey(pathRuleRequest));
-        list.remove(pathRuleRequest.getPathPattern());
-    }
-
-    /**
-     * 清除某个服务的实例的所有规则
-     *
-     * @param applicationName     服务名字
-     * @param instanceAddress 实例地址。例：127.0.0.1:8080
-     */
-    public void deleteRule(String applicationName, String instanceAddress) {
-        String key = RuleKeyHelper.assembleSearchKey(applicationName, instanceAddress);
-        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        keys.deleteByPattern(key);
-    }
-
-    /**
-     * 清除服务的所有规则
-     *
-     * @param applicationName 服务名字
-     */
-    public void deleteRuleByServiceName(String applicationName) {
-        deleteRule(applicationName, "*");
-    }
-
-    /**
-     * 清除实例的所有规则
-     *
-     * @param instanceAddress 实例地址。例：127.0.0.1:8080
-     */
-    public void deleteRuleByInstanceAddress(String instanceAddress) {
-        deleteRule("*", instanceAddress);
     }
 }
