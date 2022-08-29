@@ -2,9 +2,9 @@ package com.knife.router4j.common.util;
 
 import com.knife.router4j.common.entity.*;
 import com.knife.router4j.common.helper.InstanceInfoHelper;
+import com.knife.router4j.common.helper.PathMatchHelper;
 import com.knife.router4j.common.helper.RuleKeyHelper;
 import com.knife.router4j.common.redis.RedissonHolder;
-import org.redisson.api.RBucket;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
 import org.springframework.util.AntPathMatcher;
@@ -19,8 +19,6 @@ import java.util.Map;
  * 路径的规则
  */
 public class PathRuleUtil {
-    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-
     /**
      * 添加规则
      *
@@ -28,7 +26,10 @@ public class PathRuleUtil {
      */
     public void addRule(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RuleKeyHelper.assembleAddKey(pathRuleRequest));
+                RuleKeyHelper.assembleAddKey(
+                        pathRuleRequest.getApplicationName(),
+                        pathRuleRequest.getInstanceAddress()));
+
         if (!list.contains(pathRuleRequest.getPathPattern())) {
             list.add(pathRuleRequest.getPathPattern());
         }
@@ -43,18 +44,18 @@ public class PathRuleUtil {
     public List<RuleInfo> findRule(PathRuleRequest pathRuleRequest) {
         Iterable<String> keysByPattern = RedissonHolder.getRedissonClient()
                 .getKeys()
-                .getKeysByPattern(RuleKeyHelper.assembleSearchKey(pathRuleRequest));
+                .getKeysByPattern(RuleKeyHelper.assembleSearchKey(
+                        pathRuleRequest.getApplicationName(), pathRuleRequest.getInstanceAddress()));
 
         List<RuleInfo> result = new ArrayList<>();
         for (String key : keysByPattern) {
-            RList<String> pathPatternList = RedissonHolder.getRedissonClient().getList(key);
+            RList<String> rPathPatternList = RedissonHolder.getRedissonClient().getList(key);
             String applicationName = RuleKeyHelper.parseApplicationName(key);
             String instanceAddress = RuleKeyHelper.parseInstanceAddress(key);
-            for (String pathPattern : pathPatternList) {
+            for (String pathPattern : rPathPatternList) {
                 if (StringUtils.hasText(pathRuleRequest.getPathPattern())) {
                     // 如果redis的路径ant匹配入参或者包含入参，则认为匹配
-                    if (antPathMatcher.match(pathPattern, pathRuleRequest.getPathPattern())
-                            || pathPattern.contains(pathRuleRequest.getPathPattern())) {
+                    if (PathMatchHelper.matchForSetting(pathPattern, pathRuleRequest.getPathPattern())) {
                         RuleInfo ruleInfo = new RuleInfo();
                         ruleInfo.setApplicationName(applicationName);
                         ruleInfo.setInstanceAddress(instanceAddress);
@@ -82,15 +83,44 @@ public class PathRuleUtil {
     }
 
     /**
-     * 根据路径匹配删除规则
+     * 删除规则（精准）
      *
      * @param pathRuleRequest 路径规则请求体
      */
-    public void deleteRule(PathRuleRequest pathRuleRequest) {
+    public void deleteRuleAccurate(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RuleKeyHelper.assembleDeleteKey(pathRuleRequest));
+                RuleKeyHelper.assembleDeleteKeyAccurate(
+                        pathRuleRequest.getApplicationName(),
+                        pathRuleRequest.getInstanceAddress()));
 
         list.remove(pathRuleRequest.getPathPattern());
+    }
+
+    /**
+     * 删除规则（模糊）
+     *
+     * @param pathRuleRequest 路径规则请求体
+     */
+    public void deleteRuleFuzzy(PathRuleRequest pathRuleRequest) {
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        String keyPattern = RuleKeyHelper.assembleSearchKey(
+                pathRuleRequest.getApplicationName(),
+                pathRuleRequest.getInstanceAddress());
+
+        if (!StringUtils.hasText(pathRuleRequest.getPathPattern())) {
+            keys.deleteByPattern(keyPattern);
+        } else {
+            Iterable<String> keysByPattern = keys.getKeysByPattern(keyPattern);
+            for (String key : keysByPattern) {
+                RList<String> rPathPatternList = RedissonHolder.getRedissonClient().getList(key);
+                for (String pathPattern : rPathPatternList) {
+                    // 如果redis的路径ant匹配入参或者包含入参，则认为匹配
+                    if (PathMatchHelper.matchForSetting(pathPattern, pathRuleRequest.getPathPattern())) {
+                        rPathPatternList.remove(pathPattern);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -99,9 +129,9 @@ public class PathRuleUtil {
      * @param applicationName 服务名字
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
-    public void deleteRule(String applicationName, String instanceAddress) {
+    public void deleteRuleAccurate(String applicationName, String instanceAddress) {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        String key = RuleKeyHelper.assembleDeleteKey(applicationName, instanceAddress);
+        String key = RuleKeyHelper.assembleDeleteKeyAccurate(applicationName, instanceAddress);
         keys.deleteByPattern(key);
     }
 
@@ -111,7 +141,7 @@ public class PathRuleUtil {
      * @param applicationName 服务名字
      */
     public void deleteRuleByServiceName(String applicationName) {
-        deleteRule(applicationName, "*");
+        deleteRuleAccurate(applicationName, "*");
     }
 
     /**
@@ -120,7 +150,7 @@ public class PathRuleUtil {
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
     public void deleteRuleByInstanceAddress(String instanceAddress) {
-        deleteRule("*", instanceAddress);
+        deleteRuleAccurate("*", instanceAddress);
     }
 
     /**
@@ -162,7 +192,7 @@ public class PathRuleUtil {
 
             // 找出每个实例里匹配的最长的pathPattern
             for (String pathPattern : pathPatterns) {
-                if (antPathMatcher.match(pathPattern, path)) {
+                if (PathMatchHelper.matchForRoute(pathPattern, path)) {
                     String patternOfMap = matchedMap.get(ruleKey);
                     if (patternOfMap == null
                             || pathPattern.length() > patternOfMap.length()) {

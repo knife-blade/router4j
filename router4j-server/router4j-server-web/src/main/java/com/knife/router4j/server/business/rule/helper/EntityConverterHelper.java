@@ -2,7 +2,8 @@ package com.knife.router4j.server.business.rule.helper;
 
 import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
-import com.knife.router4j.server.business.rule.request.RuleDeleteReq;
+import com.knife.router4j.server.business.rule.request.RuleDeleteAccurateReq;
+import com.knife.router4j.server.business.rule.request.RuleDeleteFuzzyReq;
 import com.knife.router4j.server.business.rule.request.RuleEditReq;
 import lombok.Data;
 
@@ -20,7 +21,16 @@ public class EntityConverterHelper {
         return pathRuleAddRequest;
     }
 
-    public static PathRuleRequest toPathRuleRequest(RuleDeleteReq deleteReq) {
+    public static PathRuleRequest toPathRuleRequest(RuleDeleteAccurateReq deleteReq) {
+        PathRuleRequest pathRuleRequest = new PathRuleRequest();
+        pathRuleRequest.setApplicationName(deleteReq.getApplicationName());
+        pathRuleRequest.setInstanceAddress(deleteReq.getInstanceAddress());
+        pathRuleRequest.setPathPattern(deleteReq.getPathPattern());
+
+        return pathRuleRequest;
+    }
+
+    public static PathRuleRequest toPathRuleRequest(RuleDeleteFuzzyReq deleteReq) {
         PathRuleRequest pathRuleRequest = new PathRuleRequest();
         pathRuleRequest.setApplicationName(deleteReq.getApplicationName());
         pathRuleRequest.setInstanceAddress(deleteReq.getInstanceAddress());

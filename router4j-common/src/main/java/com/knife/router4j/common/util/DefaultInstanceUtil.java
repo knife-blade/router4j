@@ -50,7 +50,7 @@ public class DefaultInstanceUtil {
             pathRuleQueryRequest.setApplicationName("*");
             pathRuleQueryRequest.setInstanceAddress(instanceAddress);
             pathRuleQueryRequest.setPathPattern(PathPatternConstant.MATCH_ALL);
-            pathRuleUtil.deleteRule(pathRuleQueryRequest);
+            pathRuleUtil.deleteRuleAccurate(pathRuleQueryRequest);
         }
     }
 

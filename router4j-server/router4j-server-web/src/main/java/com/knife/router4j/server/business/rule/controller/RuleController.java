@@ -6,8 +6,8 @@ import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
-import com.knife.router4j.server.business.rule.request.RuleDeleteByInstanceAddressReq;
-import com.knife.router4j.server.business.rule.request.RuleDeleteReq;
+import com.knife.router4j.server.business.rule.request.RuleDeleteAccurateReq;
+import com.knife.router4j.server.business.rule.request.RuleDeleteFuzzyReq;
 import com.knife.router4j.server.business.rule.request.RuleEditReq;
 import com.knife.router4j.server.business.rule.service.RuleService;
 import com.knife.router4j.server.common.constant.ApiOrder;
@@ -49,25 +49,25 @@ public class RuleController {
     public void edit(@Valid @RequestBody RuleEditReq editReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper
                 .toPathRuleRequestDelete(editReq);
-        pathRuleUtil.deleteRule(pathRuleRequest);
+        pathRuleUtil.deleteRuleAccurate(pathRuleRequest);
 
         PathRuleRequest pathRuleRequestAdd = EntityConverterHelper
                 .toPathRuleRequestAdd(editReq);
         pathRuleUtil.addRule(pathRuleRequestAdd);
     }
 
-    @ApiOperation("删除匹配的规则")
-    @PostMapping("delete")
-    public void delete(@Valid @RequestBody RuleDeleteReq deleteReq) {
+    @ApiOperation("删除（精准）")
+    @PostMapping("deleteAccurate")
+    public void deleteAccurate(@Valid @RequestBody RuleDeleteAccurateReq deleteReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(deleteReq);
-        pathRuleUtil.deleteRule(pathRuleRequest);
+        pathRuleUtil.deleteRuleAccurate(pathRuleRequest);
     }
 
-    @ApiOperation("删除指定实例的所有规则")
-    @PostMapping("deleteByInstanceAddress")
-    public void deleteByInstanceAddress(
-            @Valid @RequestBody RuleDeleteByInstanceAddressReq deleteReq) {
-        pathRuleUtil.deleteRuleByInstanceAddress(deleteReq.getInstanceAddress());
+    @ApiOperation("删除（模糊）")
+    @PostMapping("deleteFuzzy")
+    public void deleteFuzzy(@Valid @RequestBody RuleDeleteFuzzyReq ruleDeleteFuzzyReq) {
+        PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(ruleDeleteFuzzyReq);
+        pathRuleUtil.deleteRuleFuzzy(pathRuleRequest);
     }
 
     @ApiOperation("删除所有规则")
