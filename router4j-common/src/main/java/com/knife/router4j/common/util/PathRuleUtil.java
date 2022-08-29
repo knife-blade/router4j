@@ -100,8 +100,8 @@ public class PathRuleUtil {
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
     public void deleteRule(String applicationName, String instanceAddress) {
-        String key = RuleKeyHelper.assembleSearchKey(applicationName, instanceAddress);
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+        String key = RuleKeyHelper.assembleDeleteKey(applicationName, instanceAddress);
         keys.deleteByPattern(key);
     }
 
@@ -111,7 +111,7 @@ public class PathRuleUtil {
      * @param applicationName 服务名字
      */
     public void deleteRuleByServiceName(String applicationName) {
-        deleteRule(applicationName, null);
+        deleteRule(applicationName, "*");
     }
 
     /**
@@ -120,7 +120,7 @@ public class PathRuleUtil {
      * @param instanceAddress 实例地址。例：127.0.0.1:8080
      */
     public void deleteRuleByInstanceAddress(String instanceAddress) {
-        deleteRule(null, instanceAddress);
+        deleteRule("*", instanceAddress);
     }
 
     /**

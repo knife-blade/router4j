@@ -32,7 +32,7 @@ public class EntityConverterHelper {
     public static PathRuleRequest toPathRuleRequestDelete(RuleEditReq editReq) {
         PathRuleRequest pathRuleQueryRequest = new PathRuleRequest();
         pathRuleQueryRequest.setApplicationName(editReq.getApplicationName());
-        pathRuleQueryRequest.setInstanceAddress(editReq.getInstanceAddress());
+        pathRuleQueryRequest.setInstanceAddress(editReq.getOldInstanceAddress());
         pathRuleQueryRequest.setPathPattern(editReq.getOldPathPattern());
 
         return pathRuleQueryRequest;
@@ -41,8 +41,8 @@ public class EntityConverterHelper {
     public static PathRuleRequest toPathRuleRequestAdd(RuleEditReq editReq) {
         PathRuleRequest pathRuleRequest = new PathRuleRequest();
         pathRuleRequest.setApplicationName(editReq.getApplicationName());
-        pathRuleRequest.setInstanceAddress(editReq.getInstanceAddress());
-        pathRuleRequest.setPathPattern(editReq.getPathPattern());
+        pathRuleRequest.setInstanceAddress(editReq.getNewInstanceAddress());
+        pathRuleRequest.setPathPattern(editReq.getNewPathPattern());
 
         return pathRuleRequest;
     }

@@ -45,9 +45,17 @@ public class RuleKeyHelper {
      * @return 组装好的key
      */
     public static String assembleDeleteKey(PathRuleRequest pathRuleRequest) {
+        String applicationNamePattern = StringUtils.hasText(pathRuleRequest.getApplicationName())
+                ? pathRuleRequest.getApplicationName()
+                : RedisConstant.SEARCH_ALL;
+
+        String instanceAddressPattern = StringUtils.hasText(pathRuleRequest.getInstanceAddress())
+                ? pathRuleRequest.getInstanceAddress()
+                : RedisConstant.SEARCH_ALL;
+
         return pathPatternPrefix
-                + RedisConstant.SEPARATOR + pathRuleRequest.getApplicationName()
-                + RedisConstant.SEPARATOR + pathRuleRequest.getInstanceAddress();
+                + RedisConstant.SEPARATOR + applicationNamePattern
+                + RedisConstant.SEPARATOR + instanceAddressPattern;
     }
 
     /**
@@ -73,7 +81,7 @@ public class RuleKeyHelper {
     }
 
     /**
-     * 组装key
+     * 组装搜索key
      *
      * @param applicationName     服务名
      * @param instanceAddress 实例地址
@@ -83,6 +91,9 @@ public class RuleKeyHelper {
         return assembleSearchKeyInside(applicationName, instanceAddress);
     }
 
+    /**
+     * 组装搜索key
+     */
     private static String assembleSearchKeyInside(String applicationName, String instanceAddress) {
         String applicationNamePattern = StringUtils.hasText(applicationName)
                 ? RedisConstant.SEARCH_ALL + applicationName + RedisConstant.SEARCH_ALL
@@ -97,6 +108,23 @@ public class RuleKeyHelper {
                 + applicationNamePattern
                 + RedisConstant.SEPARATOR 
                 + instanceAddressPattern;
+    }
+
+    /**
+     * 组装删除key
+     */
+    public static String assembleDeleteKey(String applicationName, String instanceAddress) {
+        String applicationNamePattern = StringUtils.hasText(applicationName)
+                ? applicationName
+                : RedisConstant.SEARCH_ALL;
+
+        String instanceAddressPattern = StringUtils.hasText(instanceAddress)
+                ? instanceAddress
+                : RedisConstant.SEARCH_ALL;
+
+        return pathPatternPrefix
+                + RedisConstant.SEPARATOR + applicationNamePattern
+                + RedisConstant.SEPARATOR + instanceAddressPattern;
     }
 
     /**

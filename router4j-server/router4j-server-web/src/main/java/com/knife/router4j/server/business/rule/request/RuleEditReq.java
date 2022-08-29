@@ -13,9 +13,13 @@ public class RuleEditReq {
     @NotBlank(message = "应用名不能为空")
     private String applicationName;
 
-    @ApiModelProperty("实例地址。例：127.0.0.1:8080")
-    @NotBlank(message = "实例地址不能为空")
-    private String instanceAddress;
+    @ApiModelProperty("旧实例地址。例：127.0.0.1:8080")
+    @NotBlank(message = "旧实例地址不能为空")
+    private String oldInstanceAddress;
+
+    @ApiModelProperty("新实例地址。例：127.0.0.1:8080")
+    @NotBlank(message = "新实例地址不能为空")
+    private String newInstanceAddress;
 
     @ApiModelProperty("旧路径模板")
     @NotBlank(message = "旧路径模板不能为空")
@@ -23,5 +27,5 @@ public class RuleEditReq {
 
     @ApiModelProperty("新路径模板")
     @NotBlank(message = "新路径模板不能为空")
-    private String pathPattern;
+    private String newPathPattern;
 }
