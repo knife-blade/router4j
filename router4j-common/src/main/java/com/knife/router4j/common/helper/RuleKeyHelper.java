@@ -39,6 +39,18 @@ public class RuleKeyHelper {
     }
 
     /**
+     * 组装删除key（精准删除，不模糊删除）
+     *
+     * @param pathRuleRequest 实例信息
+     * @return 组装好的key
+     */
+    public static String assembleDeleteKey(PathRuleRequest pathRuleRequest) {
+        return pathPatternPrefix
+                + RedisConstant.SEPARATOR + pathRuleRequest.getApplicationName()
+                + RedisConstant.SEPARATOR + pathRuleRequest.getInstanceAddress();
+    }
+
+    /**
      * 组装搜索key
      *
      * @param pathRuleRequest 实例信息

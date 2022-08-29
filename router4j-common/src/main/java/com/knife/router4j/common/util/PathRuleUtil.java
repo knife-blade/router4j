@@ -88,7 +88,7 @@ public class PathRuleUtil {
      */
     public void deleteRule(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RuleKeyHelper.assembleSearchKey(pathRuleRequest));
+                RuleKeyHelper.assembleDeleteKey(pathRuleRequest));
 
         list.remove(pathRuleRequest.getPathPattern());
     }

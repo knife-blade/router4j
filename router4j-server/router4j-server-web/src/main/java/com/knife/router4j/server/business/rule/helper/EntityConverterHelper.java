@@ -1,8 +1,6 @@
 package com.knife.router4j.server.business.rule.helper;
 
 import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteReq;
 import com.knife.router4j.server.business.rule.request.RuleEditReq;
@@ -24,7 +22,7 @@ public class EntityConverterHelper {
 
     public static PathRuleRequest toPathRuleRequest(RuleDeleteReq deleteReq) {
         PathRuleRequest pathRuleRequest = new PathRuleRequest();
-        pathRuleRequest.setApplicationName(deleteReq.getServiceName());
+        pathRuleRequest.setApplicationName(deleteReq.getApplicationName());
         pathRuleRequest.setInstanceAddress(deleteReq.getInstanceAddress());
         pathRuleRequest.setPathPattern(deleteReq.getPathPattern());
 

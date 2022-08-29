@@ -2,8 +2,6 @@ package com.knife.router4j.server.business.rule.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
@@ -21,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Api(tags = "规则配置")
 @ApiSupport(order = ApiOrder.RULE)
@@ -57,14 +54,6 @@ public class RuleController {
         PathRuleRequest pathRuleRequestAdd = EntityConverterHelper
                 .toPathRuleRequestAdd(editReq);
         pathRuleUtil.addRule(pathRuleRequestAdd);
-    }
-
-    @ApiOperation("删除规则（根据key）")
-    @PostMapping("deleteByKey")
-    public void delete(@Valid @RequestBody List<String> keys) {
-        for (String key : keys) {
-            pathRuleUtil.deleteRuleByKey(key);
-        }
     }
 
     @ApiOperation("删除匹配的规则")
