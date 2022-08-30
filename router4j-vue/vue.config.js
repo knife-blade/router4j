@@ -25,7 +25,7 @@ module.exports = {
                 target: 'http://localhost:8100'
             },
             '/prod-api': {
-
+                target: 'http://localhost:8101'
             }
         }
     },
