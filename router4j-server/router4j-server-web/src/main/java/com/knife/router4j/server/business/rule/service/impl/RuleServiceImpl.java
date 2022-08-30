@@ -10,7 +10,9 @@ import com.knife.router4j.server.common.entity.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleServiceImpl implements RuleService {
@@ -20,6 +22,10 @@ public class RuleServiceImpl implements RuleService {
     @Override
     public PageResponse<RuleInfo> find(PathRuleRequest pathRuleQueryRequest, PageRequest pageRequest) {
         List<RuleInfo> ruleInfoList = pathRuleUtil.findRule(pathRuleQueryRequest);
+
+        ruleInfoList = ruleInfoList.stream()
+                .sorted(Comparator.comparing(RuleInfo::getPathPattern))
+                .collect(Collectors.toList());
 
         int startIndex = (int) (pageRequest.getCurrent() * pageRequest.getSize());
         int allSize = ruleInfoList.size();
