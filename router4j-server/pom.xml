@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.knife</groupId>
-    <artifactId>router4j-server-web</artifactId>
+    <artifactId>router4j-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>router4j-server-web</name>
-    <description>router4j</description>
+    <name>router4j-server</name>
+    <description>router4j-server Project</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -99,13 +99,13 @@
 
         <dependency>
             <groupId>com.knife</groupId>
-            <artifactId>router4j-common</artifactId>
+            <artifactId>router4j-common-rule</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.knife</groupId>
-            <artifactId>router4j-server-service</artifactId>
+            <artifactId>router4j-common-instance</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
