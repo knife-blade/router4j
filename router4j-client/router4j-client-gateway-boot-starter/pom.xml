@@ -58,7 +58,14 @@
 
         <dependency>
             <groupId>com.knife</groupId>
-            <artifactId>router4j-common</artifactId>
+            <artifactId>router4j-common-rule</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.knife</groupId>
+            <artifactId>router4j-common-instance</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
