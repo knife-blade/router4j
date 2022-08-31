@@ -22,10 +22,18 @@ module.exports = {
         },
         proxy: {
             '/dev-api': {
-                target: 'http://localhost:8100'
+                target: 'http://localhost:8100/',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/dev-api': ''
+                }
             },
             '/prod-api': {
-                target: 'http://localhost:8101'
+                target: 'http://localhost:8101/',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/prod-api': ''
+                }
             }
         }
     },
