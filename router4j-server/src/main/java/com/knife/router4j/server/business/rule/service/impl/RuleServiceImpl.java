@@ -1,7 +1,6 @@
 package com.knife.router4j.server.business.rule.service.impl;
 
 import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.util.PathRuleUtil;
 import com.knife.router4j.server.business.rule.service.RuleService;
