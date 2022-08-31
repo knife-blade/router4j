@@ -42,6 +42,12 @@
             <artifactId>redisson</artifactId>
             <version>3.17.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.knife</groupId>
+            <artifactId>router4j-common-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

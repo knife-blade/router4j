@@ -1,7 +1,7 @@
-package com.knife.router4j.server.service.impl;
+package com.knife.router4j.common.instance.impl;
 
-import com.knife.router4j.common.entity.InstanceInfo;
-import com.knife.router4j.server.service.ApplicationInfoService;
+import com.knife.router4j.common.common.entity.InstanceInfo;
+import com.knife.router4j.common.instance.ApplicationInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -29,7 +29,7 @@ public class NacosImpl implements ApplicationInfoService {
         List<InstanceInfo> instanceInfos = new ArrayList<>();
         for (ServiceInstance serviceInstance : serviceInstances) {
             InstanceInfo instanceInfo = new InstanceInfo();
-            instanceInfo.setServiceName(serviceInstance.getServiceId());
+            instanceInfo.setApplicationName(serviceInstance.getServiceId());
             instanceInfo.setHost(serviceInstance.getHost());
             instanceInfo.setPort(serviceInstance.getPort());
             instanceInfos.add(instanceInfo);

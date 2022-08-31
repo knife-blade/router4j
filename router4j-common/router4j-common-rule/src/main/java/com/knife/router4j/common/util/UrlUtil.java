@@ -1,6 +1,6 @@
 package com.knife.router4j.common.util;
 
-import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.common.common.entity.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.MalformedURLException;

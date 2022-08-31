@@ -1,10 +1,8 @@
 package com.knife.router4j.common.helper;
 
-import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.common.common.entity.InstanceInfo;
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 
 /**
  * 实例信息帮助类

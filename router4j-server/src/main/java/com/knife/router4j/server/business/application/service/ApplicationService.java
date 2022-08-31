@@ -1,6 +1,7 @@
 package com.knife.router4j.server.business.application.service;
 
-import com.knife.router4j.common.entity.InstanceInfo;
+
+import com.knife.router4j.common.common.entity.InstanceInfo;
 
 import java.util.List;
 

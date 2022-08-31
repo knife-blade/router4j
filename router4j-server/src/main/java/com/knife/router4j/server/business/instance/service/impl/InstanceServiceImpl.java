@@ -1,6 +1,6 @@
 package com.knife.router4j.server.business.instance.service.impl;
 
-import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.common.common.entity.InstanceInfo;
 import com.knife.router4j.common.util.DefaultInstanceUtil;
 import com.knife.router4j.server.business.application.service.ApplicationService;
 import com.knife.router4j.server.business.instance.service.InstanceService;

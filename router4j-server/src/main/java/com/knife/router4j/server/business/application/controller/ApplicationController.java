@@ -1,9 +1,9 @@
 package com.knife.router4j.server.business.application.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import com.knife.router4j.common.entity.InstanceInfo;
+import com.knife.router4j.common.common.entity.InstanceInfo;
+import com.knife.router4j.common.instance.ApplicationInfoService;
 import com.knife.router4j.server.common.constant.ApiOrder;
-import com.knife.router4j.server.service.ApplicationInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

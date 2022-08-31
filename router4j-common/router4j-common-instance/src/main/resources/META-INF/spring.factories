@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.knife.router4j.server.service.config.InstanceServiceAutoConfiguration
+  com.knife.router4j.common.instance.config.InstanceServiceAutoConfiguration
