@@ -6,7 +6,7 @@ const resolve = dir => path.join(__dirname, dir)
 const defaultSettings = require('./src/settings.js')
 
 const port = process.env.port || process.env.npm_config_port || 10001 // dev port
-
+const target = process.env.target
 const name = defaultSettings.title || 'router4j' // page title
 
 module.exports = {
@@ -21,18 +21,11 @@ module.exports = {
             errors: true
         },
         proxy: {
-            '/dev-api': {
-                target: 'http://localhost:8100/',
+            '/api': {
+                target: target,
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/dev-api': ''
-                }
-            },
-            '/prod-api': {
-                target: 'http://localhost:8101/',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/prod-api': ''
+                    '^/api': ''
                 }
             }
         }

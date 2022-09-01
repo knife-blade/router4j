@@ -1,11 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="pageQuery.title" placeholder="Title" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFind"/>
-
       <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
-                 allow-create clearable style="width: 90px" class="filter-item" >
+                 allow-create clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
       </el-select>
 
@@ -23,10 +20,6 @@
         搜索
       </el-button>
 
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        添加
-      </el-button>
-
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-delete" @click="handleDelete">
         删除
       </el-button>
@@ -41,7 +34,7 @@
         highlight-current-row
         style="width: 100%;"
     >
-      <el-table-column label="应用名" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column label="应用名" align="center" min-width="150px" max-wi>
         <template slot-scope="{row}">
           <span>{{ row.applicationName }}</span>
         </template>
@@ -53,7 +46,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="路径" width="110px" align="center">
+      <el-table-column label="路径" min-width="200px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.pathPattern }}</span>
         </template>
@@ -174,8 +167,9 @@ export default {
     getPage() {
       this.listLoading = true
       fetchPage(this.pageQuery).then(response => {
-        this.list = response.data.items
+        this.list = response.data.data
         this.total = response.data.total
+        this.listLoading = false
       })
     },
     handleFind() {
