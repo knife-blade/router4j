@@ -2,27 +2,30 @@
   <div class="app-container">
     <div class="filter-container">
       <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
-                 allow-create clearable style="width: 90px" class="filter-item">
+                 allow-create clearable style="width: 200px" class="filter-item">
         <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
       </el-select>
 
       <el-select v-model="pageQuery.instanceAddress" placeholder="输入或选择"
-                 allow-create clearable style="width: 90px" class="filter-item">
+                 allow-create clearable style="width: 200px" class="filter-item">
         <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
       </el-select>
 
       <el-select v-model="pageQuery.pathPattern" placeholder="输入或选择"
-                 allow-create clearable style="width: 90px" class="filter-item">
+                 allow-create clearable style="width: 300px" class="filter-item">
         <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
       </el-select>
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFind">
-        搜索
-      </el-button>
+      <div class="filter-button">
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFind">
+          搜索
+        </el-button>
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-delete" @click="handleDelete">
-        删除
-      </el-button>
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-delete" @click="handleDelete">
+          删除
+        </el-button>
+      </div>
+
     </div>
 
     <el-table

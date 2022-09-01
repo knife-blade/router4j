@@ -179,6 +179,13 @@ aside {
     vertical-align: middle;
     margin: 5px 10px 10px 10px;
   }
+
+  .filter-button {
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    right: 20px;
+  }
 }
 
 //refine vue-multiselect plugin
