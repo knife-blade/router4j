@@ -121,7 +121,7 @@ aside {
 
 //main-container全局样式
 .app-container {
-  padding: 20px;
+  padding: 10px;
 }
 
 .components-container {
@@ -177,7 +177,7 @@ aside {
   .filter-item {
     display: inline-block;
     vertical-align: middle;
-    margin: 5px 10px 10px 10px;
+    margin: 0 10px;
   }
 
   .filter-button {
@@ -195,4 +195,8 @@ aside {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+.operator-button-row {
+  margin-bottom: 15px;
 }

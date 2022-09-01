@@ -1,72 +1,93 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
-                 allow-create clearable style="width: 200px" class="filter-item">
-        <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
-      </el-select>
+      <el-card>
+        <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
+                   allow-create clearable style="width: 200px" class="filter-item">
+          <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
+        </el-select>
 
-      <el-select v-model="pageQuery.instanceAddress" placeholder="输入或选择"
-                 allow-create clearable style="width: 200px" class="filter-item">
-        <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
-      </el-select>
+        <el-select v-model="pageQuery.instanceAddress" placeholder="输入或选择"
+                   allow-create clearable style="width: 200px" class="filter-item">
+          <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
+        </el-select>
 
-      <el-select v-model="pageQuery.pathPattern" placeholder="输入或选择"
-                 allow-create clearable style="width: 300px" class="filter-item">
-        <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
-      </el-select>
+        <el-select v-model="pageQuery.pathPattern" placeholder="输入或选择"
+                   allow-create clearable style="width: 300px" class="filter-item">
+          <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
+        </el-select>
 
-      <div class="filter-button">
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFind">
-          搜索
-        </el-button>
-
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-delete" @click="handleDelete">
-          删除
-        </el-button>
-      </div>
-
-    </div>
-
-    <el-table
-        :key="tableKey"
-        v-loading="listLoading"
-        :data="list"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%;"
-    >
-      <el-table-column label="应用名" align="center" min-width="150px" max-wi>
-        <template slot-scope="{row}">
-          <span>{{ row.applicationName }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="实例地址" min-width="150px">
-        <template slot-scope="{row}">
-          <span>{{ row.instanceAddress }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="路径" min-width="200px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.pathPattern }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
+        <div class="filter-button">
+          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFind">
+            搜索
           </el-button>
 
-          <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="handleDelete">
             删除
           </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        </div>
+      </el-card>
+    </div>
+
+    <el-card>
+      <el-row class="operator-button-row">
+        <el-button type="primary" @click="handleCreate()">
+          新建
+        </el-button>
+
+        <el-button type="danger" @click="handleDelete()">
+          删除
+        </el-button>
+      </el-row>
+
+      <el-table
+          :key="tableKey"
+          v-loading="listLoading"
+          :data="list"
+          border
+          fit
+          highlight-current-row
+          :header-cell-style="{background:'#F8F8F8'}"
+          style="width: 100%;"
+      >
+
+        <el-table-column
+            type="selection"
+            width="55">
+        </el-table-column>
+
+        <el-table-column label="应用名" align="center" min-width="150px" max-wi>
+          <template slot-scope="{row}">
+            <span>{{ row.applicationName }}</span>
+          </template>
+
+        </el-table-column>
+
+        <el-table-column label="实例地址" min-width="150px">
+          <template slot-scope="{row}">
+            <span>{{ row.instanceAddress }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="路径" min-width="200px" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.pathPattern }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+          <template slot-scope="{row,$index}">
+            <el-button type="primary" size="mini" @click="handleUpdate(row)">
+              编辑
+            </el-button>
+
+            <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
 
     <pagination v-show="total>0" :total="total" :page.sync="pageQuery.page" :limit.sync="pageQuery.limit"
                 @pagination="getPage"/>
@@ -96,10 +117,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          确定
         </el-button>
       </div>
     </el-dialog>
@@ -108,6 +129,7 @@
 
 <script>
 import {fetchPage} from '@/api/rule'
+import variables from '@/styles/variables.scss'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -159,6 +181,9 @@ export default {
         applicationName: [{required: true, message: '应用名是必填的', trigger: 'change'}],
         instanceAddress: [{required: true, message: '实例地址是必填的', trigger: 'change'}],
         pathPattern: [{required: true, message: '路径是必填的', trigger: 'change'}]
+      },
+      variables() {
+        return variables
       },
     }
   },
