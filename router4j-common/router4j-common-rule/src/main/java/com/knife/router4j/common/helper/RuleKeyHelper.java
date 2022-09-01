@@ -132,4 +132,5 @@ public class RuleKeyHelper {
         int length = strings.length;
         return strings[length - 2];
     }
+
 }
