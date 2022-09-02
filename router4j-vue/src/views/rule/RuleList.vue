@@ -32,7 +32,7 @@
               搜索
             </el-button>
 
-            <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="handleDelete">
+            <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="deleteFuzzy">
               删除
             </el-button>
           </div>
@@ -47,18 +47,18 @@
           新建
         </el-button>
 
-        <el-button type="danger" @click="handleDelete()">
+        <el-button type="danger" @click="deleteDataAccurateBatch()">
           删除
         </el-button>
       </el-row>
 
       <el-table
           :key="tableKey"
-          v-loading="listLoading"
           :data="list"
           border
           fit
           highlight-current-row
+          @selection-change="handleSelectionChange"
           :header-cell-style="{background:'#F8F8F8'}"
           style="width: 100%;"
       >
@@ -93,7 +93,7 @@
               编辑
             </el-button>
 
-            <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
+            <el-button size="mini" type="danger" @click="deleteDataAccurate(row,$index)">
               删除
             </el-button>
           </template>
@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import {fetchPage, add, edit} from '@/api/rule'
+import {fetchPage, add, edit, deleteAccurate, deleteAccurateBatch, deleteFuzzy} from '@/api/rule'
 import variables from '@/styles/variables.scss'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -166,8 +166,8 @@ export default {
     return {
       tableKey: 0,
       list: null,
+      listMultipleSelection: [],
       total: 0,
-      listLoading: true,
       pageQuery: {
         page: 0,
         size: 10,
@@ -177,7 +177,7 @@ export default {
         // sort: '+id'
       },
       applicationNames: ['user', 'product'],
-      instanceAddresses: ['published', 'draft', 'deleted'],
+      instanceAddresses: ['127.0.0.1:8080', '127.0.0.1:8081'],
       pathPatterns: ['/user/add', '/user/edit'],
       dialogData: {
         applicationName: '',
@@ -207,12 +207,14 @@ export default {
   },
 
   methods: {
+    handleSelectionChange(val) {
+      this.listMultipleSelection = val;
+    },
+
     getPage() {
-      this.listLoading = true
       fetchPage(this.pageQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.total
-        this.listLoading = false
       })
     },
     handleFind() {
@@ -247,6 +249,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.handleFind()
           })
         }
       })
@@ -282,24 +285,43 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.handleFind()
           })
         }
       })
     },
 
-    handleDelete(row, index) {
+    deleteFuzzy(row, index) {
       this.$notify({
-        title: 'Success',
-        message: 'Delete Successfully',
+        title: '成功',
+        message: '删除成功',
         type: 'success',
         duration: 2000
       })
-      this.list.splice(index, 1)
     },
 
-    deleteData(row, index) {
+    deleteDataAccurate(row, index) {
+      deleteAccurate(row).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.handleFind()
+      })
+    },
 
-
+    deleteDataAccurateBatch() {
+      deleteAccurateBatch(this.listMultipleSelection).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.handleFind()
+      })
     },
   }
 }

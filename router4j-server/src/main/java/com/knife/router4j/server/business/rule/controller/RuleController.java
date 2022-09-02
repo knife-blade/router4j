@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Api(tags = "规则配置")
 @ApiSupport(order = ApiOrder.RULE)
@@ -61,6 +62,15 @@ public class RuleController {
     public void deleteAccurate(@Valid @RequestBody RuleDeleteAccurateReq deleteReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(deleteReq);
         pathRuleUtil.deleteRuleAccurate(pathRuleRequest);
+    }
+
+    @ApiOperation("批量删除（精准）")
+    @PostMapping("deleteAccurateBatch")
+    public void deleteAccurateBatch(@Valid @RequestBody List<RuleDeleteAccurateReq> deleteBatchReq) {
+        for (RuleDeleteAccurateReq deleteReq : deleteBatchReq) {
+            PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(deleteReq);
+            pathRuleUtil.deleteRuleAccurate(pathRuleRequest);
+        }
     }
 
     @ApiOperation("删除（模糊）")

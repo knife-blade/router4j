@@ -25,8 +25,8 @@ public class RuleKeyHelper {
      * @return 组装好的key
      */
     public static String assembleAddKey(String applicationName, String instanceAddress) {
-        ValidateUtil.applicationNameValid(applicationName);
-        ValidateUtil.instanceAddressValid(instanceAddress);
+        ValidateUtil.checkApplicationNameValid(applicationName);
+        ValidateUtil.checkInstanceAddressValid(instanceAddress);
 
         String tmpApplicationName = StringUtils.hasText(applicationName)
                 ? applicationName
@@ -59,10 +59,12 @@ public class RuleKeyHelper {
      */
     public static String assembleDeleteKeyFuzzy(String applicationName, String instanceAddress) {
         String applicationNamePattern = StringUtils.hasText(applicationName)
+                    && !RedisConstant.SEARCH_ALL.equals(applicationName)
                 ? RedisConstant.SEARCH_ALL + applicationName + RedisConstant.SEARCH_ALL
                 : RedisConstant.SEARCH_ALL;
 
         String instanceAddressPattern = StringUtils.hasText(instanceAddress)
+                    && !RedisConstant.SEARCH_ALL.equals(instanceAddress)
                 ? RedisConstant.SEARCH_ALL + instanceAddress + RedisConstant.SEARCH_ALL
                 : RedisConstant.SEARCH_ALL;
 
@@ -97,10 +99,12 @@ public class RuleKeyHelper {
      */
     private static String assembleSearchKeyInside(String applicationName, String instanceAddress) {
         String applicationNamePattern = StringUtils.hasText(applicationName)
+                    && !RedisConstant.SEARCH_ALL.equals(applicationName)
                 ? RedisConstant.SEARCH_ALL + applicationName + RedisConstant.SEARCH_ALL
                 : RedisConstant.SEARCH_ALL;
 
         String instanceAddressPattern = StringUtils.hasText(instanceAddress)
+                    && !RedisConstant.SEARCH_ALL.equals(instanceAddress)
                 ? RedisConstant.SEARCH_ALL + instanceAddress + RedisConstant.SEARCH_ALL
                 : RedisConstant.SEARCH_ALL;
 

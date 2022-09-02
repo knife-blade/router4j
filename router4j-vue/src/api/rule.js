@@ -23,3 +23,27 @@ export function edit(data) {
     data
   })
 }
+
+export function deleteAccurate(data) {
+  return request({
+    url: '/rule/deleteAccurate',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteAccurateBatch(data) {
+  return request({
+    url: '/rule/deleteAccurateBatch',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteFuzzy(data) {
+  return request({
+    url: '/rule/deleteFuzzy',
+    method: 'post',
+    data
+  })
+}
