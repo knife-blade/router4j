@@ -9,9 +9,13 @@ import javax.validation.constraints.NotBlank;
 @Data
 @ApiModel("修改规则")
 public class RuleEditReq {
-    @ApiModelProperty("应用名")
-    @NotBlank(message = "应用名不能为空")
-    private String applicationName;
+    @ApiModelProperty("应用名字")
+    @NotBlank(message = "应用名字不能为空")
+    private String oldApplicationName;
+
+    @ApiModelProperty("应用名字")
+    @NotBlank(message = "应用名字不能为空")
+    private String newApplicationName;
 
     @ApiModelProperty("旧实例地址。例：127.0.0.1:8080")
     @NotBlank(message = "旧实例地址不能为空")
