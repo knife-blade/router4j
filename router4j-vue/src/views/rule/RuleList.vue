@@ -2,30 +2,42 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card>
-        <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
-                   allow-create clearable style="width: 200px" class="filter-item">
-          <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
-        </el-select>
+        <el-form :inline="true">
+          <el-form-item>
+            <label-wrap>应用名字</label-wrap>
+            <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
+                       filterable allow-create clearable style="width: 200px" class="filter-item">
+              <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
+            </el-select>
+          </el-form-item>
 
-        <el-select v-model="pageQuery.instanceAddress" placeholder="输入或选择"
-                   allow-create clearable style="width: 200px" class="filter-item">
-          <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
-        </el-select>
+          <el-form-item>
+            <label-wrap>实例地址</label-wrap>
+            <el-select v-model="pageQuery.instanceAddress" placeholder="输入或选择"
+                       filterable allow-create clearable style="width: 200px" class="filter-item">
+              <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
+            </el-select>
+          </el-form-item>
 
-        <el-select v-model="pageQuery.pathPattern" placeholder="输入或选择"
-                   allow-create clearable style="width: 300px" class="filter-item">
-          <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
-        </el-select>
+          <el-form-item>
+            <label-wrap>路径</label-wrap>
+            <el-select v-model="pageQuery.pathPattern" placeholder="输入或选择"
+                       filterable allow-create clearable style="width: 300px" class="filter-item">
+              <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
+            </el-select>
+          </el-form-item>
 
-        <div class="filter-button">
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFind">
-            搜索
-          </el-button>
+          <div class="filter-button">
+            <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFind">
+              搜索
+            </el-button>
 
-          <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="handleDelete">
-            删除
-          </el-button>
-        </div>
+            <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="handleDelete">
+              删除
+            </el-button>
+          </div>
+        </el-form>
+
       </el-card>
     </div>
 
@@ -56,7 +68,7 @@
             width="55">
         </el-table-column>
 
-        <el-table-column label="应用名" align="center" min-width="150px" max-wi>
+        <el-table-column label="应用名字" align="center" min-width="150px" max-wi>
           <template slot-scope="{row}">
             <span>{{ row.applicationName }}</span>
           </template>
@@ -97,19 +109,22 @@
                style="width: 400px; margin-left:50px;">
 
         <el-form-item label="应用名">
-          <el-select v-model="dialogData.applicationName" allow-create class="filter-item" placeholder="输入或选择">
+          <el-select v-model="dialogData.applicationName" filterable allow-create
+                     class="filter-item" placeholder="输入或选择">
             <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
 
         <el-form-item label="实例地址">
-          <el-select v-model="dialogData.instanceAddress" allow-create class="filter-item" placeholder="输入或选择">
+          <el-select v-model="dialogData.instanceAddress" filterable allow-create
+                     class="filter-item" placeholder="输入或选择">
             <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
 
         <el-form-item label="路径">
-          <el-select v-model="dialogData.pathPattern" allow-create class="filter-item" placeholder="输入或选择">
+          <el-select v-model="dialogData.pathPattern" filterable allow-create
+                     class="filter-item" placeholder="输入或选择">
             <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
@@ -128,7 +143,7 @@
 </template>
 
 <script>
-import {fetchPage} from '@/api/rule'
+import {fetchPage, add, edit} from '@/api/rule'
 import variables from '@/styles/variables.scss'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -161,7 +176,6 @@ export default {
         pathPattern: undefined,
         // sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
       applicationNames: ['user', 'product'],
       instanceAddresses: ['published', 'draft', 'deleted'],
       pathPatterns: ['/user/add', '/user/edit'],
@@ -170,6 +184,7 @@ export default {
         instanceAddress: '',
         pathPattern: ''
       },
+      dialogOldData: null,
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -224,24 +239,22 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.dialogData.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.dialogData.author = 'vue-element-admin'
-          // createArticle(this.dialogData).then(() => {
-          //   this.list.unshift(this.dialogData)
-          //   this.dialogFormVisible = false
-          //   this.$notify({
-          //     title: 'Success',
-          //     message: 'Created Successfully',
-          //     type: 'success',
-          //     duration: 2000
-          //   })
-          // })
+          add(this.dialogData).then(() => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
       })
     },
 
     handleUpdate(row) {
       this.dialogData = Object.assign({}, row) // copy obj
+      this.dialogOldData = Object.assign({}, row) // copy obj
       this.dialogData.timestamp = new Date(this.dialogData.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -253,18 +266,23 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.dialogData)
-          // updateArticle(tempData).then(() => {
-          //   const index = this.list.findIndex(v => v.id === this.dialogData.id)
-          //   this.list.splice(index, 1, this.dialogData)
-          //   this.dialogFormVisible = false
-          //   this.$notify({
-          //     title: 'Success',
-          //     message: 'Update Successfully',
-          //     type: 'success',
-          //     duration: 2000
-          //   })
-          // })
+          let requestBody = {
+            oldApplicationName: this.dialogOldData.applicationName,
+            oldInstanceAddress: this.dialogOldData.instanceAddress,
+            oldPathPattern: this.dialogOldData.pathPattern,
+            newApplicationName: this.dialogData.applicationName,
+            newInstanceAddress: this.dialogData.instanceAddress,
+            newPathPattern: this.dialogData.pathPattern,
+          }
+          edit(requestBody).then(() => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '编辑成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
       })
     },
@@ -277,7 +295,12 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
-    }
+    },
+
+    deleteData(row, index) {
+
+
+    },
   }
 }
 </script>
