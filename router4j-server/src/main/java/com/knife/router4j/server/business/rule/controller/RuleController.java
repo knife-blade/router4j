@@ -32,9 +32,9 @@ public class RuleController {
     private RuleService ruleService;
 
     @ApiOperation("查找规则")
-    @GetMapping("find")
-    public PageResponse<RuleInfo> find(PathRuleRequest pathRuleRequest, PageRequest pageRequest) {
-        return ruleService.find(pathRuleRequest, pageRequest);
+    @GetMapping("page")
+    public PageResponse<RuleInfo> page(PathRuleRequest pathRuleRequest, PageRequest pageRequest) {
+        return ruleService.page(pathRuleRequest, pageRequest);
     }
 
     @ApiOperation("添加规则")

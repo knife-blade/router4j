@@ -25,6 +25,9 @@ public class RuleKeyHelper {
      * @return 组装好的key
      */
     public static String assembleAddKey(String applicationName, String instanceAddress) {
+        ValidateUtil.applicationNameValid(applicationName);
+        ValidateUtil.instanceAddressValid(instanceAddress);
+
         String tmpApplicationName = StringUtils.hasText(applicationName)
                 ? applicationName
                 : RedisConstant.EMPTY_PLACEHOLDER;

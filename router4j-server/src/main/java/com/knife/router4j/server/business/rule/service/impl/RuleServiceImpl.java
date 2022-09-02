@@ -19,7 +19,7 @@ public class RuleServiceImpl implements RuleService {
     private PathRuleUtil pathRuleUtil;
 
     @Override
-    public PageResponse<RuleInfo> find(PathRuleRequest pathRuleQueryRequest, PageRequest pageRequest) {
+    public PageResponse<RuleInfo> page(PathRuleRequest pathRuleQueryRequest, PageRequest pageRequest) {
         List<RuleInfo> ruleInfoList = pathRuleUtil.findRule(pathRuleQueryRequest);
 
         ruleInfoList = ruleInfoList.stream()
