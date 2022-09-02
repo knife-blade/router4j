@@ -1,6 +1,7 @@
 package com.knife.router4j.common.util;
 
 import com.knife.router4j.common.common.entity.InstanceInfo;
+import com.knife.router4j.common.constant.RedisConstant;
 import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.helper.InstanceInfoHelper;
@@ -182,10 +183,10 @@ public class PathRuleUtil {
 
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
-        String prefix = RuleKeyHelper.assembleSearchKey(applicationName);
+        String keyPattern = RuleKeyHelper.assembleSearchKey(applicationName);
 
         // 模糊查找出所有实例的key
-        Iterable<String> ruleKeys = keys.getKeysByPattern(prefix + "*");
+        Iterable<String> ruleKeys = keys.getKeysByPattern(keyPattern);
 
         for (String ruleKey : ruleKeys) {
             // 取出每个实例的所有指定好的路径规则
@@ -219,6 +220,35 @@ public class PathRuleUtil {
         } else {
             String instanceAddress = RuleKeyHelper.parseInstanceAddress(matchedKey);
             return InstanceInfoHelper.assembleInstanceAddress(instanceAddress);
+        }
+    }
+
+    /**
+     * 检查pathPattern是否已经存在
+     * @param pathPattern 路径
+     */
+    private void checkPathPatternExist(String pathPattern) {
+        RKeys keys = RedissonHolder.getRedissonClient().getKeys();
+
+        String keyPattern = RuleKeyHelper.assembleSearchKey(RedisConstant.SEARCH_ALL);
+
+        // 模糊查找出所有实例的key
+        Iterable<String> ruleKeys = keys.getKeysByPattern(keyPattern);
+
+        for (String ruleKey : ruleKeys) {
+            // 取出每个实例的所有指定好的路径规则
+            RList<String> pathPatterns = RedissonHolder.getRedissonClient().getList(ruleKey);
+
+            // 找出每个实例里匹配的最长的pathPattern
+            for (String pathPatternOfRedis : pathPatterns) {
+                if (pathPattern.equals(pathPatternOfRedis)) {
+                    String applicationName = RuleKeyHelper.parseApplicationName(ruleKey);
+                    String instanceAddress = RuleKeyHelper.parseInstanceAddress(ruleKey);
+                    String errorMessage = String.format("此路径已经存在：" +
+                            "应用名字为%s，实例地址为%s", applicationName, instanceAddress);
+                    throw new RuntimeException(errorMessage);
+                }
+            }
         }
     }
 }

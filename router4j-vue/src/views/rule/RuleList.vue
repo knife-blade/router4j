@@ -6,7 +6,9 @@
           <el-form-item>
             <label-wrap>应用名字</label-wrap>
             <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
-                       filterable allow-create clearable style="width: 200px" class="filter-item">
+                       filterable allow-create clearable style="width: 200px" class="filter-item"
+                       @click=""
+            >
               <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
@@ -21,14 +23,12 @@
 
           <el-form-item>
             <label-wrap>路径</label-wrap>
-            <el-select v-model="pageQuery.pathPattern" placeholder="输入或选择"
-                       filterable allow-create clearable style="width: 300px" class="filter-item">
-              <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
-            </el-select>
+            <el-input v-model="pageQuery.pathPattern" placeholder="输入" style="width: 300px" class="filter-item">
+            </el-input>
           </el-form-item>
 
           <div class="filter-button">
-            <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFind">
+            <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="findData">
               搜索
             </el-button>
 
@@ -123,10 +123,8 @@
         </el-form-item>
 
         <el-form-item label="路径">
-          <el-select v-model="dialogData.pathPattern" filterable allow-create
-                     class="filter-item" placeholder="输入或选择">
-            <el-option v-for="item in pathPatterns" :key="item" :label="item" :value="item"/>
-          </el-select>
+          <el-input v-model="dialogData.pathPattern" placeholder="输入" style="width: 300px" class="filter-item">
+          </el-input>
         </el-form-item>
 
       </el-form>
@@ -176,8 +174,8 @@ export default {
         pathPattern: undefined,
         // sort: '+id'
       },
-      applicationNames: ['user', 'product'],
-      instanceAddresses: ['127.0.0.1:8080', '127.0.0.1:8081'],
+      applicationNames: null,
+      instanceAddresses: null,
       pathPatterns: ['/user/add', '/user/edit'],
       dialogData: {
         applicationName: '',
@@ -217,7 +215,7 @@ export default {
         this.total = response.data.total
       })
     },
-    handleFind() {
+    findData() {
       this.pageQuery.page = 0
       this.getPage()
     },
@@ -227,6 +225,14 @@ export default {
         instanceAddress: '',
         pathPattern: ''
       }
+    },
+
+    findApplicationNames() {
+
+    },
+
+    findInstanceAddresses() {
+
     },
 
     handleCreate() {
@@ -249,7 +255,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.handleFind()
+            this.findData()
           })
         }
       })
@@ -285,7 +291,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.handleFind()
+            this.findData()
           })
         }
       })
@@ -308,7 +314,7 @@ export default {
           type: 'success',
           duration: 2000
         })
-        this.handleFind()
+        this.findData()
       })
     },
 
@@ -320,7 +326,7 @@ export default {
           type: 'success',
           duration: 2000
         })
-        this.handleFind()
+        this.findData()
       })
     },
   }

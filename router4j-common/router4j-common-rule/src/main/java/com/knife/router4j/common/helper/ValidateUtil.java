@@ -9,7 +9,7 @@ public class ValidateUtil {
      * 校验实例地址是否有效。正确格式：127.0.0.1:8080
      * @param instanceAddress 实例地址
      */
-    public static void instanceAddressValid(String instanceAddress) {
+    public static void checkInstanceAddressValid(String instanceAddress) {
         char ch = ':';
         int frequency = 0;
         int firstIndex = 0;
@@ -34,7 +34,7 @@ public class ValidateUtil {
      * 校验应用名字是否有效。不能包含冒号
      * @param applicationName 应用名字
      */
-    public static void applicationNameValid(String applicationName) {
+    public static void checkApplicationNameValid(String applicationName) {
         char ch = ':';
         int frequency = 0;
         for(int i = 0; i < applicationName.length(); i++) {
