@@ -20,7 +20,6 @@ public class RuleKeyHelper {
     /**
      * 组装添加key
      *
-     *
      * @param applicationName
      * @param instanceAddress
      * @return 组装好的key
@@ -102,10 +101,10 @@ public class RuleKeyHelper {
                 ? RedisConstant.SEARCH_ALL + instanceAddress + RedisConstant.SEARCH_ALL
                 : RedisConstant.SEARCH_ALL;
 
-        return pathPatternPrefix 
-                + RedisConstant.SEPARATOR 
+        return pathPatternPrefix
+                + RedisConstant.SEPARATOR
                 + applicationNamePattern
-                + RedisConstant.SEPARATOR 
+                + RedisConstant.SEPARATOR
                 + instanceAddressPattern;
     }
 
@@ -118,7 +117,7 @@ public class RuleKeyHelper {
     public static String parseInstanceAddress(String redisKey) {
         String[] strings = redisKey.split(RedisConstant.SEPARATOR);
         int length = strings.length;
-        return strings[length - 1];
+        return strings[length - 2] + ":" + strings[length - 1];
     }
 
     /**
@@ -130,7 +129,7 @@ public class RuleKeyHelper {
     public static String parseApplicationName(String redisKey) {
         String[] strings = redisKey.split(RedisConstant.SEPARATOR);
         int length = strings.length;
-        return strings[length - 2];
+        return strings[length - 3];
     }
 
 }
