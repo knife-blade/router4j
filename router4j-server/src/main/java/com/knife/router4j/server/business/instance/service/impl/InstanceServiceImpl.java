@@ -23,7 +23,7 @@ public class InstanceServiceImpl implements InstanceService {
     public List<InstanceVO> findInstances() {
         List<InstanceVO> instanceVOS = new ArrayList<>();
 
-        List<String> allServices = applicationService.findAllApplications();
+        List<String> allServices = applicationService.findAllApplicationNames();
         for (String serviceName : allServices) {
             List<InstanceInfo> instanceInfos =
                     applicationService.findInstance(serviceName);

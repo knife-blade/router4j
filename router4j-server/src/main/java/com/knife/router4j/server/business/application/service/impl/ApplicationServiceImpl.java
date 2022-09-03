@@ -14,7 +14,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationInfoService applicationInfoService;
 
     @Override
-    public List<String> findAllApplications() {
+    public List<String> findAllApplicationNames() {
         return applicationInfoService.findAllApplications();
     }
 

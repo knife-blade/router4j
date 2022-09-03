@@ -3,7 +3,7 @@ package com.knife.router4j.server.business.rule.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.entity.RuleInfo;
-import com.knife.router4j.common.util.PathRuleUtil;
+import com.knife.router4j.common.util.ServerPathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
 import com.knife.router4j.server.business.rule.request.RuleDeleteAccurateReq;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequestMapping("rule")
 public class RuleController {
     @Autowired
-    private PathRuleUtil pathRuleUtil;
+    private ServerPathRuleUtil serverPathRuleUtil;
 
     @Autowired
     private RuleService ruleService;
@@ -38,11 +38,23 @@ public class RuleController {
         return ruleService.page(pathRuleRequest, pageRequest);
     }
 
+    @ApiOperation("查找应用名字")
+    @GetMapping("findApplicationNames")
+    public List<String> findApplicationNames() {
+        return ruleService.findAllApplicationNames();
+    }
+
+    @ApiOperation("查找实例地址")
+    @GetMapping("findInstanceAddresses")
+    public List<String> findInstanceAddresses(String applicationName) {
+        return ruleService.findInstanceAddresses(applicationName);
+    }
+
     @ApiOperation("添加规则")
     @PostMapping("add")
     public void add(@Valid @RequestBody RuleAddReq addReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(addReq);
-        pathRuleUtil.addRule(pathRuleRequest);
+        serverPathRuleUtil.addRule(pathRuleRequest);
     }
 
     @ApiOperation("修改规则")
@@ -50,18 +62,18 @@ public class RuleController {
     public void edit(@Valid @RequestBody RuleEditReq editReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper
                 .toPathRuleRequestDelete(editReq);
-        pathRuleUtil.deleteRuleAccurate(pathRuleRequest);
+        serverPathRuleUtil.deleteRuleAccurate(pathRuleRequest);
 
         PathRuleRequest pathRuleRequestAdd = EntityConverterHelper
                 .toPathRuleRequestAdd(editReq);
-        pathRuleUtil.addRule(pathRuleRequestAdd);
+        serverPathRuleUtil.addRule(pathRuleRequestAdd);
     }
 
     @ApiOperation("删除（精准）")
     @PostMapping("deleteAccurate")
     public void deleteAccurate(@Valid @RequestBody RuleDeleteAccurateReq deleteReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(deleteReq);
-        pathRuleUtil.deleteRuleAccurate(pathRuleRequest);
+        serverPathRuleUtil.deleteRuleAccurate(pathRuleRequest);
     }
 
     @ApiOperation("批量删除（精准）")
@@ -69,7 +81,7 @@ public class RuleController {
     public void deleteAccurateBatch(@Valid @RequestBody List<RuleDeleteAccurateReq> deleteBatchReq) {
         for (RuleDeleteAccurateReq deleteReq : deleteBatchReq) {
             PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(deleteReq);
-            pathRuleUtil.deleteRuleAccurate(pathRuleRequest);
+            serverPathRuleUtil.deleteRuleAccurate(pathRuleRequest);
         }
     }
 
@@ -77,12 +89,12 @@ public class RuleController {
     @PostMapping("deleteFuzzy")
     public void deleteFuzzy(@Valid @RequestBody RuleDeleteFuzzyReq ruleDeleteFuzzyReq) {
         PathRuleRequest pathRuleRequest = EntityConverterHelper.toPathRuleRequest(ruleDeleteFuzzyReq);
-        pathRuleUtil.deleteRuleFuzzy(pathRuleRequest);
+        serverPathRuleUtil.deleteRuleFuzzy(pathRuleRequest);
     }
 
     @ApiOperation("删除所有规则")
     @PostMapping("deleteAll")
     public void deleteAll() {
-        pathRuleUtil.deleteAllRule();
+        serverPathRuleUtil.deleteAllRule();
     }
 }

@@ -13,7 +13,7 @@ public class DefaultInstanceUtil {
     private RuleProperties rule;
 
     @Autowired
-    private PathRuleUtil pathRuleUtil;
+    private ServerPathRuleUtil serverPathRuleUtil;
 
     /**
      * 标记为默认实例
@@ -30,7 +30,7 @@ public class DefaultInstanceUtil {
             pathRuleRequest.setApplicationName("*");
             pathRuleRequest.setInstanceAddress(instanceAddress);
             pathRuleRequest.setPathPattern(PathPatternConstant.MATCH_ALL);
-            pathRuleUtil.addRule(pathRuleRequest);
+            serverPathRuleUtil.addRule(pathRuleRequest);
         }
     }
 
@@ -50,7 +50,7 @@ public class DefaultInstanceUtil {
             pathRuleQueryRequest.setApplicationName("*");
             pathRuleQueryRequest.setInstanceAddress(instanceAddress);
             pathRuleQueryRequest.setPathPattern(PathPatternConstant.MATCH_ALL);
-            pathRuleUtil.deleteRuleAccurate(pathRuleQueryRequest);
+            serverPathRuleUtil.deleteRuleAccurate(pathRuleQueryRequest);
         }
     }
 
