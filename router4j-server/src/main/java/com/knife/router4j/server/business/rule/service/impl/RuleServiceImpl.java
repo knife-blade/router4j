@@ -10,6 +10,7 @@ import com.knife.router4j.server.common.entity.PageRequest;
 import com.knife.router4j.server.common.entity.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -62,6 +63,10 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public List<String> findInstanceAddresses(String applicationName) {
+        if (!StringUtils.hasText(applicationName)) {
+            return new ArrayList<>();
+        }
+
         List<String> instanceAddressesOfRedis =
                 serverPathRuleUtil.findInstanceAddresses(applicationName);
 
