@@ -30,18 +30,20 @@ public class InstanceController {
     @ApiOperation("设置为默认实例")
     @PostMapping("markAsDefaultInstance")
     public void markAsDefaultInstance(@RequestBody InstanceReq addReq) {
-        defaultInstanceUtil.markAsDefaultInstance(addReq.getInstanceAddresses());
+        defaultInstanceUtil.markAsDefaultInstance(
+                addReq.getApplicationName(), addReq.getInstanceAddress());
     }
 
     @ApiOperation("取消默认实例设置")
     @PostMapping("cancelDefaultInstance")
     public void cancelDefaultInstance(@RequestBody InstanceReq deleteReq) {
-        defaultInstanceUtil.cancelDefaultInstance(deleteReq.getInstanceAddresses());
+        defaultInstanceUtil.cancelDefaultInstance(
+                deleteReq.getApplicationName(), deleteReq.getInstanceAddress());
     }
 
-    @ApiOperation("查找所有实例")
-    @PostMapping("findAllDefaultInstance")
-    public List<InstanceVO> findAllDefaultInstance() {
-        return instanceService.findInstances();
+    @ApiOperation("查找应用的默认实例")
+    @PostMapping("findDefaultInstance")
+    public List<InstanceVO> findDefaultInstance(String applicationName) {
+        return instanceService.findDefaultInstance(applicationName);
     }
 }

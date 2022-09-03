@@ -5,5 +5,5 @@ import com.knife.router4j.server.business.instance.vo.InstanceVO;
 import java.util.List;
 
 public interface InstanceService {
-    List<InstanceVO> findInstances();
+    List<InstanceVO> findDefaultInstance(String applicationName);
 }

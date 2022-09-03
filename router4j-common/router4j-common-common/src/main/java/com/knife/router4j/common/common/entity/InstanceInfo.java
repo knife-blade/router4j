@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class InstanceInfo {
     /**
-     * 服务名
+     * 应用名字
      */
     private String applicationName;
 

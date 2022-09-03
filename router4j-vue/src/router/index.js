@@ -42,17 +42,30 @@ const routes = [
         ]
     },
     {
-        path: '/application',
-
+        path: '/instance',
         component: Layout,
-        redirect: '/application/applicationList',
-        meta: {title: '应用管理', icon: 'component'},
+        redirect: '/instance/instanceList',
+        meta: {title: '实例管理', icon: 'component'},
         children: [
             {
-                path: 'applicationList',
-                component: () => import('@/views/application/ApplicationList'),
+                path: 'instanceList',
+                component: () => import('@/views/instance/InstanceList'),
                 name: 'ApplicationList',
-                meta: {title: '应用列表'}
+                meta: {title: '实例列表'}
+            }
+        ]
+    },
+    {
+        path: '/guide',
+        component: Layout,
+        redirect: '/guide/guideDetail',
+        meta: {title: '使用指南', icon: 'component'},
+        children: [
+            {
+                path: 'guideDetail',
+                component: () => import('@/views/guide/GuideDetail'),
+                name: 'GuideDetail',
+                meta: {title: '指南详情'}
             }
         ]
     },

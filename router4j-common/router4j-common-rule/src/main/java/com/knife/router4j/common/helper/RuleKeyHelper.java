@@ -6,35 +6,33 @@ import com.knife.router4j.common.util.spring.ApplicationContextHolder;
 import org.springframework.util.StringUtils;
 
 /**
- * Redis的rule的key工具类
+ * Redis的key工具类
  */
 public class RuleKeyHelper {
-    private static final String pathPatternPrefix;
+    private final String pathPatternPrefix;
 
-    static {
-        pathPatternPrefix = ApplicationContextHolder.getContext()
-                .getBean(RuleProperties.class)
-                .getPathPatternPrefix();
+    public RuleKeyHelper(String pathPatternPrefix) {
+        this.pathPatternPrefix = pathPatternPrefix;
     }
 
     /**
      * 组装添加key
      *
-     * @param applicationName
-     * @param instanceAddress
+     * @param applicationName 应用名字
+     * @param instanceAddress 实例地址
      * @return 组装好的key
      */
-    public static String assembleAddKey(String applicationName, String instanceAddress) {
+    public String assembleAddKey(String applicationName, String instanceAddress) {
         ValidateUtil.checkApplicationNameValid(applicationName);
         ValidateUtil.checkInstanceAddressValid(instanceAddress);
 
         String tmpApplicationName = StringUtils.hasText(applicationName)
                 ? applicationName
-                : RedisConstant.EMPTY_PLACEHOLDER;
+                : RedisConstant.MATCH_ALL;
 
         String tmpInstanceAddress = StringUtils.hasText(instanceAddress)
                 ? instanceAddress
-                : RedisConstant.EMPTY_PLACEHOLDER;
+                : RedisConstant.MATCH_ALL;
 
         return pathPatternPrefix
                 + RedisConstant.SEPARATOR + tmpApplicationName
@@ -46,7 +44,7 @@ public class RuleKeyHelper {
      *
      * @return 组装好的key
      */
-    public static String assembleDeleteKeyAccurate(String applicationName, String instanceAddress) {
+    public String assembleDeleteKeyAccurate(String applicationName, String instanceAddress) {
         return pathPatternPrefix
                 + RedisConstant.SEPARATOR + applicationName
                 + RedisConstant.SEPARATOR + instanceAddress;
@@ -57,16 +55,16 @@ public class RuleKeyHelper {
      *
      * @return 组装好的key
      */
-    public static String assembleDeleteKeyFuzzy(String applicationName, String instanceAddress) {
+    public String assembleDeleteKeyFuzzy(String applicationName, String instanceAddress) {
         String applicationNamePattern = StringUtils.hasText(applicationName)
-                    && !RedisConstant.SEARCH_ALL.equals(applicationName)
-                ? RedisConstant.SEARCH_ALL + applicationName + RedisConstant.SEARCH_ALL
-                : RedisConstant.SEARCH_ALL;
+                    && !RedisConstant.MATCH_ALL.equals(applicationName)
+                ? RedisConstant.MATCH_ALL + applicationName + RedisConstant.MATCH_ALL
+                : RedisConstant.MATCH_ALL;
 
         String instanceAddressPattern = StringUtils.hasText(instanceAddress)
-                    && !RedisConstant.SEARCH_ALL.equals(instanceAddress)
-                ? RedisConstant.SEARCH_ALL + instanceAddress + RedisConstant.SEARCH_ALL
-                : RedisConstant.SEARCH_ALL;
+                    && !RedisConstant.MATCH_ALL.equals(instanceAddress)
+                ? RedisConstant.MATCH_ALL + instanceAddress + RedisConstant.MATCH_ALL
+                : RedisConstant.MATCH_ALL;
 
         return pathPatternPrefix
                 + RedisConstant.SEPARATOR + applicationNamePattern
@@ -79,8 +77,8 @@ public class RuleKeyHelper {
      * @param applicationName 服务名
      * @return 组装好的key
      */
-    public static String assembleSearchKey(String applicationName) {
-        return assembleSearchKeyInside(applicationName, null);
+    public String assembleSearchKey(String applicationName) {
+        return assembleSearchKeyInside(applicationName, RedisConstant.MATCH_ALL);
     }
 
     /**
@@ -90,53 +88,29 @@ public class RuleKeyHelper {
      * @param instanceAddress 实例地址
      * @return 组装好的key
      */
-    public static String assembleSearchKey(String applicationName, String instanceAddress) {
+    public String assembleSearchKey(String applicationName, String instanceAddress) {
         return assembleSearchKeyInside(applicationName, instanceAddress);
     }
 
     /**
      * 组装搜索key
      */
-    private static String assembleSearchKeyInside(String applicationName, String instanceAddress) {
+    private String assembleSearchKeyInside(String applicationName, String instanceAddress) {
         String applicationNamePattern = StringUtils.hasText(applicationName)
-                    && !RedisConstant.SEARCH_ALL.equals(applicationName)
-                ? RedisConstant.SEARCH_ALL + applicationName + RedisConstant.SEARCH_ALL
-                : RedisConstant.SEARCH_ALL;
+                    && !RedisConstant.MATCH_ALL.equals(applicationName)
+                ? RedisConstant.MATCH_ALL + applicationName + RedisConstant.MATCH_ALL
+                : RedisConstant.MATCH_ALL;
 
         String instanceAddressPattern = StringUtils.hasText(instanceAddress)
-                    && !RedisConstant.SEARCH_ALL.equals(instanceAddress)
-                ? RedisConstant.SEARCH_ALL + instanceAddress + RedisConstant.SEARCH_ALL
-                : RedisConstant.SEARCH_ALL;
+                    && !RedisConstant.MATCH_ALL.equals(instanceAddress)
+                ? RedisConstant.MATCH_ALL + instanceAddress + RedisConstant.MATCH_ALL
+                : RedisConstant.MATCH_ALL;
 
         return pathPatternPrefix
                 + RedisConstant.SEPARATOR
                 + applicationNamePattern
                 + RedisConstant.SEPARATOR
                 + instanceAddressPattern;
-    }
-
-    /**
-     * 解析出实例地址
-     *
-     * @param redisKey redis的key
-     * @return 实例地址
-     */
-    public static String parseInstanceAddress(String redisKey) {
-        String[] strings = redisKey.split(RedisConstant.SEPARATOR);
-        int length = strings.length;
-        return strings[length - 2] + ":" + strings[length - 1];
-    }
-
-    /**
-     * 解析出服务名
-     *
-     * @param redisKey redis的key
-     * @return 实例地址
-     */
-    public static String parseApplicationName(String redisKey) {
-        String[] strings = redisKey.split(RedisConstant.SEPARATOR);
-        int length = strings.length;
-        return strings[length - 3];
     }
 
 }

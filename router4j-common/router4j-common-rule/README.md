@@ -1,7 +1,7 @@
 ### 说明
 规则管理。作用有：
-1. 路径匹配
-2. 操作Redis
+1. 设置路径匹配规则
+2. 对请求的url重新匹配实例
 
 ### 配置示例
 application.yml
@@ -23,6 +23,10 @@ router4j:
   #   cacheKey: "router4j:instruction"
 ````
 ### 底层数据存放格式
-#### 规则数据
-router4j:rule:pathPattern:服务名:ip:端口=路径（列表）
+#### 规则配置
+router4j:rule:path-pattern:服务名:ip:端口=路径（列表）
+#### 默认实例
+router4j:rule:default-instance:服务名:ip:端口=是否优先使用默认实例（true/false）
+- value的含义：在规则配置（router4j:rule:path-pattern）中已有配置时，是否仍然路由到默认实例。
+
 

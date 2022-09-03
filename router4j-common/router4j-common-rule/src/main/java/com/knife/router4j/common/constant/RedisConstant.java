@@ -9,7 +9,7 @@ public interface RedisConstant {
     String EMPTY_PLACEHOLDER = "#";
 
     /**
-     * 搜索所有的通配符
+     * 匹配所有的通配符
      */
-    String SEARCH_ALL = "*";
+    String MATCH_ALL = "*";
 }

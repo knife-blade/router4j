@@ -1,27 +1,35 @@
 package com.knife.router4j.common.util;
 
-import com.knife.router4j.common.common.entity.InstanceInfo;
 import com.knife.router4j.common.constant.RedisConstant;
 import com.knife.router4j.common.entity.PathRuleRequest;
 import com.knife.router4j.common.entity.RuleInfo;
-import com.knife.router4j.common.helper.InstanceInfoHelper;
+import com.knife.router4j.common.helper.ParseRuleKeyHelper;
 import com.knife.router4j.common.helper.PathMatchHelper;
 import com.knife.router4j.common.helper.RuleKeyHelper;
+import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
+import com.knife.router4j.common.util.spring.ApplicationContextHolder;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 路径的规则
  * 服务端使用
  */
 public class ServerPathRuleUtil {
+    private static final RuleKeyHelper ruleKeyHelper;
+
+    static {
+        String keyPrefix = ApplicationContextHolder.getContext()
+                .getBean(RuleProperties.class)
+                .getPathPatternPrefix();
+        ruleKeyHelper = new RuleKeyHelper(keyPrefix);
+    }
+
     /**
      * 添加规则
      *
@@ -29,7 +37,7 @@ public class ServerPathRuleUtil {
      */
     public void addRule(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RuleKeyHelper.assembleAddKey(
+                ruleKeyHelper.assembleAddKey(
                         pathRuleRequest.getApplicationName(),
                         pathRuleRequest.getInstanceAddress()));
 
@@ -47,14 +55,14 @@ public class ServerPathRuleUtil {
     public List<RuleInfo> findRule(PathRuleRequest pathRuleRequest) {
         Iterable<String> keysByPattern = RedissonHolder.getRedissonClient()
                 .getKeys()
-                .getKeysByPattern(RuleKeyHelper.assembleSearchKey(
+                .getKeysByPattern(ruleKeyHelper.assembleSearchKey(
                         pathRuleRequest.getApplicationName(), pathRuleRequest.getInstanceAddress()));
 
         List<RuleInfo> result = new ArrayList<>();
         for (String key : keysByPattern) {
             RList<String> rPathPatternList = RedissonHolder.getRedissonClient().getList(key);
-            String applicationName = RuleKeyHelper.parseApplicationName(key);
-            String instanceAddress = RuleKeyHelper.parseInstanceAddress(key);
+            String applicationName = ParseRuleKeyHelper.parseApplicationName(key);
+            String instanceAddress = ParseRuleKeyHelper.parseInstanceAddress(key);
             for (String pathPattern : rPathPatternList) {
                 if (StringUtils.hasText(pathRuleRequest.getPathPattern())) {
                     // 如果redis的路径ant匹配入参或者包含入参，则认为匹配
@@ -85,11 +93,11 @@ public class ServerPathRuleUtil {
     public List<String> findApplicationNames() {
         Iterable<String> keysByPattern = RedissonHolder.getRedissonClient()
                 .getKeys()
-                .getKeysByPattern(RuleKeyHelper.assembleSearchKey("*"));
+                .getKeysByPattern(ruleKeyHelper.assembleSearchKey("*"));
 
         List<String> result = new ArrayList<>();
         for (String key : keysByPattern) {
-            String applicationName = RuleKeyHelper.parseApplicationName(key);
+            String applicationName = ParseRuleKeyHelper.parseApplicationName(key);
             result.add(applicationName);
         }
         return result;
@@ -103,11 +111,11 @@ public class ServerPathRuleUtil {
     public List<String> findInstanceAddresses(String applicationName) {
         Iterable<String> keysByPattern = RedissonHolder.getRedissonClient()
                 .getKeys()
-                .getKeysByPattern(RuleKeyHelper.assembleSearchKey(applicationName));
+                .getKeysByPattern(ruleKeyHelper.assembleSearchKey(applicationName));
 
         List<String> result = new ArrayList<>();
         for (String key : keysByPattern) {
-            String instanceAddress = RuleKeyHelper.parseInstanceAddress(key);
+            String instanceAddress = ParseRuleKeyHelper.parseInstanceAddress(key);
             result.add(instanceAddress);
         }
         return result;
@@ -118,7 +126,7 @@ public class ServerPathRuleUtil {
      */
     public void deleteAllRule() {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        keys.deleteByPattern(RuleKeyHelper.assembleSearchKey("*", "*"));
+        keys.deleteByPattern(ruleKeyHelper.assembleSearchKey("*", "*"));
     }
 
     /**
@@ -128,7 +136,7 @@ public class ServerPathRuleUtil {
      */
     public void deleteRuleAccurate(PathRuleRequest pathRuleRequest) {
         RList<String> list = RedissonHolder.getRedissonClient().getList(
-                RuleKeyHelper.assembleDeleteKeyAccurate(
+                ruleKeyHelper.assembleDeleteKeyAccurate(
                         pathRuleRequest.getApplicationName(),
                         pathRuleRequest.getInstanceAddress()));
 
@@ -142,7 +150,7 @@ public class ServerPathRuleUtil {
      */
     public void deleteRuleFuzzy(PathRuleRequest pathRuleRequest) {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        String keyPattern = RuleKeyHelper.assembleSearchKey(
+        String keyPattern = ruleKeyHelper.assembleSearchKey(
                 pathRuleRequest.getApplicationName(),
                 pathRuleRequest.getInstanceAddress());
 
@@ -170,7 +178,7 @@ public class ServerPathRuleUtil {
      */
     public void deleteRuleAccurate(String applicationName, String instanceAddress) {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
-        String key = RuleKeyHelper.assembleDeleteKeyAccurate(applicationName, instanceAddress);
+        String key = ruleKeyHelper.assembleDeleteKeyAccurate(applicationName, instanceAddress);
         keys.deleteByPattern(key);
     }
 
@@ -201,7 +209,7 @@ public class ServerPathRuleUtil {
     private void checkPathPatternExist(String pathPattern) {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
 
-        String keyPattern = RuleKeyHelper.assembleSearchKey(RedisConstant.SEARCH_ALL);
+        String keyPattern = ruleKeyHelper.assembleSearchKey(RedisConstant.MATCH_ALL);
 
         // 模糊查找出所有实例的key
         Iterable<String> ruleKeys = keys.getKeysByPattern(keyPattern);
@@ -213,8 +221,8 @@ public class ServerPathRuleUtil {
             // 找出完全匹配的pathPattern
             for (String pathPatternOfRedis : pathPatterns) {
                 if (pathPattern.equals(pathPatternOfRedis)) {
-                    String applicationName = RuleKeyHelper.parseApplicationName(ruleKey);
-                    String instanceAddress = RuleKeyHelper.parseInstanceAddress(ruleKey);
+                    String applicationName = ParseRuleKeyHelper.parseApplicationName(ruleKey);
+                    String instanceAddress = ParseRuleKeyHelper.parseInstanceAddress(ruleKey);
                     String errorMessage = String.format("此路径已经存在：" +
                             "应用名字为%s，实例地址为%s", applicationName, instanceAddress);
                     throw new RuntimeException(errorMessage);
