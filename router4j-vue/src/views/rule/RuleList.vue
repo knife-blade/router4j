@@ -7,7 +7,7 @@
             <label-wrap>应用名字</label-wrap>
             <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 200px" class="filter-item"
-                       @click=""
+                       @change="findInstanceAddresses"
             >
               <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
             </el-select>
@@ -141,7 +141,16 @@
 </template>
 
 <script>
-import {fetchPage, add, edit, deleteAccurate, deleteAccurateBatch, deleteFuzzy} from '@/api/rule'
+import {
+  fetchPage,
+  add,
+  edit,
+  deleteAccurate,
+  deleteAccurateBatch,
+  deleteFuzzy,
+  findApplicationNames,
+  findInstanceAddresses
+} from '@/api/rule'
 import variables from '@/styles/variables.scss'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -201,7 +210,7 @@ export default {
     }
   },
   created() {
-    this.getPage()
+    this.findData()
   },
 
   methods: {
@@ -216,8 +225,8 @@ export default {
       })
     },
     findData() {
-      this.pageQuery.page = 0
       this.getPage()
+      this.findAllApplicationNames()
     },
     resetTemp() {
       this.dialogData = {
@@ -227,12 +236,19 @@ export default {
       }
     },
 
-    findApplicationNames() {
-
+    findAllApplicationNames() {
+      findApplicationNames(null).then((response) => {
+        this.applicationNames = response.data
+      })
     },
 
     findInstanceAddresses() {
-
+      let query = {
+        applicationName: this.pageQuery.applicationName
+      }
+      findInstanceAddresses(query).then((response) => {
+        this.instanceAddresses = response.data
+      })
     },
 
     handleCreate() {

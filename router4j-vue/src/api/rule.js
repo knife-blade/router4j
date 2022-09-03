@@ -48,4 +48,18 @@ export function deleteFuzzy(data) {
   })
 }
 
+export function findApplicationNames(query) {
+  return request({
+    url: '/rule/findApplicationNames',
+    method: 'get',
+    params: query
+  })
+}
 
+export function findInstanceAddresses(query) {
+  return request({
+    url: '/rule/findInstanceAddresses',
+    method: 'get',
+    params: query
+  })
+}
