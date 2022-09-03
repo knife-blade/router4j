@@ -7,9 +7,9 @@
             <label-wrap>应用名字</label-wrap>
             <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 200px" class="filter-item"
-                       @change="findInstanceAddresses"
+                       @change="findInstanceAddressesForPage"
             >
-              <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
+              <el-option v-for="item in pageResultList.applicationNames" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
 
@@ -17,7 +17,7 @@
             <label-wrap>实例地址</label-wrap>
             <el-select v-model="pageQuery.instanceAddress" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 200px" class="filter-item">
-              <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
+              <el-option v-for="item in pageResultList.instanceAddresses" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
 
@@ -110,15 +110,15 @@
 
         <el-form-item label="应用名">
           <el-select v-model="dialogData.applicationName" filterable allow-create
-                     class="filter-item" placeholder="输入或选择">
-            <el-option v-for="item in applicationNames" :key="item" :label="item" :value="item"/>
+                     class="filter-item" placeholder="输入或选择" @change="findInstanceAddressesForDialog">
+            <el-option v-for="item in dialogResultList.applicationNames" :key="item" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
 
         <el-form-item label="实例地址">
           <el-select v-model="dialogData.instanceAddress" filterable allow-create
                      class="filter-item" placeholder="输入或选择">
-            <el-option v-for="item in instanceAddresses" :key="item" :label="item" :value="item"/>
+            <el-option v-for="item in dialogResultList.instanceAddresses" :key="item" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
 
@@ -183,13 +183,20 @@ export default {
         pathPattern: undefined,
         // sort: '+id'
       },
-      applicationNames: null,
-      instanceAddresses: null,
+      pageResultList: {
+        applicationNames: null,
+        instanceAddresses: null,
+      },
+
       pathPatterns: ['/user/add', '/user/edit'],
       dialogData: {
         applicationName: '',
         instanceAddress: '',
         pathPattern: ''
+      },
+      dialogResultList: {
+        applicationNames: null,
+        instanceAddresses: null,
       },
       dialogOldData: null,
       dialogFormVisible: false,
@@ -238,16 +245,26 @@ export default {
 
     findAllApplicationNames() {
       findApplicationNames(null).then((response) => {
-        this.applicationNames = response.data
+        this.pageResultList.applicationNames = response.data
+        this.dialogResultList.applicationNames = response.data
       })
     },
 
-    findInstanceAddresses() {
+    findInstanceAddressesForPage() {
       let query = {
         applicationName: this.pageQuery.applicationName
       }
       findInstanceAddresses(query).then((response) => {
-        this.instanceAddresses = response.data
+        this.pageResultList.instanceAddresses = response.data
+      })
+    },
+
+    findInstanceAddressesForDialog() {
+      let query = {
+        applicationName: this.dialogData.applicationName
+      }
+      findInstanceAddresses(query).then((response) => {
+        this.dialogResultList.instanceAddresses = response.data
       })
     },
 
