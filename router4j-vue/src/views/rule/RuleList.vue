@@ -6,7 +6,7 @@
           <el-form-item>
             <label-wrap>应用名字</label-wrap>
             <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
-                       filterable allow-create clearable style="width: 200px" class="filter-item"
+                       filterable allow-create clearable style="width: 150px" class="filter-item"
                        @change="findInstanceAddressesForPage"
             >
               <el-option v-for="item in pageResultList.applicationNames" :key="item" :label="item" :value="item"/>
@@ -102,7 +102,7 @@
     </el-card>
 
     <pagination v-show="total>0" :total="total" :page.sync="pageQuery.page" :limit.sync="pageQuery.limit"
-                @pagination="getPage"/>
+                @pagination="getPage" :limit="10"/>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="dialogData" label-position="left" label-width="70px"
