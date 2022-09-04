@@ -31,14 +31,17 @@ public class InstanceController {
     @PostMapping("markAsDefaultInstance")
     public void markAsDefaultInstance(@RequestBody InstanceReq addReq) {
         defaultInstanceUtil.markAsDefaultInstance(
-                addReq.getApplicationName(), addReq.getInstanceAddress());
+                addReq.getApplicationName(),
+                addReq.getInstanceAddress(),
+                addReq.getForceRoute());
     }
 
     @ApiOperation("取消默认实例设置")
     @PostMapping("cancelDefaultInstance")
     public void cancelDefaultInstance(@RequestBody InstanceReq deleteReq) {
         defaultInstanceUtil.cancelDefaultInstance(
-                deleteReq.getApplicationName(), deleteReq.getInstanceAddress());
+                deleteReq.getApplicationName(),
+                deleteReq.getInstanceAddress());
     }
 
     @ApiOperation("查找应用的默认实例")

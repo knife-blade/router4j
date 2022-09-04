@@ -11,6 +11,7 @@ import com.knife.router4j.common.redis.RedissonHolder;
 import com.knife.router4j.common.util.spring.ApplicationContextHolder;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -21,13 +22,13 @@ import java.util.List;
  * 服务端使用
  */
 public class ServerPathRuleUtil {
-    private static final RuleKeyHelper ruleKeyHelper;
 
-    static {
-        String keyPrefix = ApplicationContextHolder.getContext()
-                .getBean(RuleProperties.class)
-                .getPathPatternPrefix();
-        ruleKeyHelper = new RuleKeyHelper(keyPrefix);
+    private RuleKeyHelper ruleKeyHelper;
+
+    @Autowired
+    public void setRuleProperties(RuleProperties ruleProperties) {
+        String pathPatternPrefix = ruleProperties.getPathPatternPrefix();
+        ruleKeyHelper = new RuleKeyHelper(pathPatternPrefix);
     }
 
     /**

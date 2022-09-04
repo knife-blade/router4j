@@ -26,7 +26,7 @@ router4j:
 #### 规则配置
 router4j:rule:path-pattern:服务名:ip:端口=路径（列表）
 #### 默认实例
-router4j:rule:default-instance:服务名:ip:端口=是否优先使用默认实例（true/false）
-- value的含义：在规则配置（router4j:rule:path-pattern）中已有配置时，是否仍然路由到默认实例。
+router4j:rule:default-instance:服务名:ip:端口=是否强制路由（true/false）
+- value的含义：在规则配置（router4j:rule:path-pattern）中已有配置时，是否强制路由到默认实例。
 
 

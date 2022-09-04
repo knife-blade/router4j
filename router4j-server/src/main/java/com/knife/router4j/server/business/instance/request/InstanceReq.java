@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @ApiModel("添加默认实例")
@@ -16,4 +17,8 @@ public class InstanceReq {
     @ApiModelProperty("实例地址")
     @NotBlank(message = "实例地址不能为空")
     private String instanceAddress;
+
+    @ApiModelProperty("是否强制路由到此实例")
+    @NotNull(message = "是否强制路由到此实例不能为空")
+    private Boolean forceRoute;
 }

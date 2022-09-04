@@ -85,6 +85,10 @@ public class InstanceServiceImpl implements InstanceService {
     private List<InstanceVO> fillIsDefaultInstance(List<InstanceVO> instanceVOS) {
         List<InstanceVO> instanceVOListResult = new ArrayList<>(instanceVOS);
 
+        for (InstanceVO instanceVO : instanceVOListResult) {
+            instanceVO.setIsDefaultInstance(false);
+        }
+
         // 获取设置到Redis中的所有默认实例
         List<RuleInfo> defaultInstanceListOfRedis = defaultInstanceUtil.findAllDefaultInstance();
 
@@ -92,7 +96,7 @@ public class InstanceServiceImpl implements InstanceService {
             String applicationNameOfRedis = defaultInstanceOfRedis.getApplicationName();
             String instanceAddressOfRedis = defaultInstanceOfRedis.getInstanceAddress();
 
-            // 如果已存在，则不再添加
+            // 如果结果中已存在，则不再添加
             boolean exist = false;
             for (InstanceVO instanceVO : instanceVOListResult) {
                 if (applicationNameOfRedis.equals(instanceVO.getApplicationName())
@@ -102,6 +106,7 @@ public class InstanceServiceImpl implements InstanceService {
                     break;
                 }
             }
+            // 如果不存在，则添加
             if (!exist) {
                 InstanceVO instanceVO = new InstanceVO();
                 instanceVO.setApplicationName(applicationNameOfRedis);
