@@ -18,7 +18,11 @@ public class InstanceReq {
     @NotBlank(message = "实例地址不能为空")
     private String instanceAddress;
 
-    @ApiModelProperty("是否强制路由到此实例")
-    @NotNull(message = "是否强制路由到此实例不能为空")
-    private Boolean forceRoute;
+    @ApiModelProperty("是否设置为默认路由")
+    @NotNull(message = "是否设置为默认路由不能为空")
+    private Boolean isDefaultInstance;
+
+    @ApiModelProperty("是否设置为强制路由")
+    @NotNull(message = "是否设置为强制路由不能为空")
+    private Boolean isForceRoute;
 }

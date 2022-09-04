@@ -5,6 +5,7 @@ import com.knife.router4j.common.entity.DefaultInstanceInfo;
 import com.knife.router4j.common.util.DefaultInstanceUtil;
 import com.knife.router4j.server.business.application.service.ApplicationService;
 import com.knife.router4j.server.business.instance.helper.InstanceHelper;
+import com.knife.router4j.server.business.instance.request.InstanceReq;
 import com.knife.router4j.server.business.instance.service.InstanceService;
 import com.knife.router4j.server.business.instance.vo.InstanceVO;
 import com.knife.router4j.server.common.entity.PageRequest;
@@ -40,6 +41,21 @@ public class InstanceServiceImpl implements InstanceService {
                                                             PageRequest pageRequest) {
         List<InstanceVO> defaultInstanceList = findDefaultInstance(applicationName);
         return PageUtil.toPage(defaultInstanceList, pageRequest);
+    }
+
+    @Override
+    public void setupDefaultInstance(List<InstanceReq> instanceReqs) {
+        for (InstanceReq instanceReq : instanceReqs) {
+            String applicationName = instanceReq.getApplicationName();
+            String instanceAddress = instanceReq.getInstanceAddress();
+
+            if (!instanceReq.getIsDefaultInstance()) {
+                defaultInstanceUtil.cancelDefaultInstance(applicationName, instanceAddress);
+            } else {
+                defaultInstanceUtil.markAsDefaultInstance(
+                        applicationName, instanceAddress, instanceReq.getIsForceRoute());
+            }
+        }
     }
 
     private List<InstanceVO> findDefaultInstance(String applicationName) {
