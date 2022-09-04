@@ -40,18 +40,22 @@ public class InstanceController {
 
     @ApiOperation("设置为默认实例")
     @PostMapping("markAsDefaultInstance")
-    public void markAsDefaultInstance(@RequestBody InstanceReq addReq) {
-        defaultInstanceUtil.markAsDefaultInstance(
-                addReq.getApplicationName(),
-                addReq.getInstanceAddress(),
-                addReq.getForceRoute());
+    public void markAsDefaultInstance(@RequestBody List<InstanceReq> addReqs) {
+        for (InstanceReq addReq : addReqs) {
+            defaultInstanceUtil.markAsDefaultInstance(
+                    addReq.getApplicationName(),
+                    addReq.getInstanceAddress(),
+                    addReq.getForceRoute());
+        }
     }
 
     @ApiOperation("取消默认实例设置")
     @PostMapping("cancelDefaultInstance")
-    public void cancelDefaultInstance(@RequestBody InstanceReq deleteReq) {
-        defaultInstanceUtil.cancelDefaultInstance(
-                deleteReq.getApplicationName(),
-                deleteReq.getInstanceAddress());
+    public void cancelDefaultInstance(@RequestBody List<InstanceReq> deleteReqs) {
+        for (InstanceReq deleteReq : deleteReqs) {
+            defaultInstanceUtil.cancelDefaultInstance(
+                    deleteReq.getApplicationName(),
+                    deleteReq.getInstanceAddress());
+        }
     }
 }

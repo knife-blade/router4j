@@ -1,9 +1,10 @@
 package com.knife.router4j.server.business.instance.service.impl;
 
 import com.knife.router4j.common.common.entity.InstanceInfo;
-import com.knife.router4j.common.entity.RuleInfo;
+import com.knife.router4j.common.entity.DefaultInstanceInfo;
 import com.knife.router4j.common.util.DefaultInstanceUtil;
 import com.knife.router4j.server.business.application.service.ApplicationService;
+import com.knife.router4j.server.business.instance.helper.InstanceHelper;
 import com.knife.router4j.server.business.instance.service.InstanceService;
 import com.knife.router4j.server.business.instance.vo.InstanceVO;
 import com.knife.router4j.server.common.entity.PageRequest;
@@ -30,7 +31,7 @@ public class InstanceServiceImpl implements InstanceService {
     public List<String> findAllApplicationNames(String applicationName) {
         List<InstanceVO> defaultInstanceList = findDefaultInstance(applicationName);
         return defaultInstanceList.stream()
-                .map(InstanceVO::getInstanceAddress)
+                .map(InstanceVO::getApplicationName)
                 .collect(Collectors.toList());
     }
 
@@ -38,10 +39,6 @@ public class InstanceServiceImpl implements InstanceService {
     public PageResponse<InstanceVO> findDefaultInstancePage(String applicationName,
                                                             PageRequest pageRequest) {
         List<InstanceVO> defaultInstanceList = findDefaultInstance(applicationName);
-        defaultInstanceList = defaultInstanceList.stream()
-                .sorted(Comparator.comparing(InstanceVO::getInstanceAddress))
-                .collect(Collectors.toList());
-
         return PageUtil.toPage(defaultInstanceList, pageRequest);
     }
 
@@ -53,7 +50,15 @@ public class InstanceServiceImpl implements InstanceService {
             instanceInfos = findAllInstanceOfRegistry();
         }
 
-        return fill(instanceInfos);
+        List<InstanceVO> instanceVOS = InstanceHelper.toInstanceVO(instanceInfos);
+        fillIsRunning(instanceVOS);
+
+        List<InstanceVO> instanceVOListResult = findInstanceOfRedis(instanceVOS, applicationName);
+
+        instanceVOListResult = instanceVOListResult.stream()
+                .sorted(Comparator.comparing(InstanceVO::getInstanceAddress))
+                .collect(Collectors.toList());
+        return instanceVOListResult;
     }
 
     private List<InstanceInfo> findAllInstanceOfRegistry() {
@@ -70,23 +75,6 @@ public class InstanceServiceImpl implements InstanceService {
 
     private List<InstanceInfo> findInstanceOfRegistry(String applicationName) {
         return applicationService.findInstance(applicationName);
-    }
-
-    private List<InstanceVO> fill(List<InstanceInfo> instanceInfos) {
-        List<InstanceVO> instanceVOS = new ArrayList<>();
-        for (InstanceInfo instanceInfo : instanceInfos) {
-            String applicationName = instanceInfo.getApplicationName();
-            String instanceAddress = instanceInfo.instanceAddressWithoutProtocol();
-
-            InstanceVO instanceVO = new InstanceVO();
-            instanceVO.setApplicationName(applicationName);
-            instanceVO.setInstanceAddress(instanceAddress);
-            instanceVOS.add(instanceVO);
-        }
-
-        fillIsRunning(instanceVOS);
-
-        return fillIsDefaultInstance(instanceVOS);
     }
 
     /**
@@ -106,19 +94,17 @@ public class InstanceServiceImpl implements InstanceService {
      * @param instanceVOS 实例列表
      * @return 填充好的实例列表
      */
-    private List<InstanceVO> fillIsDefaultInstance(List<InstanceVO> instanceVOS) {
+    private List<InstanceVO> findInstanceOfRedis(List<InstanceVO> instanceVOS, String applicationName) {
         List<InstanceVO> instanceVOListResult = new ArrayList<>(instanceVOS);
 
-        for (InstanceVO instanceVO : instanceVOListResult) {
-            instanceVO.setIsDefaultInstance(false);
-        }
-
         // 获取设置到Redis中的所有默认实例
-        List<RuleInfo> defaultInstanceListOfRedis = defaultInstanceUtil.findAllDefaultInstance();
+        List<DefaultInstanceInfo> defaultInstanceListOfRedis =
+                defaultInstanceUtil.findDefaultInstance(applicationName);
 
-        for (RuleInfo defaultInstanceOfRedis : defaultInstanceListOfRedis) {
+        for (DefaultInstanceInfo defaultInstanceOfRedis : defaultInstanceListOfRedis) {
             String applicationNameOfRedis = defaultInstanceOfRedis.getApplicationName();
             String instanceAddressOfRedis = defaultInstanceOfRedis.getInstanceAddress();
+            Boolean isForceRoute = defaultInstanceOfRedis.getIsForceRoute();
 
             // 如果结果中已存在，则不再添加
             boolean exist = false;
@@ -126,6 +112,7 @@ public class InstanceServiceImpl implements InstanceService {
                 if (applicationNameOfRedis.equals(instanceVO.getApplicationName())
                         && instanceAddressOfRedis.equals(instanceVO.getInstanceAddress())) {
                     instanceVO.setIsDefaultInstance(true);
+                    instanceVO.setIsForceRoute(isForceRoute);
                     exist = true;
                     break;
                 }
@@ -136,6 +123,7 @@ public class InstanceServiceImpl implements InstanceService {
                 instanceVO.setApplicationName(applicationNameOfRedis);
                 instanceVO.setInstanceAddress(instanceAddressOfRedis);
                 instanceVO.setIsDefaultInstance(true);
+                instanceVO.setIsForceRoute(isForceRoute);
                 instanceVO.setIsRunning(false);
                 instanceVOListResult.add(instanceVO);
             }

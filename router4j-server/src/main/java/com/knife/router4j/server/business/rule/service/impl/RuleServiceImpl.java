@@ -1,8 +1,8 @@
 package com.knife.router4j.server.business.rule.service.impl;
 
 import com.knife.router4j.common.common.entity.InstanceInfo;
+import com.knife.router4j.common.entity.PathPatternInfo;
 import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.util.ServerPathRuleUtil;
 import com.knife.router4j.server.business.application.service.ApplicationService;
 import com.knife.router4j.server.business.rule.service.RuleService;
@@ -27,11 +27,11 @@ public class RuleServiceImpl implements RuleService {
     private ApplicationService applicationService;
 
     @Override
-    public PageResponse<RuleInfo> page(PathRuleRequest pathRuleQueryRequest, PageRequest pageRequest) {
-        List<RuleInfo> ruleInfoList = serverPathRuleUtil.findRule(pathRuleQueryRequest);
+    public PageResponse<PathPatternInfo> page(PathRuleRequest pathRuleQueryRequest, PageRequest pageRequest) {
+        List<PathPatternInfo> ruleInfoList = serverPathRuleUtil.findRule(pathRuleQueryRequest);
 
         ruleInfoList = ruleInfoList.stream()
-                .sorted(Comparator.comparing(RuleInfo::getPathPattern))
+                .sorted(Comparator.comparing(PathPatternInfo::getPathPattern))
                 .collect(Collectors.toList());
 
         return PageUtil.toPage(ruleInfoList, pageRequest);

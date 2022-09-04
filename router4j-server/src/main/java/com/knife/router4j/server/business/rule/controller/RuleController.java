@@ -1,8 +1,8 @@
 package com.knife.router4j.server.business.rule.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.knife.router4j.common.entity.PathPatternInfo;
 import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.RuleInfo;
 import com.knife.router4j.common.util.ServerPathRuleUtil;
 import com.knife.router4j.server.business.rule.helper.EntityConverterHelper;
 import com.knife.router4j.server.business.rule.request.RuleAddReq;
@@ -34,7 +34,7 @@ public class RuleController {
 
     @ApiOperation("查找规则")
     @GetMapping("page")
-    public PageResponse<RuleInfo> page(PathRuleRequest pathRuleRequest, PageRequest pageRequest) {
+    public PageResponse<PathPatternInfo> page(PathRuleRequest pathRuleRequest, PageRequest pageRequest) {
         return ruleService.page(pathRuleRequest, pageRequest);
     }
 

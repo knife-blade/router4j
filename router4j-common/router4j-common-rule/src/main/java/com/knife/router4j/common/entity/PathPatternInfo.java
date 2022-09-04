@@ -3,7 +3,7 @@ package com.knife.router4j.common.entity;
 import lombok.Data;
 
 @Data
-public class RuleInfo {
+public class PathPatternInfo {
     private String applicationName;
 
     private String instanceAddress;

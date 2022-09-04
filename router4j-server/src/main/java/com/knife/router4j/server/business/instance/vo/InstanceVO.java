@@ -16,6 +16,9 @@ public class InstanceVO {
     @ApiModelProperty("是否是默认实例")
     private Boolean isDefaultInstance;
 
+    @ApiModelProperty("是否强制")
+    private Boolean isForceRoute;
+
     @ApiModelProperty("是否正在运行")
     private Boolean isRunning;
 }

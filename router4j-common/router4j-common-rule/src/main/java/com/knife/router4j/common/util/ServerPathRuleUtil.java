@@ -2,13 +2,12 @@ package com.knife.router4j.common.util;
 
 import com.knife.router4j.common.constant.RedisConstant;
 import com.knife.router4j.common.entity.PathRuleRequest;
-import com.knife.router4j.common.entity.RuleInfo;
+import com.knife.router4j.common.entity.PathPatternInfo;
 import com.knife.router4j.common.helper.ParseRuleKeyHelper;
 import com.knife.router4j.common.helper.PathMatchHelper;
 import com.knife.router4j.common.helper.RuleKeyHelper;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
-import com.knife.router4j.common.util.spring.ApplicationContextHolder;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +52,13 @@ public class ServerPathRuleUtil {
      * @param pathRuleRequest 路径规则请求体
      * @return 路径模板列表
      */
-    public List<RuleInfo> findRule(PathRuleRequest pathRuleRequest) {
+    public List<PathPatternInfo> findRule(PathRuleRequest pathRuleRequest) {
         Iterable<String> keysByPattern = RedissonHolder.getRedissonClient()
                 .getKeys()
                 .getKeysByPattern(ruleKeyHelper.assembleSearchKey(
                         pathRuleRequest.getApplicationName(), pathRuleRequest.getInstanceAddress()));
 
-        List<RuleInfo> result = new ArrayList<>();
+        List<PathPatternInfo> result = new ArrayList<>();
         for (String key : keysByPattern) {
             RList<String> rPathPatternList = RedissonHolder.getRedissonClient().getList(key);
             String applicationName = ParseRuleKeyHelper.parseApplicationName(key);
@@ -68,18 +67,18 @@ public class ServerPathRuleUtil {
                 if (StringUtils.hasText(pathRuleRequest.getPathPattern())) {
                     // 如果redis的路径ant匹配入参或者包含入参，则认为匹配
                     if (PathMatchHelper.matchForSetting(pathPattern, pathRuleRequest.getPathPattern())) {
-                        RuleInfo ruleInfo = new RuleInfo();
-                        ruleInfo.setApplicationName(applicationName);
-                        ruleInfo.setInstanceAddress(instanceAddress);
-                        ruleInfo.setPathPattern(pathPattern);
-                        result.add(ruleInfo);
+                        PathPatternInfo pathPatternInfo = new PathPatternInfo();
+                        pathPatternInfo.setApplicationName(applicationName);
+                        pathPatternInfo.setInstanceAddress(instanceAddress);
+                        pathPatternInfo.setPathPattern(pathPattern);
+                        result.add(pathPatternInfo);
                     }
                 } else {
-                    RuleInfo ruleInfo = new RuleInfo();
-                    ruleInfo.setApplicationName(applicationName);
-                    ruleInfo.setInstanceAddress(instanceAddress);
-                    ruleInfo.setPathPattern(pathPattern);
-                    result.add(ruleInfo);
+                    PathPatternInfo pathPatternInfo = new PathPatternInfo();
+                    pathPatternInfo.setApplicationName(applicationName);
+                    pathPatternInfo.setInstanceAddress(instanceAddress);
+                    pathPatternInfo.setPathPattern(pathPattern);
+                    result.add(pathPatternInfo);
                 }
             }
         }
