@@ -25,11 +25,15 @@
     <el-card>
       <el-row class="operator-button-row">
         <el-button type="primary" @click="handleCreate()">
-          设置默认路由
+          创建设置
         </el-button>
 
         <el-button type="primary" @click="handleCreate()">
-          设置强制路由
+          设为默认路由
+        </el-button>
+
+        <el-button type="primary" @click="handleCreate()">
+          设为强制路由
         </el-button>
 
         <el-button type="danger" @click="deleteDataAccurateBatch()">
@@ -57,7 +61,7 @@
             width="55">
         </el-table-column>
 
-        <el-table-column label="应用名字" align="center" min-width="150px" max-wi>
+        <el-table-column label="应用名字" align="center" width="150px" max-wi>
           <template slot-scope="{row}">
             <span>{{ row.applicationName }}</span>
           </template>
@@ -76,29 +80,24 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="强制路由" min-width="50px" align="center">
+        <el-table-column label="默认路由" width="150px" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.forceRoute }}</span>
+            <span>{{ row.isDefaultInstance }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" width="500" class-name="small-padding fixed-width">
+        <el-table-column label="强制路由" width="150px" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.isForceRoute }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
           <template slot-scope="{row,$index}">
             <el-button type="primary" size="mini" @click="handleUpdate(row)">
-              设置默认路由
+              编辑
             </el-button>
 
-            <el-button type="primary" size="mini" @click="cancelData(row,$index)">
-              设置强制路由
-            </el-button>
-
-            <el-button type="danger" size="mini" @click="handleUpdate(row)">
-              取消默认路由
-            </el-button>
-
-            <el-button type="danger" size="mini" @click="cancelData(row,$index)">
-              取消强制路由
-            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -126,7 +125,7 @@
         </el-form-item>
 
         <el-form-item label="路径">
-          <el-input v-model="dialogData.forceRoute" placeholder="输入" style="width: 300px" class="filter-item">
+          <el-input v-model="dialogData.isForceRoute" placeholder="输入" style="width: 300px" class="filter-item">
           </el-input>
         </el-form-item>
 
@@ -186,8 +185,8 @@ export default {
       dialogData: {
         applicationName: '',
         instanceAddress: '',
-        isRunning: false,
-        forceRoute: ''
+        isRunning: undefined,
+        isForceRoute: undefined
       },
       dialogResultList: {
         applicationNames: null,
@@ -253,15 +252,6 @@ export default {
       })
     },
 
-    findInstanceAddressesForDialog() {
-      let query = {
-        applicationName: this.dialogData.applicationName
-      }
-      findDefaultInstancePage(query).then((response) => {
-        this.dialogResultList.instanceAddresses = response.data
-      })
-    },
-
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -271,7 +261,7 @@ export default {
       })
     },
 
-    createData() {
+    markAsDefaultInstance() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           markAsDefaultInstance(this.dialogData).then(() => {

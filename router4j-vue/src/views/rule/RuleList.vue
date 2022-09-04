@@ -68,7 +68,7 @@
             width="55">
         </el-table-column>
 
-        <el-table-column label="应用名字" align="center" min-width="150px" max-wi>
+        <el-table-column label="应用名字" align="center" width="150px" max-wi>
           <template slot-scope="{row}">
             <span>{{ row.applicationName }}</span>
           </template>
