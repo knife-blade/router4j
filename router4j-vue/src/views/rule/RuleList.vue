@@ -32,9 +32,9 @@
               搜索
             </el-button>
 
-            <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="deleteFuzzy">
-              删除
-            </el-button>
+            <!--<el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="deleteFuzzy">-->
+            <!--  删除-->
+            <!--</el-button>-->
           </div>
         </el-form>
 
@@ -187,8 +187,6 @@ export default {
         applicationNames: null,
         instanceAddresses: null,
       },
-
-      pathPatterns: ['/user/add', '/user/edit'],
       dialogData: {
         applicationName: '',
         instanceAddress: '',
@@ -227,8 +225,9 @@ export default {
 
     getPage() {
       fetchPage(this.pageQuery).then(response => {
-        this.list = response.data.data
+        this.list = response.data.dataList
         this.total = response.data.total
+
       })
     },
     findData() {
@@ -330,12 +329,15 @@ export default {
       })
     },
 
-    deleteFuzzy(row, index) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
+    deleteFuzzy() {
+      deleteFuzzy(this.pageQuery).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.findData()
       })
     },
 
