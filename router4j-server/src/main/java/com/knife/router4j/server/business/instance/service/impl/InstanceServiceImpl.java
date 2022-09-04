@@ -6,12 +6,17 @@ import com.knife.router4j.common.util.DefaultInstanceUtil;
 import com.knife.router4j.server.business.application.service.ApplicationService;
 import com.knife.router4j.server.business.instance.service.InstanceService;
 import com.knife.router4j.server.business.instance.vo.InstanceVO;
+import com.knife.router4j.server.common.entity.PageRequest;
+import com.knife.router4j.server.common.entity.PageResponse;
+import com.knife.router4j.server.common.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InstanceServiceImpl implements InstanceService {
@@ -22,12 +27,30 @@ public class InstanceServiceImpl implements InstanceService {
     private DefaultInstanceUtil defaultInstanceUtil;
 
     @Override
-    public List<InstanceVO> findDefaultInstance(String applicationName) {
+    public List<String> findAllApplicationNames(String applicationName) {
+        List<InstanceVO> defaultInstanceList = findDefaultInstance(applicationName);
+        return defaultInstanceList.stream()
+                .map(InstanceVO::getInstanceAddress)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponse<InstanceVO> findDefaultInstancePage(String applicationName,
+                                                            PageRequest pageRequest) {
+        List<InstanceVO> defaultInstanceList = findDefaultInstance(applicationName);
+        defaultInstanceList = defaultInstanceList.stream()
+                .sorted(Comparator.comparing(InstanceVO::getInstanceAddress))
+                .collect(Collectors.toList());
+
+        return PageUtil.toPage(defaultInstanceList, pageRequest);
+    }
+
+    private List<InstanceVO> findDefaultInstance(String applicationName) {
         List<InstanceInfo> instanceInfos;
         if (StringUtils.hasText(applicationName)) {
             instanceInfos = findInstanceOfRegistry(applicationName);
         } else {
-            instanceInfos =  findAllInstanceOfRegistry();
+            instanceInfos = findAllInstanceOfRegistry();
         }
 
         return fill(instanceInfos);
@@ -68,6 +91,7 @@ public class InstanceServiceImpl implements InstanceService {
 
     /**
      * 填充是否正在运行字段
+     *
      * @param instanceVOS 实例列表
      */
     private void fillIsRunning(List<InstanceVO> instanceVOS) {

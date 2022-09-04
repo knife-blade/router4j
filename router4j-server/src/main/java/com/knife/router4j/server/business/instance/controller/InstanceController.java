@@ -6,13 +6,12 @@ import com.knife.router4j.server.business.instance.request.InstanceReq;
 import com.knife.router4j.server.business.instance.service.InstanceService;
 import com.knife.router4j.server.business.instance.vo.InstanceVO;
 import com.knife.router4j.server.common.constant.ApiOrder;
+import com.knife.router4j.server.common.entity.PageRequest;
+import com.knife.router4j.server.common.entity.PageResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +25,18 @@ public class InstanceController {
 
     @Autowired
     private InstanceService instanceService;
+
+    @ApiOperation("查找应用的默认实例（分页）")
+    @GetMapping("findDefaultInstancePage")
+    public PageResponse<InstanceVO> findDefaultInstancePage(String applicationName, PageRequest pageRequest) {
+        return instanceService.findDefaultInstancePage(applicationName, pageRequest);
+    }
+
+    @ApiOperation("查找所有的应用名字")
+    @GetMapping("findApplicationNames")
+    public List<String> findApplicationNames(String applicationName) {
+        return instanceService.findAllApplicationNames(applicationName);
+    }
 
     @ApiOperation("设置为默认实例")
     @PostMapping("markAsDefaultInstance")
@@ -42,11 +53,5 @@ public class InstanceController {
         defaultInstanceUtil.cancelDefaultInstance(
                 deleteReq.getApplicationName(),
                 deleteReq.getInstanceAddress());
-    }
-
-    @ApiOperation("查找应用的默认实例")
-    @PostMapping("findDefaultInstance")
-    public List<InstanceVO> findDefaultInstance(String applicationName) {
-        return instanceService.findDefaultInstance(applicationName);
     }
 }
