@@ -24,25 +24,23 @@
 
     <el-card>
       <el-row class="operator-button-row">
-        <el-button type="primary" @click="handleCreate()">
-          创建设置
-        </el-button>
+        <div style="display: inline-block">
+          <el-button type="primary" @click="handleCreate()" class="operator-button">
+            创建设置
+          </el-button>
+        </div>
 
-        <el-button type="primary" @click="handleCreate()">
-          设为默认路由
-        </el-button>
+        <div style="display: inline-block" class="operator-button">
+          <label-wrap>设置为默认实例</label-wrap>
+          <el-switch v-model="operatorButtonRow.isDefaultInstance"></el-switch>
+        </div>
 
-        <el-button type="primary" @click="handleCreate()">
-          设为强制路由
-        </el-button>
+        <div style="display: inline-block" class="operator-button">
+          <label-wrap>设置为强制路由</label-wrap>
+          <el-switch v-model="operatorButtonRow.isForceRoute"></el-switch>
 
-        <el-button type="danger" @click="deleteDataAccurateBatch()">
-          取消默认路由
-        </el-button>
+        </div>
 
-        <el-button type="danger" @click="deleteDataAccurateBatch()">
-          取消强制路由
-        </el-button>
       </el-row>
 
       <el-table
@@ -76,28 +74,20 @@
 
         <el-table-column label="运行状态" min-width="100px" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.isRunning }}</span>
+            <el-switch v-model="row.isRunning" disabled></el-switch>
+
           </template>
         </el-table-column>
 
         <el-table-column label="默认路由" width="150px" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.isDefaultInstance }}</span>
+            <el-switch v-model="row.isDefaultInstance"></el-switch>
           </template>
         </el-table-column>
 
         <el-table-column label="强制路由" width="150px" align="center">
           <template slot-scope="{row}">
-            <span>{{ row.isForceRoute }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
-          <template slot-scope="{row,$index}">
-            <el-button type="primary" size="mini" @click="handleUpdate(row)">
-              编辑
-            </el-button>
-
+            <el-switch v-model="row.isForceRoute"></el-switch>
           </template>
         </el-table-column>
       </el-table>
@@ -107,26 +97,28 @@
                 @pagination="getPage" :limit="10"/>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="dialogData" label-position="left" label-width="70px"
+      <el-form ref="dataForm" :rules="rules" :model="dialogData" label-position="left" label-width="120px"
                style="width: 400px; margin-left:50px;">
 
         <el-form-item label="应用名">
-          <el-select v-model="dialogData.applicationName" filterable allow-create
-                     class="filter-item" placeholder="输入或选择" @change="findInstanceAddressesForDialog">
-            <el-option v-for="item in dialogResultList.applicationNames" :key="item" :label="item" :value="item"/>
-          </el-select>
+          <el-input v-model="dialogData.applicationName" disabled style="width: 150px">
+          </el-input>
         </el-form-item>
 
         <el-form-item label="实例地址">
-          <el-select v-model="dialogData.instanceAddress" filterable allow-create
-                     class="filter-item" placeholder="输入或选择">
-            <el-option v-for="item in dialogResultList.instanceAddresses" :key="item" :label="item" :value="item"/>
-          </el-select>
+          <el-input v-model="dialogData.instanceAddress" disabled style="width: 150px">
+          </el-input>
         </el-form-item>
 
-        <el-form-item label="路径">
-          <el-input v-model="dialogData.isForceRoute" placeholder="输入" style="width: 300px" class="filter-item">
-          </el-input>
+        <el-form-item label="设置为默认路由">
+          <el-switch v-model="dialogData.isDefaultInstance">
+          </el-switch>
+        </el-form-item>
+
+        <el-form-item label="设置为强制路由">
+          <el-switch v-model="dialogData.isForceRoute">
+          </el-switch>
+
         </el-form-item>
 
       </el-form>
@@ -134,7 +126,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="dialogStatus==='create'?markAsDefaultInstance():markAsDefaultInstance()">
           确定
         </el-button>
       </div>
@@ -146,7 +138,7 @@
 import {
   findApplicationNames,
   findDefaultInstancePage,
-  markAsDefaultInstance,
+  setupDefaultInstance,
   cancelDefaultInstance
 } from '@/api/defaultInstance'
 import variables from '@/styles/variables.scss'
@@ -186,6 +178,7 @@ export default {
         applicationName: '',
         instanceAddress: '',
         isRunning: undefined,
+        isDefaultInstance: undefined,
         isForceRoute: undefined
       },
       dialogResultList: {
@@ -199,6 +192,10 @@ export default {
         create: '创建'
       },
       dialogPvVisible: false,
+      operatorButtonRow: {
+        isDefaultInstance: false,
+        isForceRoute: false
+      },
       rules: {
         applicationName: [{required: true, message: '应用名是必填的', trigger: 'change'}],
         instanceAddress: [{required: true, message: '实例地址是必填的', trigger: 'change'}],
@@ -264,7 +261,10 @@ export default {
     markAsDefaultInstance() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          markAsDefaultInstance(this.dialogData).then(() => {
+          let requestBody = [];
+          requestBody.push(this.dialogData);
+
+          setupDefaultInstance(requestBody).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -292,7 +292,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          markAsDefaultInstance(this.dialogData).then(() => {
+          setupDefaultInstance(this.dialogData).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

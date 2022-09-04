@@ -15,17 +15,9 @@ export function findDefaultInstancePage(query) {
   })
 }
 
-export function markAsDefaultInstance(data) {
+export function setupDefaultInstance(data) {
   return request({
-    url: '/instance/markAsDefaultInstance',
-    method: 'post',
-    data
-  })
-}
-
-export function cancelDefaultInstance(data) {
-  return request({
-    url: '/instance/cancelDefaultInstance',
+    url: '/instance/setupDefaultInstance',
     method: 'post',
     data
   })
