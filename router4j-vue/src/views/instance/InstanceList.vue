@@ -45,7 +45,6 @@
             <el-button v-waves type="primary" size="small">设置</el-button>
             <el-button v-waves type="danger" size="small">取消</el-button>
           </el-button-group>
-
         </div>
 
       </el-row>
@@ -133,7 +132,8 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?markAsDefaultInstance():markAsDefaultInstance()">
+        <el-button type="primary"
+                   @click="dialogStatus==='create'?setupDefaultInstanceForDialog():setupDefaultInstanceForDialog()">
           确定
         </el-button>
       </div>
@@ -265,7 +265,36 @@ export default {
       })
     },
 
-    markAsDefaultInstance() {
+    setupDefaultInstanceForBatch: function (isDefaultInstance, isForceRoute) {
+      let requestBodyArray = this._.cloneDeep(this.listMultipleSelection);
+      for (let requestBody of requestBodyArray) {
+        if (isDefaultInstance === null) {
+          requestBody.isForceRoute = isForceRoute;
+          if (isForceRoute) {
+            requestBody.isForceRoute = true;
+          }
+        }
+        if (isForceRoute === null) {
+          requestBody.isDefaultInstance = isDefaultInstance;
+          if (!isDefaultInstance) {
+            requestBody.isForceRoute = false
+          }
+        }
+      }
+
+      setupDefaultInstance(requestBodyArray).then(() => {
+        this.dialogFormVisible = false
+        this.$notify({
+          title: '成功',
+          message: '创建成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.findData()
+      })
+    },
+
+    setupDefaultInstanceForDialog() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           let requestBody = [];

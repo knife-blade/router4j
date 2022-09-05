@@ -9,7 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import '@/styles/index.scss' // global css
 
-
+import _ from 'lodash'
+Vue.prototype._ = _
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 
