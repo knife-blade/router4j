@@ -49,11 +49,16 @@ public class InstanceServiceImpl implements InstanceService {
             String applicationName = instanceReq.getApplicationName();
             String instanceAddress = instanceReq.getInstanceAddress();
 
-            if (!instanceReq.getIsDefaultInstance()) {
-                defaultInstanceUtil.cancelDefaultInstance(applicationName, instanceAddress);
-            } else {
+            if (instanceReq.getIsForceRoute()) {
                 defaultInstanceUtil.markAsDefaultInstance(
-                        applicationName, instanceAddress, instanceReq.getIsForceRoute());
+                        applicationName, instanceAddress, true);
+            } else {
+                if (instanceReq.getIsDefaultInstance()) {
+                    defaultInstanceUtil.markAsDefaultInstance(
+                            applicationName, instanceAddress, false);
+                } else {
+                    defaultInstanceUtil.cancelDefaultInstance(applicationName, instanceAddress);
+                }
             }
         }
     }
