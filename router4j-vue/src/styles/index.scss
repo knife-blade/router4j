@@ -197,11 +197,21 @@ aside {
   z-index: 1000 !important;
 }
 
+// 以下是自定义的
 .operator-button-row {
   margin-bottom: 15px;
 }
 
 .operator-button {
   margin-left: 10px;
-  margin-right: 10px;
+  margin-right: 15px;
+}
+
+.operator-button-group {
+  padding: 5px;
+  border: 2px solid rgb(220, 223,230);
+}
+
+label-wrap{
+  font-size: 14px;
 }

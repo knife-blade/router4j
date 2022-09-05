@@ -30,14 +30,21 @@
           </el-button>
         </div>
 
-        <div style="display: inline-block" class="operator-button">
-          <label-wrap>设置为默认实例</label-wrap>
-          <el-switch v-model="operatorButtonRow.isDefaultInstance"></el-switch>
+        <div style="display: inline-block" class="operator-button operator-button-group">
+          <label-wrap style="margin-right: 10px">默认路由</label-wrap>
+          <el-button-group>
+            <el-button v-waves type="primary" size="small">设置</el-button>
+            <el-button v-waves type="danger" size="small">取消</el-button>
+          </el-button-group>
+
         </div>
 
-        <div style="display: inline-block" class="operator-button">
-          <label-wrap>设置为强制路由</label-wrap>
-          <el-switch v-model="operatorButtonRow.isForceRoute"></el-switch>
+        <div style="display: inline-block" class="operator-button operator-button-group">
+          <label-wrap style="margin-right: 10px">强制路由</label-wrap>
+          <el-button-group>
+            <el-button v-waves type="primary" size="small">设置</el-button>
+            <el-button v-waves type="danger" size="small">取消</el-button>
+          </el-button-group>
 
         </div>
 
