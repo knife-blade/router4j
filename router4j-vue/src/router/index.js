@@ -66,6 +66,11 @@ const routes = [
                 component: () => import('@/views/guide/GuideDetail'),
                 name: 'GuideDetail',
                 meta: {title: '指南详情'}
+            },{
+                path: 'guideEdit',
+                component: () => import('@/views/guide/GuideEdit'),
+                name: 'GuideEdit',
+                meta: {title: '编辑指南'}
             }
         ]
     },

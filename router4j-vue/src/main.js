@@ -10,9 +10,14 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '@/styles/index.scss' // global css
 
 import _ from 'lodash'
-Vue.prototype._ = _
+
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false
+Vue.prototype._ = _
+Vue.use(mavonEditor)
 
 new Vue({
   router,
