@@ -33,8 +33,14 @@
         <div style="display: inline-block" class="operator-button operator-button-group">
           <label-wrap style="margin-right: 10px">默认路由</label-wrap>
           <el-button-group>
-            <el-button v-waves type="primary" size="small">设置</el-button>
-            <el-button v-waves type="danger" size="small">取消</el-button>
+            <el-button v-waves type="primary" size="small"
+                       @click="setupDefaultInstanceForBatch(true, null)">
+              设置
+            </el-button>
+            <el-button v-waves type="danger" size="small"
+                       @click="setupDefaultInstanceForBatch(false, null)">
+              取消
+            </el-button>
           </el-button-group>
 
         </div>
@@ -42,8 +48,14 @@
         <div style="display: inline-block" class="operator-button operator-button-group">
           <label-wrap style="margin-right: 10px">强制路由</label-wrap>
           <el-button-group>
-            <el-button v-waves type="primary" size="small">设置</el-button>
-            <el-button v-waves type="danger" size="small">取消</el-button>
+            <el-button v-waves type="primary" size="small"
+                       @click="setupDefaultInstanceForBatch(null, true)">
+              设置
+            </el-button>
+            <el-button v-waves type="danger" size="small"
+                       @click="setupDefaultInstanceForBatch(null, false)">
+              取消
+            </el-button>
           </el-button-group>
         </div>
 
@@ -81,19 +93,18 @@
         <el-table-column label="运行状态" min-width="100px" align="center">
           <template slot-scope="{row}">
             <el-switch v-model="row.isRunning" disabled></el-switch>
-
           </template>
         </el-table-column>
 
         <el-table-column label="默认路由" width="150px" align="center">
           <template slot-scope="{row}">
-            <el-switch v-model="row.isDefaultInstance"></el-switch>
+            <el-switch v-model="row.isDefaultInstance" @change="setupDefaultInstance(row)"></el-switch>
           </template>
         </el-table-column>
 
         <el-table-column label="强制路由" width="150px" align="center">
           <template slot-scope="{row}">
-            <el-switch v-model="row.isForceRoute"></el-switch>
+            <el-switch v-model="row.isForceRoute" @change="setupDefaultInstance(row)"></el-switch>
           </template>
         </el-table-column>
       </el-table>
@@ -107,22 +118,25 @@
                style="width: 400px; margin-left:50px;">
 
         <el-form-item label="应用名">
-          <el-input v-model="dialogData.applicationName" disabled style="width: 150px">
-          </el-input>
+          <el-select v-model="dialogData.applicationName" placeholder="输入或选择"
+                     filterable allow-create clearable style="width: 150px"
+          >
+            <el-option v-for="item in dialogResultList.applicationNames" :key="item" :label="item" :value="item"/>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="实例地址">
-          <el-input v-model="dialogData.instanceAddress" disabled style="width: 150px">
+          <el-input v-model="dialogData.instanceAddress" style="width: 150px">
           </el-input>
         </el-form-item>
 
         <el-form-item label="设置为默认路由">
-          <el-switch v-model="dialogData.isDefaultInstance">
+          <el-switch v-model="dialogData.isDefaultInstance" @change="modifyIsForceRoute">
           </el-switch>
         </el-form-item>
 
         <el-form-item label="设置为强制路由">
-          <el-switch v-model="dialogData.isForceRoute">
+          <el-switch v-model="dialogData.isForceRoute" @change="modifyIsDefaultInstance">
           </el-switch>
 
         </el-form-item>
@@ -184,7 +198,6 @@ export default {
       dialogData: {
         applicationName: '',
         instanceAddress: '',
-        isRunning: undefined,
         isDefaultInstance: undefined,
         isForceRoute: undefined
       },
@@ -265,13 +278,13 @@ export default {
       })
     },
 
-    setupDefaultInstanceForBatch: function (isDefaultInstance, isForceRoute) {
+    setupDefaultInstanceForBatch (isDefaultInstance, isForceRoute) {
       let requestBodyArray = this._.cloneDeep(this.listMultipleSelection);
       for (let requestBody of requestBodyArray) {
         if (isDefaultInstance === null) {
           requestBody.isForceRoute = isForceRoute;
           if (isForceRoute) {
-            requestBody.isForceRoute = true;
+            requestBody.isDefaultInstance = true;
           }
         }
         if (isForceRoute === null) {
@@ -286,11 +299,27 @@ export default {
         this.dialogFormVisible = false
         this.$notify({
           title: '成功',
-          message: '创建成功',
+          message: '设置成功',
           type: 'success',
           duration: 2000
         })
         this.findData()
+      })
+    },
+
+    setupDefaultInstance (row) {
+      let requestBodyArray = [];
+      requestBodyArray.push(row);
+
+      setupDefaultInstance(requestBodyArray).then(() => {
+        this.dialogFormVisible = false
+        this.$notify({
+          title: '成功',
+          message: '设置成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.findData();
       })
     },
 
@@ -304,7 +333,7 @@ export default {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
-              message: '创建成功',
+              message: '设置成功',
               type: 'success',
               duration: 2000
             })
@@ -312,6 +341,20 @@ export default {
           })
         }
       })
+    },
+
+    // 如果不是默认路由，那么也不能设置为强制路由
+    modifyIsForceRoute() {
+      if (this.dialogData.isDefaultInstance === false) {
+        this.dialogData.isForceRoute = false;
+      }
+    },
+
+    // 如果是强制路由，那么也要设置为默认路由
+    modifyIsDefaultInstance() {
+      if (this.dialogData.isForceRoute === true) {
+        this.dialogData.isDefaultInstance = true;
+      }
     },
 
     handleUpdate(row) {
@@ -352,19 +395,7 @@ export default {
         })
         this.findData()
       })
-    },
-
-    deleteDataAccurateBatch() {
-      cancelDefaultInstance(this.listMultipleSelection).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '取消成功',
-          type: 'success',
-          duration: 2000
-        })
-        this.findData()
-      })
-    },
+    }
   }
 }
 </script>
