@@ -7,6 +7,6 @@ import lombok.Data;
 @ApiModel("保存使用指南")
 @Data
 public class InstructionSaveReq {
-    @ApiModelProperty("文本数据")
-    private String text;
+    @ApiModelProperty("内容")
+    private String content;
 }

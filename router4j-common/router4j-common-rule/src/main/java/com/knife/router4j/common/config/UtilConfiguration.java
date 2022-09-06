@@ -34,9 +34,4 @@ public class UtilConfiguration {
     public DefaultInstanceUtil defaultInstanceUtil() {
         return new DefaultInstanceUtil();
     }
-
-    @Bean
-    public GuideUtil instructionUtil() {
-        return new GuideUtil();
-    }
 }
