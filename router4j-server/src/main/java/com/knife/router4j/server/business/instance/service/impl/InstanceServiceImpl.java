@@ -33,6 +33,7 @@ public class InstanceServiceImpl implements InstanceService {
         List<InstanceVO> defaultInstanceList = findDefaultInstance(applicationName);
         return defaultInstanceList.stream()
                 .map(InstanceVO::getApplicationName)
+                .distinct()
                 .collect(Collectors.toList());
     }
 
@@ -49,11 +50,13 @@ public class InstanceServiceImpl implements InstanceService {
             String applicationName = instanceReq.getApplicationName();
             String instanceAddress = instanceReq.getInstanceAddress();
 
-            if (instanceReq.getIsForceRoute()) {
+            if (instanceReq.getIsForceRoute() != null
+                    && instanceReq.getIsForceRoute()) {
                 defaultInstanceUtil.markAsDefaultInstance(
                         applicationName, instanceAddress, true);
             } else {
-                if (instanceReq.getIsDefaultInstance()) {
+                if (instanceReq.getIsDefaultInstance() != null
+                        && instanceReq.getIsDefaultInstance()) {
                     defaultInstanceUtil.markAsDefaultInstance(
                             applicationName, instanceAddress, false);
                 } else {
