@@ -1,10 +1,11 @@
-package com.knife.router4j.server.business.instance.controller;
+package com.knife.router4j.server.business.defaultInstance.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.knife.router4j.common.util.DefaultInstanceUtil;
-import com.knife.router4j.server.business.instance.request.InstanceReq;
-import com.knife.router4j.server.business.instance.service.InstanceService;
-import com.knife.router4j.server.business.instance.vo.InstanceVO;
+import com.knife.router4j.server.business.defaultInstance.request.InstanceReq;
+import com.knife.router4j.server.business.defaultInstance.service.InstanceService;
+import com.knife.router4j.server.business.defaultInstance.vo.DefaultInstanceVO;
+import com.knife.router4j.server.business.defaultInstance.vo.InstanceVO;
 import com.knife.router4j.server.common.constant.ApiOrder;
 import com.knife.router4j.server.common.entity.PageRequest;
 import com.knife.router4j.server.common.entity.PageResponse;
@@ -26,16 +27,16 @@ public class InstanceController {
     @Autowired
     private InstanceService instanceService;
 
-    @ApiOperation("查找应用的默认实例（分页）")
-    @GetMapping("findDefaultInstancePage")
-    public PageResponse<InstanceVO> findDefaultInstancePage(String applicationName, PageRequest pageRequest) {
-        return instanceService.findDefaultInstancePage(applicationName, pageRequest);
+    @ApiOperation("查找所有的默认应用")
+    @GetMapping("findApplicationNames")
+    public List<InstanceVO> findApplicationNames(InstanceVO instanceVO) {
+        return instanceService.findAllInstance(instanceVO);
     }
 
-    @ApiOperation("查找所有的应用名字")
-    @GetMapping("findApplicationNames")
-    public List<String> findApplicationNames(String applicationName) {
-        return instanceService.findAllApplicationNames(applicationName);
+    @ApiOperation("查找应用的默认实例（分页）")
+    @GetMapping("findDefaultInstancePage")
+    public PageResponse<DefaultInstanceVO> findDefaultInstancePage(InstanceVO instanceVO, PageRequest pageRequest) {
+        return instanceService.findDefaultInstancePage(instanceVO, pageRequest);
     }
 
     @ApiOperation("设置默认实例")

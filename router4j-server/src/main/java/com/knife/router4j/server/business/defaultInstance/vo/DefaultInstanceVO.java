@@ -1,12 +1,12 @@
-package com.knife.router4j.server.business.instance.vo;
+package com.knife.router4j.server.business.defaultInstance.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@ApiModel("实例")
+@ApiModel("默认实例")
 @Data
-public class InstanceVO {
+public class DefaultInstanceVO {
     @ApiModelProperty("应用名字")
     private String applicationName;
 

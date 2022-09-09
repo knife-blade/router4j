@@ -1,9 +1,7 @@
 package com.knife.router4j.common.util;
 
-import com.knife.router4j.common.common.util.JsonUtil;
 import com.knife.router4j.common.constant.RedisConstant;
 import com.knife.router4j.common.entity.DefaultInstanceInfo;
-import com.knife.router4j.common.entity.PathPatternInfo;
 import com.knife.router4j.common.helper.ParseRuleKeyHelper;
 import com.knife.router4j.common.helper.RuleKeyHelper;
 import com.knife.router4j.common.property.RuleProperties;
@@ -13,9 +11,8 @@ import org.redisson.api.RKeys;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DefaultInstanceUtil {
 
@@ -61,9 +58,10 @@ public class DefaultInstanceUtil {
      *
      * @return 实例地址列表
      */
-    public List<DefaultInstanceInfo> findDefaultInstance(String applicationName) {
+    public List<DefaultInstanceInfo> findDefaultInstance(String applicationName,
+                                                         String instanceAddress) {
         String keyPattern = ruleKeyHelper.assembleSearchKey(
-                applicationName, RedisConstant.MATCH_ALL);
+                applicationName, instanceAddress);
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
         Iterable<String> keysByPattern = keys.getKeysByPattern(keyPattern);
 
@@ -94,27 +92,29 @@ public class DefaultInstanceUtil {
         RKeys keys = RedissonHolder.getRedissonClient().getKeys();
         Iterable<String> keysByPattern =
                 keys.getKeysByPattern(ruleKeyHelper.assembleSearchKey(applicationName));
-        Map<String, String> map = new HashMap<>();
+        List<String> keyList = new ArrayList<>();
 
         for (String key : keysByPattern) {
-            RBucket<String> bucket = RedissonHolder.getRedissonClient().getBucket(key);
-            String instanceAddressOfRedis = bucket.get();
-            // 如果应用已经设置了其他默认实例，则报异常
-            if (!key.contains(instanceAddress)) {
-
-                String errorMessage = String.format(
-                        "当前应用（%s）已经设置了默认实例（%s）",
-                        applicationName, instanceAddressOfRedis);
-                throw new RuntimeException(errorMessage);
-            }
-            map.put(key, instanceAddressOfRedis);
+            keyList.add(key);
         }
 
         // 如果有多个
-        if (map.size() > 1) {
+        if (keyList.size() > 1) {
+            List<String> instanceAddressList = keyList.stream()
+                    .map(ParseRuleKeyHelper::parseInstanceAddress)
+                    .collect(Collectors.toList());
             String errorMessage = String.format(
                     "当前应用（%s）设置了多个默认实例，请处理。设置的默认实例为：（%s）",
-                    applicationName, JsonUtil.toJson(map));
+                    applicationName, instanceAddressList);
+            throw new RuntimeException(errorMessage);
+        }
+
+        // 如果应用已经设置了其他默认实例，则报异常
+        String key = keyList.get(0);
+        if (!key.contains(instanceAddress)) {
+            String errorMessage = String.format(
+                    "当前应用（%s）已经设置了默认实例（%s）",
+                    applicationName, ParseRuleKeyHelper.parseInstanceAddress(key));
             throw new RuntimeException(errorMessage);
         }
     }

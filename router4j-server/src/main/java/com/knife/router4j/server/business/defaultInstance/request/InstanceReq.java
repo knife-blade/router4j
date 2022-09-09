@@ -1,4 +1,4 @@
-package com.knife.router4j.server.business.instance.request;
+package com.knife.router4j.server.business.defaultInstance.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,7 +6,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @ApiModel("添加默认实例")
 @Data
