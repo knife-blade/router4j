@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-export function findApplicationNames(query) {
+export function findAllInstance(query) {
   return request({
-    url: '/instance/findApplicationNames',
+    url: '/instance/findAllInstance',
     method: 'get',
     params: query
   })

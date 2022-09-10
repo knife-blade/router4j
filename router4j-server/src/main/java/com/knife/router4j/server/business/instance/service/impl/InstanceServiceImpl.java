@@ -1,14 +1,15 @@
-package com.knife.router4j.server.business.defaultInstance.service.impl;
+package com.knife.router4j.server.business.instance.service.impl;
 
 import com.knife.router4j.common.common.entity.InstanceInfo;
 import com.knife.router4j.common.entity.DefaultInstanceInfo;
 import com.knife.router4j.common.util.DefaultInstanceUtil;
 import com.knife.router4j.server.business.application.service.ApplicationService;
-import com.knife.router4j.server.business.defaultInstance.helper.InstanceHelper;
-import com.knife.router4j.server.business.defaultInstance.request.InstanceReq;
-import com.knife.router4j.server.business.defaultInstance.service.InstanceService;
-import com.knife.router4j.server.business.defaultInstance.vo.DefaultInstanceVO;
-import com.knife.router4j.server.business.defaultInstance.vo.InstanceVO;
+import com.knife.router4j.server.business.instance.helper.InstanceHelper;
+import com.knife.router4j.server.business.instance.request.DefaultInstanceRequest;
+import com.knife.router4j.server.business.instance.service.InstanceService;
+import com.knife.router4j.server.business.instance.vo.DefaultInstanceVO;
+import com.knife.router4j.server.business.instance.request.InstanceRequest;
+import com.knife.router4j.server.business.instance.vo.InstanceForHeaderVO;
 import com.knife.router4j.server.common.entity.PageRequest;
 import com.knife.router4j.server.common.entity.PageResponse;
 import com.knife.router4j.server.common.util.PageUtil;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,49 +30,43 @@ public class InstanceServiceImpl implements InstanceService {
     private DefaultInstanceUtil defaultInstanceUtil;
 
     @Override
-    public List<InstanceVO> findAllInstance(InstanceVO instanceVO) {
+    public InstanceForHeaderVO findAllInstance(InstanceRequest instanceRequest) {
         List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(
-                instanceVO.getApplicationName(),
-                instanceVO.getInstanceIp(),
-                instanceVO.getInstancePort());
+                instanceRequest.getApplicationName(),
+                instanceRequest.getInstanceIp(),
+                instanceRequest.getInstancePort());
 
-        List<InstanceVO> instanceVOS = new ArrayList<>();
-        for (DefaultInstanceVO defaultInstanceVO : defaultInstanceList) {
-            InstanceVO tmpInstanceVO = new InstanceVO();
-            tmpInstanceVO.setApplicationName(defaultInstanceVO.getApplicationName());
-
-            String[] strings = defaultInstanceVO.getInstanceAddress().split(":");
-            tmpInstanceVO.setInstanceIp(strings[0]);
-            tmpInstanceVO.setInstancePort(Integer.parseInt(strings[1]));
-            instanceVOS.add(tmpInstanceVO);
-        }
-
-        return instanceVOS;
+        return InstanceHelper.toInstanceForHeaderVO(defaultInstanceList);
     }
 
     @Override
-    public PageResponse<DefaultInstanceVO> findDefaultInstancePage(InstanceVO instanceVO,
+    public PageResponse<DefaultInstanceVO> findDefaultInstancePage(InstanceRequest instanceRequest,
                                                                    PageRequest pageRequest) {
         List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(
-                instanceVO.getApplicationName(),
-                instanceVO.getInstanceIp(),
-                instanceVO.getInstancePort());
+                instanceRequest.getApplicationName(),
+                instanceRequest.getInstanceIp(),
+                instanceRequest.getInstancePort());
         return PageUtil.toPage(defaultInstanceList, pageRequest);
     }
 
     @Override
-    public void setupDefaultInstance(List<InstanceReq> instanceReqs) {
-        for (InstanceReq instanceReq : instanceReqs) {
-            String applicationName = instanceReq.getApplicationName();
-            String instanceAddress = instanceReq.getInstanceAddress();
+    public void setupDefaultInstance(List<DefaultInstanceRequest> defaultInstanceRequests) {
+        for (DefaultInstanceRequest defaultInstanceRequest : defaultInstanceRequests) {
+            String applicationName = defaultInstanceRequest.getApplicationName();
 
-            if (instanceReq.getIsForceRoute() != null
-                    && instanceReq.getIsForceRoute()) {
+            String instanceAddress = null;
+            if (StringUtils.hasText(defaultInstanceRequest.getInstanceIp())
+                    || defaultInstanceRequest.getInstancePort() != null) {
+                instanceAddress = defaultInstanceRequest.getInstanceIp() + ":" + defaultInstanceRequest.getInstancePort();
+            }
+
+            if (defaultInstanceRequest.getIsForceRoute() != null
+                    && defaultInstanceRequest.getIsForceRoute()) {
                 defaultInstanceUtil.markAsDefaultInstance(
                         applicationName, instanceAddress, true);
             } else {
-                if (instanceReq.getIsDefaultInstance() != null
-                        && instanceReq.getIsDefaultInstance()) {
+                if (defaultInstanceRequest.getIsDefaultInstance() != null
+                        && defaultInstanceRequest.getIsDefaultInstance()) {
                     defaultInstanceUtil.markAsDefaultInstance(
                             applicationName, instanceAddress, false);
                 } else {
@@ -97,14 +91,18 @@ public class InstanceServiceImpl implements InstanceService {
             instanceInfos = findAllInstanceOfRegistry();
         }
 
-        List<DefaultInstanceVO> defaultInstanceVOS = InstanceHelper.toInstanceVO(instanceInfos);
+        List<DefaultInstanceVO> defaultInstanceVOS = InstanceHelper.toDefaultInstanceVO(instanceInfos);
         fillIsRunning(defaultInstanceVOS);
 
         List<DefaultInstanceVO> defaultInstanceVOListResult = findInstanceOfRedis(
                 defaultInstanceVOS, applicationName, instanceAddress);
 
         defaultInstanceVOListResult = defaultInstanceVOListResult.stream()
-                .sorted(Comparator.comparing(DefaultInstanceVO::getInstanceAddress))
+                .sorted(((o1, o2) -> {
+                    String tmp1 = o1.getApplicationName() + o1.getInstanceIp() + o1.getInstancePort();
+                    String tmp2 = o2.getApplicationName() + o2.getInstanceIp() + o2.getInstancePort();
+                    return tmp1.compareTo(tmp2);
+                }))
                 .collect(Collectors.toList());
         return defaultInstanceVOListResult;
     }
@@ -161,12 +159,14 @@ public class InstanceServiceImpl implements InstanceService {
             String applicationNameOfRedis = defaultInstanceOfRedis.getApplicationName();
             String instanceAddressOfRedis = defaultInstanceOfRedis.getInstanceAddress();
             Boolean isForceRoute = defaultInstanceOfRedis.getIsForceRoute();
-
+            String instanceIpOfRedis = InstanceHelper.parseIp(instanceAddressOfRedis);
+            Integer instancePortOfRedis = InstanceHelper.parsePort(instanceAddressOfRedis);
             // 如果结果中已存在，则不再添加
             boolean exist = false;
             for (DefaultInstanceVO defaultInstanceVO : defaultInstanceVOListResult) {
                 if (applicationNameOfRedis.equals(defaultInstanceVO.getApplicationName())
-                        && instanceAddressOfRedis.equals(defaultInstanceVO.getInstanceAddress())) {
+                        && instanceIpOfRedis.equals(defaultInstanceVO.getInstanceIp())
+                        && instancePortOfRedis.equals(defaultInstanceVO.getInstancePort())) {
                     defaultInstanceVO.setIsDefaultInstance(true);
                     defaultInstanceVO.setIsForceRoute(isForceRoute);
                     exist = true;
@@ -177,7 +177,8 @@ public class InstanceServiceImpl implements InstanceService {
             if (!exist) {
                 DefaultInstanceVO defaultInstanceVO = new DefaultInstanceVO();
                 defaultInstanceVO.setApplicationName(applicationNameOfRedis);
-                defaultInstanceVO.setInstanceAddress(instanceAddressOfRedis);
+                defaultInstanceVO.setInstanceIp(InstanceHelper.parseIp(instanceAddressOfRedis));
+                defaultInstanceVO.setInstancePort(InstanceHelper.parsePort(instanceAddressOfRedis));
                 defaultInstanceVO.setIsDefaultInstance(true);
                 defaultInstanceVO.setIsForceRoute(isForceRoute);
                 defaultInstanceVO.setIsRunning(false);

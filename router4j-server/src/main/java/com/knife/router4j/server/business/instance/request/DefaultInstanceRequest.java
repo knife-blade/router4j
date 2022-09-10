@@ -1,4 +1,4 @@
-package com.knife.router4j.server.business.defaultInstance.request;
+package com.knife.router4j.server.business.instance.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,13 +9,17 @@ import javax.validation.constraints.NotNull;
 
 @ApiModel("添加默认实例")
 @Data
-public class InstanceReq {
+public class DefaultInstanceRequest {
     @ApiModelProperty("应用名字")
     private String applicationName;
 
-    @ApiModelProperty("实例地址")
-    @NotBlank(message = "实例地址不能为空")
-    private String instanceAddress;
+    @ApiModelProperty("实例的IP地址")
+    @NotBlank(message = "实例的IP地址不能为空")
+    private String instanceIp;
+
+    @ApiModelProperty("实例的端口")
+    @NotNull(message = "实例的端口不能为空")
+    private Integer instancePort;
 
     @ApiModelProperty("是否设置为默认路由")
     @NotNull(message = "是否设置为默认路由不能为空")

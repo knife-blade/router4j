@@ -1,4 +1,4 @@
-package com.knife.router4j.server.business.defaultInstance.vo;
+package com.knife.router4j.server.business.instance.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,8 +10,11 @@ public class DefaultInstanceVO {
     @ApiModelProperty("应用名字")
     private String applicationName;
 
-    @ApiModelProperty("实例地址")
-    private String instanceAddress;
+    @ApiModelProperty("实例IP")
+    private String instanceIp;
+
+    @ApiModelProperty("实例端口")
+    private Integer instancePort;
 
     @ApiModelProperty("是否是默认实例")
     private Boolean isDefaultInstance;

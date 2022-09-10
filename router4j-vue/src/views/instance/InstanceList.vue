@@ -8,7 +8,26 @@
             <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 150px" class="filter-item"
             >
-              <el-option v-for="item in pageResultList.applicationNames" :key="item" :label="item" :value="item"/>
+              <el-option v-for="item in headerResultArray.applicationNames" :key="item" :label="item" :value="item"/>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <label-wrap>实例的IP</label-wrap>
+            <el-select v-model="pageQuery.instanceIp" placeholder="输入或选择"
+                       filterable allow-create clearable style="width: 150px" class="filter-item"
+            >
+              <el-option v-for="item in headerResultArray.instanceIps" :key="item" :label="item" :value="item"/>
+            </el-select>
+          </el-form-item>
+
+
+          <el-form-item>
+            <label-wrap>实例的端口</label-wrap>
+            <el-select v-model="pageQuery.instancePort" placeholder="输入或选择"
+                       filterable allow-create clearable style="width: 150px" class="filter-item"
+            >
+              <el-option v-for="item in headerResultArray.instancePorts" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
 
@@ -63,7 +82,7 @@
 
       <el-table
           :key="tableKey"
-          :data="list"
+          :data="pageResultList"
           border
           fit
           highlight-current-row
@@ -77,16 +96,22 @@
             width="55">
         </el-table-column>
 
-        <el-table-column label="应用名字" align="center" width="150px" max-wi>
+        <el-table-column label="应用名字" align="center" min-width="150px" max-wi>
           <template slot-scope="{row}">
             <span>{{ row.applicationName }}</span>
           </template>
 
         </el-table-column>
 
-        <el-table-column label="实例地址" min-width="150px">
+        <el-table-column label="实例的IP" min-width="150px">
           <template slot-scope="{row}">
-            <span>{{ row.instanceAddress }}</span>
+            <span>{{ row.instanceIp }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="实例的端口" min-width="100px">
+          <template slot-scope="{row}">
+            <span>{{ row.instancePort }}</span>
           </template>
         </el-table-column>
 
@@ -121,12 +146,12 @@
           <el-select v-model="dialogData.applicationName" placeholder="输入或选择"
                      filterable allow-create clearable style="width: 150px"
           >
-            <el-option v-for="item in dialogResultList.applicationNames" :key="item" :label="item" :value="item"/>
+            <el-option v-for="item in dialogResultArray.applicationNames" :key="item" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
 
         <el-form-item label="实例地址">
-          <el-input v-model="dialogData.instanceAddress" style="width: 150px">
+          <el-input v-model="dialogData.instanceIp" style="width: 150px">
           </el-input>
         </el-form-item>
 
@@ -157,10 +182,9 @@
 
 <script>
 import {
-  findApplicationNames,
+  findAllInstance,
   findDefaultInstancePage,
-  setupDefaultInstance,
-  cancelDefaultInstance
+  setupDefaultInstance
 } from '@/api/defaultInstance'
 import variables from '@/styles/variables.scss'
 import waves from '@/directive/waves' // waves directive
@@ -183,27 +207,37 @@ export default {
   data() {
     return {
       tableKey: 0,
-      list: null,
-      listMultipleSelection: [],
+      headerQuery: {
+        applicationName: null,
+        instanceIp: null,
+        instancePort: null
+      },
+      headerResultArray: {
+        applicationNames: null,
+        instanceIps: null,
+        instancePorts: null
+      },
       total: 0,
       pageQuery: {
         page: 0,
         size: 10,
         applicationName: undefined,
+        instanceIp: undefined,
+        instancePort: undefined
       },
-      pageResultList: {
-        applicationNames: null,
-        instanceAddresses: null,
-      },
+      pageResultList: null,
+      pageMultipleSelection: [],
       dialogData: {
         applicationName: '',
-        instanceAddress: '',
+        instanceIp: '',
+        instancePort: null,
         isDefaultInstance: undefined,
         isForceRoute: undefined
       },
-      dialogResultList: {
+      dialogResultArray: {
         applicationNames: null,
-        instanceAddresses: null,
+        instanceIps: null,
+        instancePorts: null,
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -218,8 +252,10 @@ export default {
       },
       rules: {
         applicationName: [{required: true, message: '应用名是必填的', trigger: 'change'}],
-        instanceAddress: [{required: true, message: '实例地址是必填的', trigger: 'change'}],
-        forceRoute: [{required: true, message: '是否强制路由是必填的', trigger: 'change'}]
+        instanceIp: [{required: true, message: '实例的IP地址是必填的', trigger: 'change'}],
+        instancePort: [{required: true, message: '实例的端口号是必填的', trigger: 'change'}],
+        isDefaultInstance: [{required: true, message: '是否默认路由是必填的', trigger: 'change'}],
+        isForceRoute: [{required: true, message: '是否强制路由是必填的', trigger: 'change'}]
       },
       variables() {
         return variables
@@ -232,45 +268,48 @@ export default {
 
   methods: {
     handleSelectionChange(val) {
-      this.listMultipleSelection = val;
+      this.pageMultipleSelection = val;
     },
 
     getPage() {
       findDefaultInstancePage(this.pageQuery).then(response => {
-        this.list = response.data.dataList
+        this.pageResultList = response.data.dataList
         this.total = response.data.total
       })
     },
     findData() {
       this.getPage()
-      this.findAllApplicationNames()
+      this.findInstanceForHeader()
     },
     resetTemp() {
       this.dialogData = {
         applicationName: '',
-        instanceAddress: '',
-        forceRoute: ''
+        instanceIp: '',
+        instancePort: null,
+        isDefaultInstance: null,
+        isForceRoute: null
       }
     },
 
-    findAllApplicationNames() {
-      findApplicationNames(null).then((response) => {
-        this.pageResultList.applicationNames = response.data
-        this.dialogResultList.applicationNames = response.data
+    findInstanceForHeader() {
+      findAllInstance(this.headerQuery).then((response) => {
+        this.headerResultArray.applicationNames = response.data.applicationNameList;
+        this.headerResultArray.instanceIps = response.data.instanceIpList;
+        this.headerResultArray.instancePorts = response.data.instancePortList;
       })
     },
 
-    findInstanceAddressesForPage() {
-      let query = {
-        applicationName: this.pageQuery.applicationName
-      }
-      findDefaultInstancePage(query).then((response) => {
-        this.pageResultList.instanceAddresses = response.data
+    findAllInstanceForDialog() {
+      findAllInstance(this.dialogData).then((response) => {
+        this.dialogResultArray.applicationNames = response.applicationNameList;
+        this.dialogResultArray.instanceIps = response.instanceIpList;
+        this.dialogResultArray.instancePorts = response.instancePortList;
       })
     },
 
     handleCreate() {
       this.resetTemp()
+      this.findAllInstanceForDialog()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -279,7 +318,7 @@ export default {
     },
 
     setupDefaultInstanceForBatch (isDefaultInstance, isForceRoute) {
-      let requestBodyArray = this._.cloneDeep(this.listMultipleSelection);
+      let requestBodyArray = this._.cloneDeep(this.pageMultipleSelection);
       for (let requestBody of requestBodyArray) {
         if (isDefaultInstance === null) {
           requestBody.isForceRoute = isForceRoute;
