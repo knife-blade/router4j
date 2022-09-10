@@ -3,26 +3,22 @@
     <div class="filter-container">
       <el-card>
         <el-form :inline="true">
-          <el-form-item>
-            <label-wrap>应用名字</label-wrap>
+          <el-form-item label="应用名字">
             <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 150px" class="filter-item"
-                       @change="findInstanceAddressesForPage"
-            >
+                       @change="findInstanceAddressesForPage">
               <el-option v-for="item in pageResultList.applicationNames" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
 
-          <el-form-item>
-            <label-wrap>实例地址</label-wrap>
+          <el-form-item label="实例地址">
             <el-select v-model="pageQuery.instanceAddress" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 200px" class="filter-item">
               <el-option v-for="item in pageResultList.instanceAddresses" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
 
-          <el-form-item>
-            <label-wrap>路径</label-wrap>
+          <el-form-item label="路径">
             <el-input v-model="pageQuery.pathPattern" placeholder="输入" style="width: 300px" class="filter-item">
             </el-input>
           </el-form-item>
