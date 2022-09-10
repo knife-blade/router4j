@@ -3,30 +3,26 @@
     <div class="filter-container">
       <el-card>
         <el-form :inline="true">
-          <el-form-item>
-            <label-wrap>应用名字</label-wrap>
+          <el-form-item label="应用名字">
             <el-select v-model="pageQuery.applicationName" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 150px" class="filter-item"
-            >
+                       @change="findInstanceForHeader">
               <el-option v-for="item in headerResultArray.applicationNames" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
 
-          <el-form-item>
-            <label-wrap>实例的IP</label-wrap>
+          <el-form-item label="实例的IP">
             <el-select v-model="pageQuery.instanceIp" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 150px" class="filter-item"
-            >
+                       @change="findInstanceForHeader">
               <el-option v-for="item in headerResultArray.instanceIps" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
 
-
-          <el-form-item>
-            <label-wrap>实例的端口</label-wrap>
+          <el-form-item label="实例的端口">
             <el-select v-model="pageQuery.instancePort" placeholder="输入或选择"
                        filterable allow-create clearable style="width: 150px" class="filter-item"
-            >
+                       @change="findInstanceForHeader">
               <el-option v-for="item in headerResultArray.instancePorts" :key="item" :label="item" :value="item"/>
             </el-select>
           </el-form-item>
@@ -50,7 +46,7 @@
         </div>
 
         <div style="display: inline-block" class="operator-button operator-button-group">
-          <label-wrap style="margin-right: 10px">默认路由</label-wrap>
+          <span style="font-size: 14px; margin-right: 10px">默认路由</span>
           <el-button-group>
             <el-button v-waves type="primary" size="small"
                        @click="setupDefaultInstanceForBatch(true, null)">
@@ -65,7 +61,7 @@
         </div>
 
         <div style="display: inline-block" class="operator-button operator-button-group">
-          <label-wrap style="margin-right: 10px">强制路由</label-wrap>
+          <span style="font-size: 14px; margin-right: 10px">强制路由</span>
           <el-button-group>
             <el-button v-waves type="primary" size="small"
                        @click="setupDefaultInstanceForBatch(null, true)">
@@ -144,15 +140,23 @@
 
         <el-form-item label="应用名">
           <el-select v-model="dialogData.applicationName" placeholder="输入或选择"
-                     filterable allow-create clearable style="width: 150px"
-          >
+                     filterable allow-create clearable style="width: 150px">
             <el-option v-for="item in dialogResultArray.applicationNames" :key="item" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="实例地址">
-          <el-input v-model="dialogData.instanceIp" style="width: 150px">
-          </el-input>
+        <el-form-item label="实例的IP">
+          <el-select v-model="dialogData.instanceIp" placeholder="输入或选择"
+                     filterable allow-create clearable style="width: 150px">
+            <el-option v-for="item in dialogResultArray.instanceIps" :key="item" :label="item" :value="item"/>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="实例的端口">
+          <el-select v-model="dialogData.instancePort" placeholder="输入或选择"
+                     filterable allow-create clearable style="width: 150px">
+            <el-option v-for="item in dialogResultArray.instancePorts" :key="item" :label="item" :value="item"/>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="设置为默认路由">
@@ -194,24 +198,9 @@ export default {
   name: 'InstanceList',
   components: {Pagination},
   directives: {waves},
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-  },
   data() {
     return {
       tableKey: 0,
-      headerQuery: {
-        applicationName: null,
-        instanceIp: null,
-        instancePort: null
-      },
       headerResultArray: {
         applicationNames: null,
         instanceIps: null,
@@ -292,7 +281,7 @@ export default {
     },
 
     findInstanceForHeader() {
-      findAllInstance(this.headerQuery).then((response) => {
+      findAllInstance(this.pageQuery).then((response) => {
         this.headerResultArray.applicationNames = response.data.applicationNameList;
         this.headerResultArray.instanceIps = response.data.instanceIpList;
         this.headerResultArray.instancePorts = response.data.instancePortList;
@@ -317,7 +306,7 @@ export default {
       })
     },
 
-    setupDefaultInstanceForBatch (isDefaultInstance, isForceRoute) {
+    setupDefaultInstanceForBatch(isDefaultInstance, isForceRoute) {
       let requestBodyArray = this._.cloneDeep(this.pageMultipleSelection);
       for (let requestBody of requestBodyArray) {
         if (isDefaultInstance === null) {
@@ -346,7 +335,7 @@ export default {
       })
     },
 
-    setupDefaultInstance (row) {
+    setupDefaultInstance(row) {
       let requestBodyArray = [];
       requestBodyArray.push(row);
 
@@ -421,18 +410,6 @@ export default {
             this.findData()
           })
         }
-      })
-    },
-
-    cancelData(row, index) {
-      cancelDefaultInstance(row).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '取消成功',
-          type: 'success',
-          duration: 2000
-        })
-        this.findData()
       })
     }
   }
