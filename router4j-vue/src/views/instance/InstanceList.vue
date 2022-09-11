@@ -28,17 +28,13 @@
           </el-form-item>
 
           <div class="filter-button-group">
-            <div class="filter-button">
               <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="findData">
                 搜索
               </el-button>
-            </div>
 
-            <div class="filter-button">
               <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="clearSearch">
                 清除
               </el-button>
-            </div>
           </div>
 
         </el-form>
