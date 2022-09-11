@@ -79,20 +79,18 @@ public class InstanceServiceImpl implements InstanceService {
     private List<DefaultInstanceVO> findDefaultInstance(String applicationName,
                                                         String instanceIp,
                                                         Integer instancePort) {
-        String instanceAddress = null;
-        if (StringUtils.hasText(instanceIp) || instancePort != null) {
-            instanceAddress = instanceIp + ":" + instancePort;
+        String instanceAddress = "";
+
+        if (StringUtils.hasText(instanceIp)) {
+            instanceAddress += instanceIp;
         }
 
-        List<InstanceInfo> instanceInfos;
-        if (StringUtils.hasText(applicationName)) {
-            instanceInfos = findInstanceOfRegistry(applicationName);
-        } else {
-            instanceInfos = findAllInstanceOfRegistry();
+        if (instancePort != null) {
+            instanceAddress += ":" + instancePort;
         }
 
-        List<DefaultInstanceVO> defaultInstanceVOS = InstanceHelper.toDefaultInstanceVO(instanceInfos);
-        fillIsRunning(defaultInstanceVOS);
+        List<DefaultInstanceVO> defaultInstanceVOS =
+                findAllInstanceOfRegistry(applicationName, instanceIp, instancePort);
 
         List<DefaultInstanceVO> defaultInstanceVOListResult = findInstanceOfRedis(
                 defaultInstanceVOS, applicationName, instanceAddress);
@@ -110,23 +108,26 @@ public class InstanceServiceImpl implements InstanceService {
     /**
      * 查找注册中心里的所有服务
      */
-    private List<InstanceInfo> findAllInstanceOfRegistry() {
-        List<InstanceInfo> instanceInfoListResult = new ArrayList<>();
+    private List<DefaultInstanceVO> findAllInstanceOfRegistry(String applicationName,
+                                                              String instanceIp,
+                                                              Integer instancePort) {
+        List<InstanceInfo> instanceInfoList = new ArrayList<>();
 
         List<String> allApplicationNames = applicationService.findAllApplicationNames();
-        for (String applicationName : allApplicationNames) {
-            List<InstanceInfo> instanceInfos = applicationService.findInstance(applicationName);
-            instanceInfoListResult.addAll(instanceInfos);
+        for (String applicationNameOfRegistry : allApplicationNames) {
+            List<InstanceInfo> instanceInfos =
+                    applicationService.findInstance(applicationNameOfRegistry);
+            instanceInfoList.addAll(instanceInfos);
         }
 
-        return instanceInfoListResult;
-    }
+        List<DefaultInstanceVO> defaultInstanceVOS =
+                InstanceHelper.toDefaultInstanceVO(instanceInfoList);
 
-    /**
-     * 查找注册中心里的实例
-     */
-    private List<InstanceInfo> findInstanceOfRegistry(String applicationName) {
-        return applicationService.findInstance(applicationName);
+        List<DefaultInstanceVO> filterResult =
+                filter(defaultInstanceVOS, applicationName, instanceIp, instancePort);
+        fillIsRunning(filterResult);
+
+        return filterResult;
     }
 
     /**
@@ -186,5 +187,41 @@ public class InstanceServiceImpl implements InstanceService {
             }
         }
         return defaultInstanceVOListResult;
+    }
+
+    private List<DefaultInstanceVO> filter(List<DefaultInstanceVO> defaultInstanceVOList,
+                                           String applicationName,
+                                           String instanceIp,
+                                           Integer instancePort) {
+        List<DefaultInstanceVO> result = new ArrayList<>();
+
+        for (DefaultInstanceVO defaultInstanceVO : defaultInstanceVOList) {
+            boolean match = true;
+
+            if (StringUtils.hasText(applicationName)) {
+                if (!(defaultInstanceVO.getApplicationName().contains(applicationName))) {
+                    match = false;
+                }
+            }
+
+            if (StringUtils.hasText(instanceIp)) {
+                if (!(defaultInstanceVO.getInstanceIp().contains(instanceIp))) {
+                    match = false;
+                }
+            }
+
+            if (instancePort != null) {
+                if (!(defaultInstanceVO.getInstancePort().toString()
+                        .contains(instancePort.toString()))) {
+                    match = false;
+                }
+            }
+
+            if (match) {
+                result.add(defaultInstanceVO);
+            }
+        }
+
+        return result;
     }
 }

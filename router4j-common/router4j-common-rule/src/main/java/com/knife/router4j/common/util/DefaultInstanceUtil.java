@@ -98,6 +98,10 @@ public class DefaultInstanceUtil {
             keyList.add(key);
         }
 
+        if (keyList.size() == 0) {
+            return;
+        }
+
         // 如果有多个
         if (keyList.size() > 1) {
             List<String> instanceAddressList = keyList.stream()

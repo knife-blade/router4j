@@ -269,6 +269,7 @@ export default {
     findData() {
       this.getPage()
       this.findInstanceForHeader()
+      this.findInstanceForDialog()
     },
     resetTemp() {
       this.dialogData = {
@@ -288,17 +289,16 @@ export default {
       })
     },
 
-    findAllInstanceForDialog() {
+    findInstanceForDialog() {
       findAllInstance(this.dialogData).then((response) => {
-        this.dialogResultArray.applicationNames = response.applicationNameList;
-        this.dialogResultArray.instanceIps = response.instanceIpList;
-        this.dialogResultArray.instancePorts = response.instancePortList;
+        this.dialogResultArray.applicationNames = response.data.applicationNameList;
+        this.dialogResultArray.instanceIps = response.data.instanceIpList;
+        this.dialogResultArray.instancePorts = response.data.instancePortList;
       })
     },
 
     handleCreate() {
       this.resetTemp()
-      this.findAllInstanceForDialog()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
