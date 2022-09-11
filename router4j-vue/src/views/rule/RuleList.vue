@@ -28,9 +28,9 @@
               搜索
             </el-button>
 
-            <!--<el-button v-waves class="filter-item" type="danger" icon="el-icon-delete" @click="deleteFuzzy">-->
-            <!--  删除-->
-            <!--</el-button>-->
+            <el-button v-waves class="filter-item" type="primary" icon="el-icon-delete" @click="clearSearch">
+              清除
+            </el-button>
           </div>
         </el-form>
 
@@ -228,6 +228,12 @@ export default {
     findData() {
       this.getPage()
       this.findAllApplicationNames()
+    },
+
+    clearSearch() {
+      this.pageQuery.applicationName = undefined
+      this.pageQuery.instanceAddress = undefined
+      this.pageQuery.pathPattern = undefined
     },
     resetTemp() {
       this.dialogData = {
