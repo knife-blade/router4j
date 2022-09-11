@@ -28,7 +28,7 @@
               搜索
             </el-button>
 
-            <el-button v-waves class="filter-item" type="primary" icon="el-icon-delete" @click="clearSearch">
+            <el-button v-waves class="filter-item" icon="el-icon-delete" @click="clearSearch">
               重置
             </el-button>
           </div>
