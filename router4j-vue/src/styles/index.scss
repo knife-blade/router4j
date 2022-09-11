@@ -181,11 +181,15 @@ aside {
     margin: 0 10px;
   }
 
-  .filter-button {
+  .filter-button-group {
     display: inline-block;
-    vertical-align: middle;
     position: absolute;
     right: 20px;
+
+    .filter-button {
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
 }
 
@@ -210,9 +214,9 @@ aside {
 
 .operator-button-group {
   padding: 5px;
-  border: 2px solid rgb(220, 223,230);
+  border: 2px solid rgb(220, 223, 230);
 }
 
-label-wrap{
+label-wrap {
   font-size: 14px;
 }

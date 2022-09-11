@@ -27,11 +27,20 @@
             </el-select>
           </el-form-item>
 
-          <div class="filter-button">
-            <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="findData">
-              搜索
-            </el-button>
+          <div class="filter-button-group">
+            <div class="filter-button">
+              <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="findData">
+                搜索
+              </el-button>
+            </div>
+
+            <div class="filter-button">
+              <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="clearSearch">
+                清除
+              </el-button>
+            </div>
           </div>
+
         </el-form>
 
       </el-card>
@@ -279,6 +288,12 @@ export default {
         isDefaultInstance: null,
         isForceRoute: null
       }
+    },
+
+    clearSearch() {
+      this.pageQuery.applicationName = undefined
+      this.pageQuery.instanceIp = undefined
+      this.pageQuery.instancePort = undefined
     },
 
     findInstanceForHeader() {

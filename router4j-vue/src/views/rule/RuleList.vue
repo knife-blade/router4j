@@ -23,7 +23,7 @@
             </el-input>
           </el-form-item>
 
-          <div class="filter-button">
+          <div class="filter-button-group">
             <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="findData">
               搜索
             </el-button>
