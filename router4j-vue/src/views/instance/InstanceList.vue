@@ -33,7 +33,7 @@
               </el-button>
 
               <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="clearSearch">
-                清除
+                重置
               </el-button>
           </div>
 
