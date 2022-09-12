@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * http://localhost:9012/order/create/?userId=1&productId=1&count=10&money=100
- * http://localhost:9012/order/createFault/?userId=1&productId=1&count=10&money=100
+ * http://localhost:9011/order/create/?userId=1&productId=1&count=10&money=100
+ * http://localhost:9011/order/createFault/?userId=1&productId=1&count=10&money=100
  */
 
 @Slf4j
