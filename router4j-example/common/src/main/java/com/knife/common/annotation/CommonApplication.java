@@ -14,6 +14,7 @@ import java.lang.annotation.*;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients("com.knife.**.api")
+
 public @interface CommonApplication {
     @AliasFor(annotation = SpringBootApplication.class)
     String[] scanBasePackages() default "com.knife.**";

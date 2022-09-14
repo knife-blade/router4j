@@ -1,7 +1,7 @@
 package com.knife.router4j.gateway.filter;
 
-import com.knife.router4j.common.entity.InstanceInfo;
-import com.knife.router4j.common.util.PathRuleUtil;
+import com.knife.router4j.common.common.entity.InstanceInfo;
+import com.knife.router4j.common.util.ClientPathRuleUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -22,7 +22,7 @@ import java.net.URI;
 @Slf4j
 public class SpringCloudGatewayFilter implements GlobalFilter, Ordered {
     @Autowired
-    private PathRuleUtil pathRuleUtil;
+    private ClientPathRuleUtil clientPathRuleUtil;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -37,11 +37,11 @@ public class SpringCloudGatewayFilter implements GlobalFilter, Ordered {
         String rawPath = originalRequest.getURI().getRawPath();
 
         // 获取请求的服务名。route.getUri()示例值：lb://order
-        // Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-        // String serviceName = route.getUri().getHost();
+        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
+        String serviceName = route.getUri().getHost();
 
         // 从redis中取出对应服务的url，然后用rawPath去匹配
-        InstanceInfo matchedInstance = pathRuleUtil.findMatchedInstance(rawPath);
+        InstanceInfo matchedInstance = clientPathRuleUtil.findMatchedInstance(serviceName, rawPath);
 
         URI originUri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
 

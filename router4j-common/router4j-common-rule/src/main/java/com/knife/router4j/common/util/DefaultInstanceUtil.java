@@ -54,7 +54,7 @@ public class DefaultInstanceUtil {
     }
 
     /**
-     * 查找所有的默认实例
+     * 查找默认实例
      *
      * @return 实例地址列表
      */
