@@ -1,7 +1,7 @@
 package com.knife.router4j.example.order.controller;
 
-import com.knife.example.common.entity.Result;
-import com.knife.account.api.AccountFeignClient;
+import com.knife.router4j.example.common.entity.Result;
+import com.knife.router4j.example.account.api.AccountFeignClient;
 import com.knife.router4j.example.order.entity.Order;
 import com.knife.router4j.example.storage.api.StorageFeignClient;
 import lombok.extern.slf4j.Slf4j;
