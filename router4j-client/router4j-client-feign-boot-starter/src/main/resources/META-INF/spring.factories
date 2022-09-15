@@ -1,2 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.knife.router4j.feign.config.byClient.Router4jFeignLoadBalancerAutoConfiguration
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+#    com.knife.router4j.feign.config.loadBalancer.ForceLoadBalancerConfiguration

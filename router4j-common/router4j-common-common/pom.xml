@@ -8,7 +8,7 @@
         <version>2.4.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.knife</groupId>
+    <groupId>com.knife.router4j</groupId>
     <artifactId>router4j-common-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>router4j-common-common</name>

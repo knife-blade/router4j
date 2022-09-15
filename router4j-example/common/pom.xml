@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.knife</groupId>
-        <artifactId>parent-core</artifactId>
+        <groupId>com.knife.router4j</groupId>
+        <artifactId>example-parent-core</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../parent/parent-core/pom.xml</relativePath>
     </parent>
-    <artifactId>common</artifactId>
+    <artifactId>example-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>common</name>
+    <name>example-common</name>
     <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 

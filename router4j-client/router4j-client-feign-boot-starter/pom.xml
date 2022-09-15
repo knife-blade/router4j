@@ -8,7 +8,7 @@
         <version>2.4.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.knife</groupId>
+    <groupId>com.knife.router4j</groupId>
     <artifactId>router4j-client-feign-boot-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>router4j-client-feign-boot-starter</name>
@@ -59,14 +59,14 @@
         </dependency>
 
         <dependency>
-            <groupId>com.knife</groupId>
+            <groupId>com.knife.router4j</groupId>
             <artifactId>router4j-common-rule</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.knife</groupId>
+            <groupId>com.knife.router4j</groupId>
             <artifactId>router4j-common-instance</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>provided</scope>
