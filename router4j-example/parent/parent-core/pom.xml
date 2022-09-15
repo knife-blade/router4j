@@ -69,12 +69,6 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.knife.router4j</groupId>
-            <artifactId>example-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <build>
