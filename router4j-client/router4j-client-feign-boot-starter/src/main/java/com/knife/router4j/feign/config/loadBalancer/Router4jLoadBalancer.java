@@ -16,9 +16,12 @@
 
 package com.knife.router4j.feign.config.loadBalancer;
 
+import com.knife.router4j.common.util.ClientPathRuleUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.EmptyResponse;
@@ -32,11 +35,10 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 /**
- * 强制路由到某个实例
+ * 根据Redis配置路由到某个实例
  */
-public class ForceLoadBalancer implements ReactorServiceInstanceLoadBalancer {
-
-    private static final Log log = LogFactory.getLog(ForceLoadBalancer.class);
+@Slf4j
+public class Router4jLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 
     private final String serviceId;
 
@@ -47,11 +49,14 @@ public class ForceLoadBalancer implements ReactorServiceInstanceLoadBalancer {
      *                                            {@link ServiceInstanceListSupplier} that will be used to get available instances
      * @param serviceId                           id of the service for which to choose an instance
      */
-    public ForceLoadBalancer(ObjectProvider<ServiceInstanceListSupplier> serviceInstanceListSupplierProvider,
-                             String serviceId) {
+    public Router4jLoadBalancer(ObjectProvider<ServiceInstanceListSupplier> serviceInstanceListSupplierProvider,
+                                String serviceId) {
         this.serviceId = serviceId;
         this.serviceInstanceListSupplierProvider = serviceInstanceListSupplierProvider;
     }
+
+    @Autowired
+    private ClientPathRuleUtil clientPathRuleUtil;
 
     @Override
     public Mono<Response<ServiceInstance>> choose(Request request) {
@@ -76,7 +81,7 @@ public class ForceLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 
         ServiceInstance instanceResult = null;
         for (ServiceInstance instance : instances) {
-            if (serviceId.equals(instance.getInstanceId())
+            if (serviceId.equals(instance.getServiceId())
                     && host.equals(instance.getHost())
                     && port == instance.getPort()) {
                 instanceResult = instance;
