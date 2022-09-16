@@ -68,7 +68,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.knife</groupId>
+            <groupId>com.knife.router4j</groupId>
             <artifactId>router4j-client-gateway-boot-starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
