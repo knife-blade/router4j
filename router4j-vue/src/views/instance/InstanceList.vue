@@ -124,13 +124,13 @@
 
         <el-table-column label="默认路由" width="150px" align="center">
           <template slot-scope="{row}">
-            <el-switch v-model="row.isDefaultInstance" @change="setupDefaultInstance(row)"></el-switch>
+            <el-switch v-model="row.isDefaultInstance" @change="setupDefaultInstance(row, $event, null)"></el-switch>
           </template>
         </el-table-column>
 
         <el-table-column label="强制路由" width="150px" align="center">
           <template slot-scope="{row}">
-            <el-switch v-model="row.isForceRoute" @change="setupDefaultInstance(row)"></el-switch>
+            <el-switch v-model="row.isForceRoute" @change="setupDefaultInstance(row, null, $event)"></el-switch>
           </template>
         </el-table-column>
       </el-table>
@@ -346,9 +346,24 @@ export default {
       })
     },
 
-    setupDefaultInstance(row) {
+    setupDefaultInstance(row, isDefaultInstance, isForceRoute) {
+      let requestBody = this._.cloneDeep(row);
+
+      if (isDefaultInstance === null) {
+        requestBody.isForceRoute = isForceRoute;
+        if (isForceRoute) {
+          requestBody.isDefaultInstance = true;
+        }
+      }
+      if (isForceRoute === null) {
+        requestBody.isDefaultInstance = isDefaultInstance;
+        if (!isDefaultInstance) {
+          requestBody.isForceRoute = false
+        }
+      }
+
       let requestBodyArray = [];
-      requestBodyArray.push(row);
+      requestBodyArray.push(requestBody);
 
       setupDefaultInstance(requestBodyArray).then(() => {
         this.dialogFormVisible = false
