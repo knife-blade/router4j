@@ -9,11 +9,10 @@ import java.net.URI;
  */
 public class InstanceInfoHelper {
     public static InstanceInfo assembleInstanceAddress(String instanceAddress) {
-        URI uri = URI.create(instanceAddress);
         InstanceInfo instanceInfo = new InstanceInfo();
-        instanceInfo.setProtocol(uri.getScheme());
-        instanceInfo.setHost(uri.getHost());
-        instanceInfo.setPort(uri.getPort());
+        instanceInfo.setProtocol("http");
+        instanceInfo.setHost(ParseRuleKeyHelper.parseInstanceIp(instanceAddress));
+        instanceInfo.setPort(ParseRuleKeyHelper.parsePort(instanceAddress));
         return instanceInfo;
     }
 }

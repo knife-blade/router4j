@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 路径的规则
@@ -100,7 +101,7 @@ public class ServerPathRuleUtil {
             String applicationName = ParseRuleKeyHelper.parseApplicationName(key);
             result.add(applicationName);
         }
-        return result;
+        return result.stream().distinct().collect(Collectors.toList());
     }
 
     /**

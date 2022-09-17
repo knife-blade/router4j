@@ -6,6 +6,7 @@ import com.knife.router4j.example.order.entity.Order;
 import com.knife.router4j.example.storage.api.StorageFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class OrderController {
     private StorageFeignClient storageFeignClient;
 
     // 正常流程
-    @PostMapping("create")
+    @GetMapping("create")
     public Result create(Order order) {
         log.info("订单服务：创建订单：{}", order);
 

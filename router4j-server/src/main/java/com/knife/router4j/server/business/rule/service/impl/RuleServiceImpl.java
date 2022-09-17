@@ -8,6 +8,7 @@ import com.knife.router4j.server.business.application.service.ApplicationService
 import com.knife.router4j.server.business.rule.service.RuleService;
 import com.knife.router4j.server.common.entity.PageRequest;
 import com.knife.router4j.server.common.entity.PageResponse;
+import com.knife.router4j.server.common.util.BeanHelper;
 import com.knife.router4j.server.common.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,13 +43,13 @@ public class RuleServiceImpl implements RuleService {
         List<String> allApplicationNamesOfRedis = serverPathRuleUtil.findApplicationNames();
         List<String> allApplicationNamesOfRegistry = applicationService.findAllApplicationNames();
 
-        List<String> result = new ArrayList<>(allApplicationNamesOfRedis);
         for (String applicationName : allApplicationNamesOfRegistry) {
-            if (!result.contains(applicationName)) {
-                result.add(applicationName);
+            if (!allApplicationNamesOfRedis.contains(applicationName)) {
+                allApplicationNamesOfRedis.add(applicationName);
             }
         }
-        return result;
+
+        return allApplicationNamesOfRedis;
     }
 
     @Override

@@ -98,13 +98,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.knife</groupId>
+            <groupId>com.knife.router4j</groupId>
             <artifactId>router4j-common-rule</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>com.knife</groupId>
+            <groupId>com.knife.router4j</groupId>
             <artifactId>router4j-common-instance</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

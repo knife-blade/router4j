@@ -49,9 +49,9 @@ public class ParseRuleKeyHelper {
      * @param redisKey redis的key
      * @return 实例地址
      */
-    public static String parsePort(String redisKey) {
+    public static int parsePort(String redisKey) {
         String instanceAddress = parseInstanceAddress(redisKey);
         String[] strings = instanceAddress.split(":");
-        return strings[1];
+        return Integer.parseInt(strings[1]);
     }
 }

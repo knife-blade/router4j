@@ -15,7 +15,12 @@ public class PathMatchHelper {
      * @return 是否匹配
      */
     public static boolean matchForRoute(String pathInRedis, String pathParam) {
-        return antPathMatcher.match(pathInRedis, pathParam);
+        // 如果pathParam里最后是"/"，就把它取消。否则匹配不上
+        String tmpPathParam = pathParam;
+        if (tmpPathParam.length() - 1 == tmpPathParam.lastIndexOf("/")) {
+            tmpPathParam = tmpPathParam.substring(0, tmpPathParam.length() - 1);
+        }
+        return antPathMatcher.match(pathInRedis, tmpPathParam);
     }
 
     /**
@@ -26,7 +31,7 @@ public class PathMatchHelper {
      */
     public static boolean matchForSetting(String pathInRedis, String pathParam) {
         // 如果redis的路径ant匹配入参或者包含入参，则认为匹配
-        return antPathMatcher.match(pathInRedis, pathParam)
+        return matchForRoute(pathInRedis, pathParam)
                 || pathInRedis.contains(pathParam);
     }
 }

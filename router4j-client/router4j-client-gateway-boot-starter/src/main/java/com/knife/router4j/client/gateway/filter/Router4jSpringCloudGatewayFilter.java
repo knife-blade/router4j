@@ -20,7 +20,7 @@ import java.net.URI;
  * 动态路由
  */
 @Slf4j
-public class SpringCloudGatewayFilter implements GlobalFilter, Ordered {
+public class Router4jSpringCloudGatewayFilter implements GlobalFilter, Ordered {
     @Autowired
     private ClientPathRuleUtil clientPathRuleUtil;
 
@@ -40,16 +40,22 @@ public class SpringCloudGatewayFilter implements GlobalFilter, Ordered {
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         String serviceName = route.getUri().getHost();
 
-        // 从redis中取出对应服务的url，然后用rawPath去匹配
+        // 从Redis中取出对应服务的path，然后用rawPath去匹配
         InstanceInfo matchedInstance = clientPathRuleUtil.findMatchedInstance(serviceName, rawPath);
 
         URI originUri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
+        URI newUri = null;
 
-        URI newUri = UriComponentsBuilder.fromUri(originUri)
-                .host(matchedInstance.getHost())
-                .port(matchedInstance.getPort())
-                .build()
-                .toUri();
+        // 如果没有匹配的，则路由到原来的地址
+        if (matchedInstance == null) {
+            newUri = originUri;
+        } else {
+            newUri = UriComponentsBuilder.fromUri(originUri)
+                    .host(matchedInstance.getHost())
+                    .port(matchedInstance.getPort())
+                    .build()
+                    .toUri();
+        }
 
         //重新封装request对象
         ServerHttpRequest newRequest = originalRequest.mutate().uri(newUri).build();
