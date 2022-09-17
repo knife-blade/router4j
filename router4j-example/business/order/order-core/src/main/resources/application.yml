@@ -8,3 +8,18 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+
+router4j:
+  redis:
+    host: 192.168.5.193
+    password: 222333
+    port: 6379
+    # database: 0
+    # ssl: false
+    # timeout: 3s
+  rule:
+    enable: true
+    # pathPatternPrefix: "router4j:rule:pathPattern"
+    # defaultInstancePrefix: "router4j:rule:defaultInstance"
+  # instruction:
+  #   cacheKey: "router4j:instruction"

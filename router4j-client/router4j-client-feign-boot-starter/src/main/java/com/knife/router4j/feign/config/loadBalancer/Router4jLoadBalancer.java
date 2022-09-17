@@ -16,6 +16,7 @@
 
 package com.knife.router4j.feign.config.loadBalancer;
 
+import com.knife.router4j.common.common.entity.InstanceInfo;
 import com.knife.router4j.common.util.ClientPathRuleUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
@@ -23,16 +24,15 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.DefaultResponse;
-import org.springframework.cloud.client.loadbalancer.EmptyResponse;
-import org.springframework.cloud.client.loadbalancer.Request;
-import org.springframework.cloud.client.loadbalancer.Response;
+import org.springframework.cloud.client.loadbalancer.*;
 import org.springframework.cloud.loadbalancer.core.NoopServiceInstanceListSupplier;
 import org.springframework.cloud.loadbalancer.core.ReactorServiceInstanceLoadBalancer;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 根据Redis配置路由到某个实例
@@ -63,37 +63,49 @@ public class Router4jLoadBalancer implements ReactorServiceInstanceLoadBalancer 
         ServiceInstanceListSupplier supplier = serviceInstanceListSupplierProvider
                 .getIfAvailable(NoopServiceInstanceListSupplier::new);
 
-        return supplier.get(request).next().map(this::getInstanceResponse);
+        return supplier.get(request).next()
+                .map(serviceInstances -> getInstanceResponse(request, serviceInstances));
     }
 
-    private Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances) {
-        if (instances.isEmpty()) {
+    private Response<ServiceInstance> getInstanceResponse(Request request,
+                                                          List<ServiceInstance> serviceInstances) {
+        if (serviceInstances.isEmpty()) {
             if (log.isWarnEnabled()) {
                 log.warn("No servers available for service: " + serviceId);
             }
             return new EmptyResponse();
         }
 
+        RequestDataContext requestDataContext = (RequestDataContext) (request.getContext());
+        URI url = requestDataContext.getClientRequest().getUrl();
+        String path = url.getPath();
+
+        // 去Redis查找匹配的实例
+        InstanceInfo matchedInstance = clientPathRuleUtil.findMatchedInstance(serviceId, path);
+        if (matchedInstance == null) {
+            return selectRandomInstance(serviceInstances);
+        }
+
         // 将特定应用的请求路由到指定实例
-        String serviceId = "storage";
-        String host = "192.168.5.1";
-        int port = 9021;
+        String host = matchedInstance.getHost();
+        int port = matchedInstance.getPort();
 
         ServiceInstance instanceResult = null;
-        for (ServiceInstance instance : instances) {
-            if (serviceId.equals(instance.getServiceId())
-                    && host.equals(instance.getHost())
+        for (ServiceInstance instance : serviceInstances) {
+            if (host.equals(instance.getHost())
                     && port == instance.getPort()) {
                 instanceResult = instance;
-                break;
+                return new DefaultResponse(instanceResult);
             }
         }
 
         // 如果指定的实例不可用，则随机取一个可用的服务
-        if (instanceResult == null) {
-            instanceResult = instances.get(0);
-        }
+        return selectRandomInstance(serviceInstances);
+    }
 
+    private Response<ServiceInstance> selectRandomInstance(List<ServiceInstance> serviceInstances) {
+        int index = ThreadLocalRandom.current().nextInt(serviceInstances.size());
+        ServiceInstance instanceResult = serviceInstances.get(index);
         return new DefaultResponse(instanceResult);
     }
 
