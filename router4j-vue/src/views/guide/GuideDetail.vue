@@ -1,11 +1,28 @@
 <template>
   <div class="app-container">
-    <el-row>
-      <a href="https://www.yuque.com/knifeblade/opensource/router4j"
-         target="_blank">
-        官网文档
-      </a>
-    </el-row>
+    <ul>
+      <li>
+        <a href="https://www.yuque.com/knifeblade/opensource/router4j"
+           target="_blank">
+          官网文档
+        </a>
+      </li>
+
+      <li>
+        <a href="https://github.com/knife-blade/router4j"
+           target="_blank">
+          github
+        </a>
+      </li>
+
+      <li>
+        <a href="https://gitee.com/knifeedge/router4j/"
+           target="_blank">
+          gitee
+        </a>
+      </li>
+    </ul>
+
   </div>
 </template>
 
@@ -16,11 +33,18 @@ export default {
 </script>
 
 <style scoped>
+
+
+.app-container {
+  background-color: white;
+}
+
 a {
   color: #409EFF;
 }
 
-.app-container {
-  background-color: white;
+li {
+  display: inline-block;
+  margin: 0 10px;
 }
 </style>
