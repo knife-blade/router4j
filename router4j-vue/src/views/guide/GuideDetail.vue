@@ -17,8 +17,7 @@ export default {
 
 <style scoped>
 a {
-  color: #42b983;
-  text-decoration: underline;
+  color: #409EFF;
 }
 
 .app-container {
