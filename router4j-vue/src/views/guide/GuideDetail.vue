@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-row>
-      <a href="https://knife.blog.csdn.net/"
+      <a href="https://www.yuque.com/knifeblade/opensource/router4j"
          target="_blank">
         官网文档
       </a>
