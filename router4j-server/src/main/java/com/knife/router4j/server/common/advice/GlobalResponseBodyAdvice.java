@@ -3,7 +3,7 @@ package com.knife.router4j.server.common.advice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.knife.router4j.server.common.constant.WhiteList;
-import com.knife.router4j.server.common.entity.Result;
+import com.knife.router4j.server.common.entity.ResultWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -37,18 +37,19 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             // 若返回值为String类型，需要包装为String类型返回。否则会报错
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                Result<Object> result = new Result<>().data(body);
-                return objectMapper.writeValueAsString(result);
+                ResultWrapper<Object> resultWrapper = ResultWrapper.success().data(body);
+                return objectMapper.writeValueAsString(resultWrapper);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException("序列化String错误");
             }
-        } else if (body instanceof Result) {
+        } else if (body instanceof ResultWrapper) {
             return body;
         } else if (isKnife4jUrl(request.getURI().getPath())) {
             // 如果是接口文档uri，直接跳过
             return body;
         }
-        return new Result<>().data(body);
+
+        return ResultWrapper.success().data(body);
     }
 
     private boolean isKnife4jUrl(String uri) {
