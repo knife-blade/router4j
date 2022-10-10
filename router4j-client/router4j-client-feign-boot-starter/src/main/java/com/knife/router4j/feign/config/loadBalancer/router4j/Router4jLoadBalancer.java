@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.knife.router4j.feign.config.loadBalancer;
+package com.knife.router4j.feign.config.loadBalancer.router4j;
 
 import com.knife.router4j.common.common.entity.InstanceInfo;
 import com.knife.router4j.common.util.ClientPathRuleUtil;

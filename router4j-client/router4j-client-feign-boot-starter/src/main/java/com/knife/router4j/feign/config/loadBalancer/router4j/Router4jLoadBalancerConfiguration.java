@@ -1,4 +1,4 @@
-package com.knife.router4j.feign.config.loadBalancer;
+package com.knife.router4j.feign.config.loadBalancer.router4j;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.loadbalancer.core.ReactorLoadBalancer;
@@ -9,8 +9,10 @@ import org.springframework.core.env.Environment;
 
 public class Router4jLoadBalancerConfiguration {
     @Bean
-    public ReactorLoadBalancer<ServiceInstance> reactorServiceInstanceLoadBalancer(Environment environment,
-                                                                                   LoadBalancerClientFactory loadBalancerClientFactory) {
+    public ReactorLoadBalancer<ServiceInstance> reactorServiceInstanceLoadBalancer(
+            Environment environment,
+            LoadBalancerClientFactory loadBalancerClientFactory) {
+
         String name = environment.getProperty(LoadBalancerClientFactory.PROPERTY_NAME);
         return new Router4jLoadBalancer(
                 loadBalancerClientFactory
