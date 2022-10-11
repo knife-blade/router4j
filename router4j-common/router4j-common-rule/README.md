@@ -8,6 +8,7 @@ application.yml
 
 ````bash
 router4j:
+  enable: true
   redis:
     host: localhost
     password: 222333
@@ -16,7 +17,6 @@ router4j:
     # ssl: false
     # timeout: 3s
   rule:
-    enable: true
     # pathPatternPrefix: "router4j:rule:pathPattern"
     # defaultInstancePrefix: "router4j:rule:defaultInstance"
   # instruction:

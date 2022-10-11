@@ -8,11 +8,6 @@ import lombok.Data;
 @Data
 public class RuleProperties {
     /**
-     * 是否开启路由功能
-     */
-    private Boolean enable = true;
-
-    /**
      * 存到Redis里的路径规则的key的前缀
      */
     private String pathPatternPrefix = "router4j:rule:path-pattern";

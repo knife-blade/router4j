@@ -1,7 +1,7 @@
-package com.knife.router4j.common.instance.impl;
+package com.knife.router4j.common.instance.applicationInfo.impl;
 
 import com.knife.router4j.common.common.entity.InstanceInfo;
-import com.knife.router4j.common.instance.ApplicationInfoService;
+import com.knife.router4j.common.instance.applicationInfo.ApplicationInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;

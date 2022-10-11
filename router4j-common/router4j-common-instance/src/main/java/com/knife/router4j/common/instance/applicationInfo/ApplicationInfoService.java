@@ -1,4 +1,4 @@
-package com.knife.router4j.common.instance;
+package com.knife.router4j.common.instance.applicationInfo;
 
 import com.knife.router4j.common.common.entity.InstanceInfo;
 

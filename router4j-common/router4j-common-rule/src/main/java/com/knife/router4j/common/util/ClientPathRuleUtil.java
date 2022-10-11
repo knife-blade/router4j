@@ -7,6 +7,7 @@ import com.knife.router4j.common.helper.InstanceInfoHelper;
 import com.knife.router4j.common.helper.ParseRuleKeyHelper;
 import com.knife.router4j.common.helper.PathMatchHelper;
 import com.knife.router4j.common.helper.RuleKeyHelper;
+import com.knife.router4j.common.instance.applicationInfo.ApplicationInfoService;
 import com.knife.router4j.common.property.RuleProperties;
 import com.knife.router4j.common.redis.RedissonHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +31,13 @@ public class ClientPathRuleUtil {
 
     private RuleKeyHelper pathPatternKeyHelper;
 
-    private RuleKeyHelper defaultInstanceKeyHelper;
+    @Autowired
+    private ApplicationInfoService applicationInfoService;
 
     @Autowired
     public void setRuleProperties(RuleProperties ruleProperties) {
         String pathPatternPrefix = ruleProperties.getPathPatternPrefix();
-        String defaultInstancePrefix = ruleProperties.getDefaultInstancePrefix();
         this.pathPatternKeyHelper = new RuleKeyHelper(pathPatternPrefix);
-        this.defaultInstanceKeyHelper = new RuleKeyHelper(defaultInstancePrefix);
     }
 
     /**
@@ -58,16 +58,13 @@ public class ClientPathRuleUtil {
      * @return 实例信息
      */
     public InstanceInfo findMatchedInstance(String applicationName, String path) {
-        // 如果没开启rule功能，则直接返回null
-        // if (!ruleProperties.getEnable()) {
-        //     return null;
-        // }
+        InstanceInfo instanceInfo = null;
 
         // 如果设置了强制路由，则使用设置的实例
         DefaultInstanceInfo defaultInstance = findDefaultInstance(applicationName);
         if (defaultInstance != null
                 && defaultInstance.getIsForceRoute()) {
-            return InstanceInfoHelper.assembleInstanceAddress(
+            instanceInfo = InstanceInfoHelper.assembleInstanceAddress(
                     defaultInstance.getInstanceAddress());
         }
 
@@ -90,15 +87,15 @@ public class ClientPathRuleUtil {
         if (matchedKey == null) {
             // 如果有默认实例，则使用默认实例
             if (defaultInstance != null) {
-                return InstanceInfoHelper.assembleInstanceAddress(
+                instanceInfo = InstanceInfoHelper.assembleInstanceAddress(
                         defaultInstance.getInstanceAddress());
             }
-
-            return null;
         } else {
             String instanceAddress = ParseRuleKeyHelper.parseInstanceAddress(matchedKey);
-            return InstanceInfoHelper.assembleInstanceAddress(instanceAddress);
+            instanceInfo = InstanceInfoHelper.assembleInstanceAddress(instanceAddress);
         }
+
+        return filterOnline(instanceInfo, applicationName);
     }
 
     /**
@@ -153,5 +150,25 @@ public class ClientPathRuleUtil {
         }
 
         return defaultInstances.get(0);
+    }
+
+    /**
+     * 实例在线才返回，否则返回null
+     */
+    private InstanceInfo filterOnline(InstanceInfo instanceInfo, String applicationName) {
+        if (instanceInfo == null) {
+            return null;
+        }
+
+        List<InstanceInfo> instanceInfos =
+                applicationInfoService.findInstances(applicationName);
+        for (InstanceInfo instanceOfRegistry : instanceInfos) {
+            if (instanceOfRegistry.getHost().equals(instanceInfo.getHost())
+                && instanceOfRegistry.getPort() == instanceInfo.getPort()) {
+                return instanceInfo;
+            }
+        }
+
+        return null;
     }
 }
