@@ -11,7 +11,7 @@ Java后端在开发SpringCloud项目时如果同一个应用起了多个实例�
 本文介绍的router4j可以解决这个问题，是我个人写的中间件。它可以设置将指定的url的请求路由到指定的机器。
 
  **官网网址** 
-- 官网文档：[router4j官网](https://www.yuque.com/knifeblade/opensource/router4j) （首先在官网更新，不定时同步到[CSDN博客](https://knife.blog.csdn.net/article/details/126930621 "CSDN博客")）
+- 官网文档：[router4j官网](https://www.yuque.com/knifeblade/opensource/router4j) （首先在官网更新，不定时同步到[CSDN博客](https://knife.blog.csdn.net/article/details/135762839 "CSDN博客")）
 - github：https://github.com/knife-blade/router4j
 - gitee：https://gitee.com/knifeedge/router4j
 
