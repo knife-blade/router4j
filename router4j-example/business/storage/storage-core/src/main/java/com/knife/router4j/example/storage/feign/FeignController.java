@@ -1,4 +1,4 @@
-package com.knife.router4j.example.storage.feign;
+package com.suchtool.router4j.example.storage.feign;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

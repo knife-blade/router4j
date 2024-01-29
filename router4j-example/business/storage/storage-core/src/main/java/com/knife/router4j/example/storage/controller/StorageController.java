@@ -1,4 +1,4 @@
-package com.knife.router4j.example.storage.controller;
+package com.suchtool.router4j.example.storage.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

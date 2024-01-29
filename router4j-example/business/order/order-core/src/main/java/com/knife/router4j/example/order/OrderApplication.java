@@ -1,6 +1,6 @@
-package com.knife.router4j.example.order;
+package com.suchtool.router4j.example.order;
 
-import com.knife.router4j.example.common.annotation.CommonApplication;
+import com.suchtool.router4j.example.common.annotation.CommonApplication;
 import org.springframework.boot.SpringApplication;
 
 @CommonApplication

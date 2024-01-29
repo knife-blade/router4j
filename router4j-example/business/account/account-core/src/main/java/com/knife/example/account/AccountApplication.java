@@ -1,6 +1,6 @@
 package com.knife.example.account;
 
-import com.knife.router4j.example.common.annotation.CommonApplication;
+import com.suchtool.router4j.example.common.annotation.CommonApplication;
 import org.springframework.boot.SpringApplication;
 
 @CommonApplication

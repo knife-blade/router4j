@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.knife.router4j.common.config.UtilConfiguration,\
-  com.knife.router4j.common.config.PropertiesConfiguration
+  com.suchtool.router4j.common.config.UtilConfiguration,\
+  com.suchtool.router4j.common.config.PropertiesConfiguration

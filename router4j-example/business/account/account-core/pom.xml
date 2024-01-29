@@ -3,23 +3,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.knife.router4j</groupId>
+        <groupId>com.suchtool.router4j</groupId>
         <artifactId>example-parent-core</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../../parent/parent-core/pom.xml</relativePath>
+        <version>0.0.1</version>
+        <relativePath/>
     </parent>
 
     <artifactId>example-account-core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>example-account-core</name>
     <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.knife.router4j</groupId>
+            <groupId>com.suchtool.router4j</groupId>
             <artifactId>example-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 

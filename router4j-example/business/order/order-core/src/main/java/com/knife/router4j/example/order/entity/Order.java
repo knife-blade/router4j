@@ -1,4 +1,4 @@
-package com.knife.router4j.example.order.entity;
+package com.suchtool.router4j.example.order.entity;
 
 import lombok.Data;
 

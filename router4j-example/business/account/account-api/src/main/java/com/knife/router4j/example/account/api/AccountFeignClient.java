@@ -1,4 +1,4 @@
-package com.knife.router4j.example.account.api;
+package com.suchtool.router4j.example.account.api;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

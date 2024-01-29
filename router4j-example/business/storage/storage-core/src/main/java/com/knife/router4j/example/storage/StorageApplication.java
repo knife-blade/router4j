@@ -1,6 +1,6 @@
-package com.knife.router4j.example.storage;
+package com.suchtool.router4j.example.storage;
 
-import com.knife.router4j.example.common.annotation.CommonApplication;
+import com.suchtool.router4j.example.common.annotation.CommonApplication;
 import org.springframework.boot.SpringApplication;
 
 @CommonApplication

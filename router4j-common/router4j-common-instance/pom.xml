@@ -8,9 +8,9 @@
         <version>2.4.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.knife.router4j</groupId>
+    <groupId>com.suchtool.router4j</groupId>
     <artifactId>router4j-common-instance</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>router4j-common-instance</name>
     <description>router4j-common-instance Project</description>
     <properties>
@@ -71,9 +71,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.knife.router4j</groupId>
+            <groupId>com.suchtool.router4j</groupId>
             <artifactId>router4j-common-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
     </dependencies>

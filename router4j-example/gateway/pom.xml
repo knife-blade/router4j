@@ -9,9 +9,9 @@
         <version>2.4.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.knife.router4j</groupId>
+    <groupId>com.suchtool.router4j</groupId>
     <artifactId>example-gateway</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>example-gateway</name>
     <description>Demo project for Spring Boot</description>
 
@@ -68,9 +68,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.knife.router4j</groupId>
+            <groupId>com.suchtool.router4j</groupId>
             <artifactId>router4j-client-gateway-boot-starter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
     </dependencies>

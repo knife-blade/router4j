@@ -1,4 +1,4 @@
-package com.knife.router4j.example.storage.entity;
+package com.suchtool.router4j.example.storage.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
