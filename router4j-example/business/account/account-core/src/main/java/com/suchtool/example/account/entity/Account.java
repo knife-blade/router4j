@@ -1,4 +1,4 @@
-package com.knife.example.account.entity;
+package com.suchtool.example.account.entity;
 
 import lombok.Data;
 

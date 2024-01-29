@@ -1,4 +1,4 @@
-package com.knife.example.account.feign;
+package com.suchtool.example.account.feign;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
