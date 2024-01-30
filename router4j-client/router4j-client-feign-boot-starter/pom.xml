@@ -3,21 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.13</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.suchtool</groupId>
+        <artifactId>router4j-client</artifactId>
+        <version>0.0.1</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.suchtool.router4j</groupId>
     <artifactId>router4j-client-feign-boot-starter</artifactId>
     <version>0.0.1</version>
     <name>router4j-client-feign-boot-starter</name>
-    <description>Demo project for Spring Boot</description>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+    <description>Demo project for Spring Boot</description>
 
     <dependencyManagement>
         <dependencies>
@@ -71,25 +67,5 @@
             <version>0.0.1</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <!--发布源码插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

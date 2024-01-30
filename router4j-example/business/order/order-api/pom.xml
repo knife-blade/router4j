@@ -6,6 +6,7 @@
         <artifactId>example-parent-api</artifactId>
         <groupId>com.suchtool.router4j</groupId>
         <version>0.0.1</version>
+        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
