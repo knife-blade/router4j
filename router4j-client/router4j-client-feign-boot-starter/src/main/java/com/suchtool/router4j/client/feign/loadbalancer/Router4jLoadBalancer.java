@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.suchtool.router4j.feign.config.loadBalancer.router4j;
+package com.suchtool.router4j.client.feign.loadbalancer;
 
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import com.suchtool.router4j.common.util.ClientPathRuleUtil;

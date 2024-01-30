@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.suchtool.router4j.feign.config.loadBalancer.DefaultLoadBalancerConfiguration
+    com.suchtool.router4j.client.feign.configuration.Router4jFeignClientConfiguration
