@@ -1,1 +1,0 @@
-http://localhost:6001/order/order/create/?userId=1&productId=1&count=10&money=100

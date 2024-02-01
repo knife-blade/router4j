@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class PropertiesConfiguration {
     @Bean
-    @ConfigurationProperties(prefix = "router4j.redis")
+    @ConfigurationProperties(prefix = "suchtool.router4j.redis")
     public RedisProperties redisProperties() {
         return new RedisProperties();
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "router4j.rule")
+    @ConfigurationProperties(prefix = "suchtool.router4j.rule")
     public RuleProperties ruleProperties() {
         return new RuleProperties();
     }

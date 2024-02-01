@@ -1,13 +1,17 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
-import store from '@/store'
+import {Message} from 'element-ui'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: getBaseUrl(), // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
 })
+
+function getBaseUrl() {
+  // 根据前端页面的url，动态确定后端接口路径
+  return location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/';
+}
 
 // request interceptor
 service.interceptors.request.use(
