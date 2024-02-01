@@ -14,6 +14,7 @@
     <groupId>com.suchtool</groupId>
     <artifactId>router4j</artifactId>
     <version>0.0.1</version>
+
     <url>https://github.com/knife-blade/router4j</url>
 
     <packaging>pom</packaging>
@@ -25,8 +26,20 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

@@ -10,11 +10,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Nacos实现
- */
 @Slf4j
-public class NacosImpl implements ApplicationInfoService {
+public class ApplicationInfoServiceImpl implements ApplicationInfoService {
     @Autowired
     private DiscoveryClient discoveryClient;
 

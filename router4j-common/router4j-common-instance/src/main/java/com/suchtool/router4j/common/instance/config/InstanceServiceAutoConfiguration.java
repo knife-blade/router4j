@@ -1,19 +1,17 @@
 package com.suchtool.router4j.common.instance.config;
 
-import com.alibaba.cloud.nacos.discovery.NacosDiscoveryAutoConfiguration;
-import com.suchtool.router4j.common.instance.applicationInfo.impl.NacosImpl;
+import com.suchtool.router4j.common.instance.applicationInfo.impl.ApplicationInfoServiceImpl;
 import com.suchtool.router4j.common.instance.applicationInfo.ApplicationInfoService;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@ConditionalOnBean(DiscoveryClient.class)
 @Configuration(proxyBeanMethods = false)
 public class InstanceServiceAutoConfiguration {
-    @Bean
-    @ConditionalOnClass(NacosDiscoveryAutoConfiguration.class)
-    public ApplicationInfoService nacosImpl() {
-        return new NacosImpl();
+    @Bean("com.suchtool.router4j.applicationInfoService")
+    public ApplicationInfoService applicationInfoService() {
+        return new ApplicationInfoServiceImpl();
     }
-
-    //todo 添加eureka逻辑
 }
