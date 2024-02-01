@@ -9,7 +9,7 @@
         <version>2.4.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.suchtool.router4j</groupId>
+    <groupId>com.suchtool</groupId>
     <artifactId>example-gateway</artifactId>
     <version>0.0.1</version>
     <name>example-gateway</name>
@@ -68,7 +68,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.suchtool.router4j</groupId>
+            <groupId>com.suchtool</groupId>
             <artifactId>router4j-client-gateway-boot-starter</artifactId>
             <version>0.0.1</version>
         </dependency>

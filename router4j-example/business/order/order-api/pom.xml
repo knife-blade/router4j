@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>example-parent-api</artifactId>
-        <groupId>com.suchtool.router4j</groupId>
+        <groupId>com.suchtool</groupId>
         <version>0.0.1</version>
         <relativePath/>
     </parent>

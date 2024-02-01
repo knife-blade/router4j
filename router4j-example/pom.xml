@@ -11,7 +11,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.suchtool.router4j</groupId>
+    <groupId>com.suchtool</groupId>
     <artifactId>example</artifactId>
     <version>0.0.1</version>
 

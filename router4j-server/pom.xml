@@ -101,13 +101,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.suchtool.router4j</groupId>
+            <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-rule</artifactId>
             <version>0.0.1</version>
         </dependency>
 
         <dependency>
-            <groupId>com.suchtool.router4j</groupId>
+            <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-instance</artifactId>
             <version>0.0.1</version>
         </dependency>

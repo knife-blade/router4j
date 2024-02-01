@@ -68,7 +68,7 @@ maven：（待上传）
 router4j-example/gateway
 ```xml
     <dependency>
-        <groupId>com.suchtool.router4j</groupId>
+        <groupId>com.suchtool</groupId>
         <artifactId>router4j-client-gateway-boot-starter</artifactId>
         <version>0.0.1</version>
     </dependency>
@@ -78,7 +78,7 @@ router4j-example/gateway
 router4j-example/business/order/order-core
 ```xml
 <dependency>
-  <groupId>com.suchtool.router4j</groupId>
+  <groupId>com.suchtool</groupId>
   <artifactId>router4j-client-feign-boot-starter</artifactId>
   <version>0.0.1</version>
 </dependency>

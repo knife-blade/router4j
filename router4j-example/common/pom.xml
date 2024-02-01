@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.suchtool.router4j</groupId>
+        <groupId>com.suchtool</groupId>
         <artifactId>example-parent-core</artifactId>
         <version>0.0.1</version>
         <relativePath>../parent/parent-core/pom.xml</relativePath>
