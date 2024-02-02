@@ -12,7 +12,6 @@ spring:
 
 suchtool:
   router4j:
-    enabled: true
     redis:
       host: 192.168.5.193
       password: 222333

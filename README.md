@@ -70,7 +70,7 @@ router4j-example/gateway
     <dependency>
         <groupId>com.suchtool</groupId>
         <artifactId>router4j-client-gateway-boot-starter</artifactId>
-        <version>0.0.1</version>
+        <version>1.0.0</version>
     </dependency>
 ```
 	
@@ -79,8 +79,8 @@ router4j-example/business/order/order-core
 ```xml
 <dependency>
   <groupId>com.suchtool</groupId>
-  <artifactId>router4j-client-feign-boot-starter</artifactId>
-  <version>0.0.1</version>
+  <artifactId>router4j-client-spring-boot-starter</artifactId>
+  <version>1.0.0</version>
 </dependency>
 ```
 ## 2.3 配置

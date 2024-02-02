@@ -13,7 +13,7 @@
 
     <groupId>com.suchtool</groupId>
     <artifactId>router4j</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
 
     <url>https://github.com/knife-blade/router4j</url>
 
@@ -39,6 +39,12 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.suchtool</groupId>
+            <artifactId>nice-util-spring-boot-starter</artifactId>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 

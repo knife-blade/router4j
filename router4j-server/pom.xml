@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.knife</groupId>
     <artifactId>router4j-server</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <name>router4j-server</name>
     <description>router4j-server Project</description>
     <properties>
@@ -103,13 +103,13 @@
         <dependency>
             <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-rule</artifactId>
-            <version>0.0.1</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-instance</artifactId>
-            <version>0.0.1</version>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

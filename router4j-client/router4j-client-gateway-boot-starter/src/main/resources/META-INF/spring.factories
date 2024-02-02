@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.suchtool.router4j.client.gateway.config.Router4jGatewayClientConfig
