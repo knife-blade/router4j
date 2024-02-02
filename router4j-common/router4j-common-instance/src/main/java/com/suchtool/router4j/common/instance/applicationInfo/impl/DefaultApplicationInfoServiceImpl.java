@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class ApplicationInfoServiceImpl implements ApplicationInfoService {
+public class DefaultApplicationInfoServiceImpl implements ApplicationInfoService {
     @Autowired
     private DiscoveryClient discoveryClient;
 

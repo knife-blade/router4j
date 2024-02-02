@@ -5,6 +5,18 @@ import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import java.util.List;
 
 public interface ApplicationInfoService {
+    default Boolean namespaceExist(){
+        return false;
+    }
+
+    /**
+     * 获得所有命名空间
+     * @return 命名空间ID列表
+     */
+    default List<String> findAllNameSpaces(){
+        return null;
+    }
+
     /**
      * 获得所有的应用
      * @return 应用的名字列表
