@@ -1,6 +1,6 @@
 package com.suchtool.router4j.common.redis;
 
-import com.suchtool.niceutil.util.ApplicationContextHolder;
+import com.suchtool.niceutil.util.spring.ApplicationContextHolder;
 import com.suchtool.router4j.common.property.RedisProperties;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

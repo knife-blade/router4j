@@ -1,9 +1,9 @@
 package com.suchtool.router4j.server.common.advice;
 
+import com.suchtool.niceutil.util.base.ThrowableUtil;
 import com.suchtool.router4j.server.common.entity.ResultWrapper;
 import com.suchtool.router4j.server.common.exception.BusinessException;
 import com.suchtool.router4j.server.common.exception.SystemException;
-import com.suchtool.router4j.server.common.util.ThrowableUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;

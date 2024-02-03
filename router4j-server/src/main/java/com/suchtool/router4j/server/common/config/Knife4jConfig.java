@@ -31,7 +31,7 @@ public class Knife4jConfig {
                 .groupName("all")
                 .select()
                 // 这里指定Controller扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.knife"))
+                .apis(RequestHandlerSelectors.basePackage("com.suchtool"))
                 .paths(PathSelectors.any())
                 .build();
 
