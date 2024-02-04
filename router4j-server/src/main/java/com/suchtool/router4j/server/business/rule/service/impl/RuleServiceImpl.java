@@ -6,8 +6,8 @@ import com.suchtool.router4j.common.entity.PathRuleRequest;
 import com.suchtool.router4j.common.util.ServerPathRuleUtil;
 import com.suchtool.router4j.server.business.application.service.ApplicationService;
 import com.suchtool.router4j.server.business.rule.service.RuleService;
-import com.suchtool.router4j.server.common.entity.PageRequest;
-import com.suchtool.router4j.server.common.entity.PageResponse;
+import com.suchtool.router4j.common.common.entity.Router4jPageBO;
+import com.suchtool.router4j.common.common.entity.Router4jPageVO;
 import com.suchtool.router4j.server.common.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,14 +27,14 @@ public class RuleServiceImpl implements RuleService {
     private ApplicationService applicationService;
 
     @Override
-    public PageResponse<PathPatternInfo> page(PathRuleRequest pathRuleQueryRequest, PageRequest pageRequest) {
+    public Router4jPageVO<PathPatternInfo> page(PathRuleRequest pathRuleQueryRequest, Router4jPageBO router4jPageBO) {
         List<PathPatternInfo> ruleInfoList = serverPathRuleUtil.findRule(pathRuleQueryRequest);
 
         ruleInfoList = ruleInfoList.stream()
                 .sorted(Comparator.comparing(PathPatternInfo::getPathPattern))
                 .collect(Collectors.toList());
 
-        return PageUtil.toPage(ruleInfoList, pageRequest);
+        return PageUtil.toPage(ruleInfoList, router4jPageBO);
     }
 
     @Override

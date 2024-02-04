@@ -10,8 +10,8 @@ import com.suchtool.router4j.server.business.instance.service.InstanceService;
 import com.suchtool.router4j.server.business.instance.vo.DefaultInstanceVO;
 import com.suchtool.router4j.server.business.instance.request.InstanceRequest;
 import com.suchtool.router4j.server.business.instance.vo.InstanceForHeaderVO;
-import com.suchtool.router4j.server.common.entity.PageRequest;
-import com.suchtool.router4j.server.common.entity.PageResponse;
+import com.suchtool.router4j.common.common.entity.Router4jPageBO;
+import com.suchtool.router4j.common.common.entity.Router4jPageVO;
 import com.suchtool.router4j.server.common.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,13 +40,13 @@ public class InstanceServiceImpl implements InstanceService {
     }
 
     @Override
-    public PageResponse<DefaultInstanceVO> findDefaultInstancePage(InstanceRequest instanceRequest,
-                                                                   PageRequest pageRequest) {
+    public Router4jPageVO<DefaultInstanceVO> findDefaultInstancePage(InstanceRequest instanceRequest,
+                                                                     Router4jPageBO router4jPageBO) {
         List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(
                 instanceRequest.getApplicationName(),
                 instanceRequest.getInstanceIp(),
                 instanceRequest.getInstancePort());
-        return PageUtil.toPage(defaultInstanceList, pageRequest);
+        return PageUtil.toPage(defaultInstanceList, router4jPageBO);
     }
 
     @Override

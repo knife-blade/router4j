@@ -11,8 +11,8 @@ import com.suchtool.router4j.server.business.rule.request.RuleDeleteFuzzyReq;
 import com.suchtool.router4j.server.business.rule.request.RuleEditReq;
 import com.suchtool.router4j.server.business.rule.service.RuleService;
 import com.suchtool.router4j.server.common.constant.ApiOrder;
-import com.suchtool.router4j.server.common.entity.PageRequest;
-import com.suchtool.router4j.server.common.entity.PageResponse;
+import com.suchtool.router4j.common.common.entity.Router4jPageBO;
+import com.suchtool.router4j.common.common.entity.Router4jPageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class RuleController {
 
     @ApiOperation("查找规则")
     @GetMapping("page")
-    public PageResponse<PathPatternInfo> page(PathRuleRequest pathRuleRequest, PageRequest pageRequest) {
-        return ruleService.page(pathRuleRequest, pageRequest);
+    public Router4jPageVO<PathPatternInfo> page(PathRuleRequest pathRuleRequest, Router4jPageBO router4jPageBO) {
+        return ruleService.page(pathRuleRequest, router4jPageBO);
     }
 
     @ApiOperation("查找应用名字")

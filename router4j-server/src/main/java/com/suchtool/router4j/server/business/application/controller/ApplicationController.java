@@ -2,7 +2,7 @@ package com.suchtool.router4j.server.business.application.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
-import com.suchtool.router4j.common.instance.applicationInfo.ApplicationInfoService;
+import com.suchtool.router4j.common.instance.applicationInfo.service.ApplicationInfoService;
 import com.suchtool.router4j.server.common.constant.ApiOrder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +31,6 @@ public class ApplicationController {
     @ApiOperation("根据应用名获得实例")
     @GetMapping("findInstance")
     public List<InstanceInfo> findInstance(@RequestParam String applicationName) {
-        return applicationInfoService.findInstances(applicationName);
+        return applicationInfoService.findInstances(, applicationName);
     }
 }

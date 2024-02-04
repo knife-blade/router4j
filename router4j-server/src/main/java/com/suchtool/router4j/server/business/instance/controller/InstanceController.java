@@ -8,8 +8,8 @@ import com.suchtool.router4j.server.business.instance.vo.DefaultInstanceVO;
 import com.suchtool.router4j.server.business.instance.request.InstanceRequest;
 import com.suchtool.router4j.server.business.instance.vo.InstanceForHeaderVO;
 import com.suchtool.router4j.server.common.constant.ApiOrder;
-import com.suchtool.router4j.server.common.entity.PageRequest;
-import com.suchtool.router4j.server.common.entity.PageResponse;
+import com.suchtool.router4j.common.common.entity.Router4jPageBO;
+import com.suchtool.router4j.common.common.entity.Router4jPageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +36,8 @@ public class InstanceController {
 
     @ApiOperation("查找应用的默认实例（分页）")
     @GetMapping("findDefaultInstancePage")
-    public PageResponse<DefaultInstanceVO> findDefaultInstancePage(InstanceRequest instanceRequest, PageRequest pageRequest) {
-        return instanceService.findDefaultInstancePage(instanceRequest, pageRequest);
+    public Router4jPageVO<DefaultInstanceVO> findDefaultInstancePage(InstanceRequest instanceRequest, Router4jPageBO router4jPageBO) {
+        return instanceService.findDefaultInstancePage(instanceRequest, router4jPageBO);
     }
 
     @ApiOperation("设置默认实例")

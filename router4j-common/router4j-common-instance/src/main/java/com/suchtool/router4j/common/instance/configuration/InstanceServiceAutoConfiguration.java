@@ -1,8 +1,9 @@
 package com.suchtool.router4j.common.instance.configuration;
 
 import com.alibaba.cloud.nacos.NacosServiceAutoConfiguration;
-import com.suchtool.router4j.common.instance.applicationInfo.impl.DefaultApplicationInfoServiceImpl;
-import com.suchtool.router4j.common.instance.applicationInfo.ApplicationInfoService;
+import com.suchtool.router4j.common.instance.applicationInfo.service.impl.DefaultApplicationInfoServiceImpl;
+import com.suchtool.router4j.common.instance.applicationInfo.service.ApplicationInfoService;
+import com.suchtool.router4j.common.instance.applicationInfo.service.impl.NacosApplicationInfoServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -28,8 +29,7 @@ public class InstanceServiceAutoConfiguration {
     protected static class NacosApplicationInfoServiceImplConfiguration {
         @Bean("com.suchtool.router4j.nacosApplicationInfoServiceImplConfiguration")
         public ApplicationInfoService nacosApplicationInfoServiceImplConfiguration() {
-            return new DefaultApplicationInfoServiceImpl();
-            // todo 改成nacos实现
+            return new NacosApplicationInfoServiceImpl();
         }
     }
 }

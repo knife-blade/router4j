@@ -7,7 +7,7 @@ import com.suchtool.router4j.common.helper.InstanceInfoHelper;
 import com.suchtool.router4j.common.helper.ParseRuleKeyHelper;
 import com.suchtool.router4j.common.helper.PathMatchHelper;
 import com.suchtool.router4j.common.helper.RuleKeyHelper;
-import com.suchtool.router4j.common.instance.applicationInfo.ApplicationInfoService;
+import com.suchtool.router4j.common.instance.applicationInfo.service.ApplicationInfoService;
 import com.suchtool.router4j.common.property.RuleProperties;
 import com.suchtool.router4j.common.redis.RedissonHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -161,7 +161,7 @@ public class ClientPathRuleUtil {
         }
 
         List<InstanceInfo> instanceInfos =
-                applicationInfoService.findInstances(applicationName);
+                applicationInfoService.findInstances();
         for (InstanceInfo instanceOfRegistry : instanceInfos) {
             if (instanceOfRegistry.getHost().equals(instanceInfo.getHost())
                 && instanceOfRegistry.getPort() == instanceInfo.getPort()) {

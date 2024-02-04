@@ -1,7 +1,7 @@
 package com.suchtool.router4j.server.business.application.service.impl;
 
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
-import com.suchtool.router4j.common.instance.applicationInfo.ApplicationInfoService;
+import com.suchtool.router4j.common.instance.applicationInfo.service.ApplicationInfoService;
 import com.suchtool.router4j.server.business.application.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public List<InstanceInfo> findInstance(String applicationName) {
-        return applicationInfoService.findInstances(applicationName);
+        return applicationInfoService.findInstances();
     }
 }
