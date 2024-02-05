@@ -1,19 +1,16 @@
 # router4j-vue
 
-## Project setup
-```
-npm install
-```
+## 项目描述
+router4j服务端的前端项目
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## 本项目打包后放到SpringBoot服务端运行
 
-### Compiles and minifies for production
-```
-npm run build
-```
+单独运行和打包运行要修改的文件是：
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+**单独运行**
+- src/utils/request.js：修改getBaseUrl方法，返回此值：process.env.VUE_APP_BASE_API
+- .env：修改VUE_APP_BASE_API，改为'/api'
+
+**打包运行**
+- src/utils/request.js：修改getBaseUrl方法，返回此值：location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/';
+- .env：修改VUE_APP_BASE_API，改为''

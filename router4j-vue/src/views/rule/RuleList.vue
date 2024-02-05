@@ -97,7 +97,7 @@
       </el-table>
     </el-card>
 
-    <pagination v-show="total>0" :total="total" :page.sync="pageQuery.page" :limit.sync="pageQuery.limit"
+    <pagination v-show="total>0" :total="total" :page.sync="pageQuery.pageNo" :limit.sync="pageQuery.limit"
                 @pagination="getPage" :limit="10"/>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -172,8 +172,8 @@ export default {
       listMultipleSelection: [],
       total: 0,
       pageQuery: {
-        page: 0,
-        size: 10,
+        pageNo: 0,
+        pageSize: 10,
         applicationName: undefined,
         instanceAddress: undefined,
         pathPattern: undefined,

@@ -25,13 +25,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     public List<String> findAllApplicationNames(String namespaceName) {
         ApplicationPageBO applicationPageBO = new ApplicationPageBO();
         applicationPageBO.setNamespaceName(namespaceName);
-        applicationPageBO.setCurrent(1);
-        applicationPageBO.setSize(pageSize);
+        applicationPageBO.setPageNo(1);
+        applicationPageBO.setPageSize(pageSize);
 
-        Router4jPageVO<ApplicationVO> allApplications = applicationInfoService
+        Router4jPageVO<ApplicationVO> pageVO = applicationInfoService
                 .findAllApplications(applicationPageBO);
 
-        List<ApplicationVO> dataList = allApplications.getDataList();
+        List<ApplicationVO> dataList = pageVO.getDataList();
         if (CollectionUtils.isEmpty(dataList)) {
             return null;
         }
@@ -46,8 +46,8 @@ public class ApplicationServiceImpl implements ApplicationService {
         InstancePageBO instancePageBO = new InstancePageBO();
         instancePageBO.setNamespaceName(namespaceName);
         instancePageBO.setApplicationName(applicationName);
-        instancePageBO.setCurrent(1);
-        instancePageBO.setSize(pageSize);
+        instancePageBO.setPageNo(1);
+        instancePageBO.setPageSize(pageSize);
 
         Router4jPageVO<InstanceInfo> pageVO = applicationInfoService.findInstances(instancePageBO);
         return pageVO.getDataList();

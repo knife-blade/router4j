@@ -2,12 +2,12 @@ package com.suchtool.router4j.server.business.rule.service.impl;
 
 import com.suchtool.router4j.common.common.entity.Router4jPageBO;
 import com.suchtool.router4j.common.common.entity.Router4jPageVO;
+import com.suchtool.router4j.common.common.util.Router4jPageUtil;
 import com.suchtool.router4j.common.entity.PathPatternInfo;
 import com.suchtool.router4j.common.entity.PathRuleRequest;
 import com.suchtool.router4j.common.util.ServerPathRuleUtil;
 import com.suchtool.router4j.server.business.application.service.ApplicationService;
 import com.suchtool.router4j.server.business.rule.service.RuleService;
-import com.suchtool.router4j.server.common.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,7 +33,7 @@ public class RuleServiceImpl implements RuleService {
                 .sorted(Comparator.comparing(PathPatternInfo::getPathPattern))
                 .collect(Collectors.toList());
 
-        return PageUtil.toPage(ruleInfoList, router4jPageBO);
+        return Router4jPageUtil.toPage(ruleInfoList, router4jPageBO);
     }
 
     @Override

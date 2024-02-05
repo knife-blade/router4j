@@ -8,14 +8,13 @@ import com.suchtool.nacosopenapi.api.vo.NacosNamespaceVO;
 import com.suchtool.nacosopenapi.api.vo.NacosServiceVO;
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import com.suchtool.router4j.common.common.entity.Router4jPageVO;
-import com.suchtool.router4j.common.common.util.PageUtil;
+import com.suchtool.router4j.common.common.util.Router4jPageUtil;
 import com.suchtool.router4j.common.instance.applicationInfo.bo.ApplicationPageBO;
 import com.suchtool.router4j.common.instance.applicationInfo.bo.InstancePageBO;
 import com.suchtool.router4j.common.instance.applicationInfo.service.ApplicationInfoService;
 import com.suchtool.router4j.common.instance.applicationInfo.vo.ApplicationVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -48,12 +47,12 @@ public class NacosApplicationInfoServiceImpl implements ApplicationInfoService {
     public Router4jPageVO<ApplicationVO> findAllApplications(ApplicationPageBO applicationPageBO) {
         NacosServicePageBO nacosServicePageBO = new NacosServicePageBO();
         nacosServicePageBO.setNamespaceId(applicationPageBO.getNamespaceName());
-        nacosServicePageBO.setPageNo((int) applicationPageBO.getCurrent());
-        nacosServicePageBO.setPageSize((int) applicationPageBO.getSize());
+        nacosServicePageBO.setPageNo((int) applicationPageBO.getPageNo());
+        nacosServicePageBO.setPageSize((int) applicationPageBO.getPageSize());
 
         List<NacosServiceVO> serviceVOS = nacosOpenApiUtil.queryService(nacosServicePageBO);
         if (CollectionUtils.isEmpty(serviceVOS)) {
-            return null;
+            return Router4jPageUtil.toPage(null, applicationPageBO);
         }
 
         List<ApplicationVO> applicationVOList = new ArrayList<>();
@@ -62,7 +61,7 @@ public class NacosApplicationInfoServiceImpl implements ApplicationInfoService {
             applicationVO.setApplicationName(serviceVO.getName());
             applicationVOList.add(applicationVO);
         }
-        return PageUtil.toPage(applicationVOList, applicationPageBO);
+        return Router4jPageUtil.toPage(applicationVOList, applicationPageBO);
     }
 
     @Override
@@ -70,12 +69,12 @@ public class NacosApplicationInfoServiceImpl implements ApplicationInfoService {
         NacosInstancePageBO nacosInstancePageBO = new NacosInstancePageBO();
         nacosInstancePageBO.setServiceName(instancePageBO.getApplicationName());
         nacosInstancePageBO.setNamespaceId(instancePageBO.getNamespaceName());
-        nacosInstancePageBO.setPageNo((int) instancePageBO.getCurrent());
-        nacosInstancePageBO.setPageSize((int) instancePageBO.getSize());
+        nacosInstancePageBO.setPageNo((int) instancePageBO.getPageNo());
+        nacosInstancePageBO.setPageSize((int) instancePageBO.getPageSize());
 
         List<NacosInstanceVO> nacosInstanceVOS = nacosOpenApiUtil.queryInstance(nacosInstancePageBO);
         if (CollectionUtils.isEmpty(nacosInstanceVOS)) {
-            return null;
+            return Router4jPageUtil.toPage(null, instancePageBO);
         }
 
         List<InstanceInfo> instanceInfos = new ArrayList<>();
@@ -86,6 +85,6 @@ public class NacosApplicationInfoServiceImpl implements ApplicationInfoService {
             instanceInfo.setPort(nacosInstanceVO.getPort());
             instanceInfos.add(instanceInfo);
         }
-        return PageUtil.toPage(instanceInfos, instancePageBO);
+        return Router4jPageUtil.toPage(instanceInfos, instancePageBO);
     }
 }

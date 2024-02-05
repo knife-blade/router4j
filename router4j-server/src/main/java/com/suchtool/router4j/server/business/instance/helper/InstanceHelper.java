@@ -3,6 +3,7 @@ package com.suchtool.router4j.server.business.instance.helper;
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import com.suchtool.router4j.server.business.instance.vo.DefaultInstanceVO;
 import com.suchtool.router4j.server.business.instance.vo.InstanceForHeaderVO;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,10 @@ public class InstanceHelper {
     }
 
     public static InstanceForHeaderVO toInstanceForHeaderVO(List<DefaultInstanceVO> defaultInstanceVOS) {
+        if (CollectionUtils.isEmpty(defaultInstanceVOS)) {
+            return null;
+        }
+
         List<String> applicationNameList = defaultInstanceVOS.stream()
                 .map(DefaultInstanceVO::getApplicationName)
                 .distinct()

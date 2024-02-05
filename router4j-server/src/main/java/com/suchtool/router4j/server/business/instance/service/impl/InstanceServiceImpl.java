@@ -1,6 +1,7 @@
 package com.suchtool.router4j.server.business.instance.service.impl;
 
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
+import com.suchtool.router4j.common.common.util.Router4jPageUtil;
 import com.suchtool.router4j.common.entity.DefaultInstanceInfo;
 import com.suchtool.router4j.common.util.DefaultInstanceUtil;
 import com.suchtool.router4j.server.business.application.service.ApplicationService;
@@ -12,9 +13,9 @@ import com.suchtool.router4j.server.business.instance.bo.InstanceBO;
 import com.suchtool.router4j.server.business.instance.vo.InstanceForHeaderVO;
 import com.suchtool.router4j.common.common.entity.Router4jPageBO;
 import com.suchtool.router4j.common.common.entity.Router4jPageVO;
-import com.suchtool.router4j.server.common.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class InstanceServiceImpl implements InstanceService {
                                                                      Router4jPageBO router4jPageBO) {
         List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(
                 instanceBO);
-        return PageUtil.toPage(defaultInstanceList, router4jPageBO);
+        return Router4jPageUtil.toPage(defaultInstanceList, router4jPageBO);
     }
 
     @Override
@@ -84,6 +85,9 @@ public class InstanceServiceImpl implements InstanceService {
         }
 
         List<DefaultInstanceVO> defaultInstanceVOS = findAllInstanceOfRegistry(instanceBO);
+        if (CollectionUtils.isEmpty(defaultInstanceVOS)) {
+            return defaultInstanceVOS;
+        }
 
         List<DefaultInstanceVO> defaultInstanceVOListResult = findInstanceOfRedis(
                 defaultInstanceVOS, instanceBO.getApplicationName(), instanceAddress);
@@ -106,6 +110,10 @@ public class InstanceServiceImpl implements InstanceService {
 
         List<String> allApplicationNames = applicationService.findAllApplicationNames(
                 instanceBO.getNamespaceName());
+        if (CollectionUtils.isEmpty(allApplicationNames)) {
+            return null;
+        }
+
         for (String applicationNameOfRegistry : allApplicationNames) {
             List<InstanceInfo> instanceInfos = applicationService.findInstance(
                     instanceBO.getNamespaceName(), applicationNameOfRegistry);
@@ -145,6 +153,10 @@ public class InstanceServiceImpl implements InstanceService {
     private List<DefaultInstanceVO> findInstanceOfRedis(List<DefaultInstanceVO> defaultInstanceVOS,
                                                         String applicationName,
                                                         String instanceAddress) {
+        if (CollectionUtils.isEmpty(defaultInstanceVOS)) {
+            return defaultInstanceVOS;
+        }
+
         List<DefaultInstanceVO> defaultInstanceVOListResult = new ArrayList<>(defaultInstanceVOS);
 
         // 获取设置到Redis中的所有默认实例

@@ -9,8 +9,9 @@ const service = axios.create({
 })
 
 function getBaseUrl() {
+  return process.env.VUE_APP_BASE_API;
   // 根据前端页面的url，动态确定后端接口路径
-  return location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/';
+  // return location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/';
 }
 
 // request interceptor

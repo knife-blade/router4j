@@ -3,7 +3,7 @@ package com.suchtool.router4j.common.instance.applicationInfo.service.impl;
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import com.suchtool.router4j.common.common.entity.Router4jPageBO;
 import com.suchtool.router4j.common.common.entity.Router4jPageVO;
-import com.suchtool.router4j.common.common.util.PageUtil;
+import com.suchtool.router4j.common.common.util.Router4jPageUtil;
 import com.suchtool.router4j.common.instance.applicationInfo.bo.ApplicationPageBO;
 import com.suchtool.router4j.common.instance.applicationInfo.bo.InstancePageBO;
 import com.suchtool.router4j.common.instance.applicationInfo.service.ApplicationInfoService;
@@ -35,7 +35,7 @@ public class DefaultApplicationInfoServiceImpl implements ApplicationInfoService
             applicationVO.setApplicationName(service);
             applicationVOList.add(applicationVO);
         }
-        return PageUtil.toPage(applicationVOList, new Router4jPageBO());
+        return Router4jPageUtil.toPage(applicationVOList, new Router4jPageBO());
     }
 
     @Override
@@ -55,6 +55,6 @@ public class DefaultApplicationInfoServiceImpl implements ApplicationInfoService
             instanceInfo.setPort(serviceInstance.getPort());
             instanceInfos.add(instanceInfo);
         }
-        return PageUtil.toPage(instanceInfos, instancePageBO);
+        return Router4jPageUtil.toPage(instanceInfos, instancePageBO);
     }
 }
