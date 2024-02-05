@@ -1,4 +1,4 @@
-package com.suchtool.router4j.server.business.instance.request;
+package com.suchtool.router4j.server.business.instance.bo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @ApiModel("添加默认实例")
 @Data
-public class DefaultInstanceRequest {
+public class DefaultInstanceBO {
     @ApiModelProperty("应用名字")
     private String applicationName;
 

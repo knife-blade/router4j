@@ -2,10 +2,10 @@ package com.suchtool.router4j.server.business.instance.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.suchtool.router4j.common.util.DefaultInstanceUtil;
-import com.suchtool.router4j.server.business.instance.request.DefaultInstanceRequest;
+import com.suchtool.router4j.server.business.instance.bo.DefaultInstanceBO;
 import com.suchtool.router4j.server.business.instance.service.InstanceService;
 import com.suchtool.router4j.server.business.instance.vo.DefaultInstanceVO;
-import com.suchtool.router4j.server.business.instance.request.InstanceRequest;
+import com.suchtool.router4j.server.business.instance.bo.InstanceBO;
 import com.suchtool.router4j.server.business.instance.vo.InstanceForHeaderVO;
 import com.suchtool.router4j.server.common.constant.ApiOrder;
 import com.suchtool.router4j.common.common.entity.Router4jPageBO;
@@ -30,19 +30,19 @@ public class InstanceController {
 
     @ApiOperation("查找所有的默认应用")
     @GetMapping("findAllInstance")
-    public InstanceForHeaderVO findAllInstance(InstanceRequest instanceRequest) {
-        return instanceService.findAllInstance(instanceRequest);
+    public InstanceForHeaderVO findAllInstance(InstanceBO instanceBO) {
+        return instanceService.findAllInstance(instanceBO);
     }
 
     @ApiOperation("查找应用的默认实例（分页）")
     @GetMapping("findDefaultInstancePage")
-    public Router4jPageVO<DefaultInstanceVO> findDefaultInstancePage(InstanceRequest instanceRequest, Router4jPageBO router4jPageBO) {
-        return instanceService.findDefaultInstancePage(instanceRequest, router4jPageBO);
+    public Router4jPageVO<DefaultInstanceVO> findDefaultInstancePage(InstanceBO instanceBO, Router4jPageBO router4jPageBO) {
+        return instanceService.findDefaultInstancePage(instanceBO, router4jPageBO);
     }
 
     @ApiOperation("设置默认实例")
     @PostMapping("setupDefaultInstance")
-    public void setupDefaultInstance(@RequestBody List<DefaultInstanceRequest> addReqs) {
+    public void setupDefaultInstance(@RequestBody List<DefaultInstanceBO> addReqs) {
         instanceService.setupDefaultInstance(addReqs);
     }
 }

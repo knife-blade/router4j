@@ -5,10 +5,10 @@ import com.suchtool.router4j.common.entity.DefaultInstanceInfo;
 import com.suchtool.router4j.common.util.DefaultInstanceUtil;
 import com.suchtool.router4j.server.business.application.service.ApplicationService;
 import com.suchtool.router4j.server.business.instance.helper.InstanceHelper;
-import com.suchtool.router4j.server.business.instance.request.DefaultInstanceRequest;
+import com.suchtool.router4j.server.business.instance.bo.DefaultInstanceBO;
 import com.suchtool.router4j.server.business.instance.service.InstanceService;
 import com.suchtool.router4j.server.business.instance.vo.DefaultInstanceVO;
-import com.suchtool.router4j.server.business.instance.request.InstanceRequest;
+import com.suchtool.router4j.server.business.instance.bo.InstanceBO;
 import com.suchtool.router4j.server.business.instance.vo.InstanceForHeaderVO;
 import com.suchtool.router4j.common.common.entity.Router4jPageBO;
 import com.suchtool.router4j.common.common.entity.Router4jPageVO;
@@ -30,43 +30,39 @@ public class InstanceServiceImpl implements InstanceService {
     private DefaultInstanceUtil defaultInstanceUtil;
 
     @Override
-    public InstanceForHeaderVO findAllInstance(InstanceRequest instanceRequest) {
+    public InstanceForHeaderVO findAllInstance(InstanceBO instanceBO) {
         List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(
-                instanceRequest.getApplicationName(),
-                instanceRequest.getInstanceIp(),
-                instanceRequest.getInstancePort());
+                instanceBO);
 
         return InstanceHelper.toInstanceForHeaderVO(defaultInstanceList);
     }
 
     @Override
-    public Router4jPageVO<DefaultInstanceVO> findDefaultInstancePage(InstanceRequest instanceRequest,
+    public Router4jPageVO<DefaultInstanceVO> findDefaultInstancePage(InstanceBO instanceBO,
                                                                      Router4jPageBO router4jPageBO) {
         List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(
-                instanceRequest.getApplicationName(),
-                instanceRequest.getInstanceIp(),
-                instanceRequest.getInstancePort());
+                instanceBO);
         return PageUtil.toPage(defaultInstanceList, router4jPageBO);
     }
 
     @Override
-    public void setupDefaultInstance(List<DefaultInstanceRequest> defaultInstanceRequests) {
-        for (DefaultInstanceRequest defaultInstanceRequest : defaultInstanceRequests) {
-            String applicationName = defaultInstanceRequest.getApplicationName();
+    public void setupDefaultInstance(List<DefaultInstanceBO> defaultInstanceBOS) {
+        for (DefaultInstanceBO defaultInstanceBO : defaultInstanceBOS) {
+            String applicationName = defaultInstanceBO.getApplicationName();
 
             String instanceAddress = null;
-            if (StringUtils.hasText(defaultInstanceRequest.getInstanceIp())
-                    || defaultInstanceRequest.getInstancePort() != null) {
-                instanceAddress = defaultInstanceRequest.getInstanceIp() + ":" + defaultInstanceRequest.getInstancePort();
+            if (StringUtils.hasText(defaultInstanceBO.getInstanceIp())
+                    || defaultInstanceBO.getInstancePort() != null) {
+                instanceAddress = defaultInstanceBO.getInstanceIp() + ":" + defaultInstanceBO.getInstancePort();
             }
 
-            if (defaultInstanceRequest.getIsForceRoute() != null
-                    && defaultInstanceRequest.getIsForceRoute()) {
+            if (defaultInstanceBO.getIsForceRoute() != null
+                    && defaultInstanceBO.getIsForceRoute()) {
                 defaultInstanceUtil.markAsDefaultInstance(
                         applicationName, instanceAddress, true);
             } else {
-                if (defaultInstanceRequest.getIsDefaultInstance() != null
-                        && defaultInstanceRequest.getIsDefaultInstance()) {
+                if (defaultInstanceBO.getIsDefaultInstance() != null
+                        && defaultInstanceBO.getIsDefaultInstance()) {
                     defaultInstanceUtil.markAsDefaultInstance(
                             applicationName, instanceAddress, false);
                 } else {
@@ -76,24 +72,21 @@ public class InstanceServiceImpl implements InstanceService {
         }
     }
 
-    private List<DefaultInstanceVO> findDefaultInstance(String applicationName,
-                                                        String instanceIp,
-                                                        Integer instancePort) {
+    private List<DefaultInstanceVO> findDefaultInstance(InstanceBO instanceBO) {
         String instanceAddress = "";
 
-        if (StringUtils.hasText(instanceIp)) {
-            instanceAddress += instanceIp;
+        if (StringUtils.hasText(instanceBO.getInstanceIp())) {
+            instanceAddress += instanceBO.getInstanceIp();
         }
 
-        if (instancePort != null) {
-            instanceAddress += ":" + instancePort;
+        if (instanceBO.getInstancePort() != null) {
+            instanceAddress += ":" + instanceBO.getInstancePort();
         }
 
-        List<DefaultInstanceVO> defaultInstanceVOS =
-                findAllInstanceOfRegistry(applicationName, instanceIp, instancePort);
+        List<DefaultInstanceVO> defaultInstanceVOS = findAllInstanceOfRegistry(instanceBO);
 
         List<DefaultInstanceVO> defaultInstanceVOListResult = findInstanceOfRedis(
-                defaultInstanceVOS, applicationName, instanceAddress);
+                defaultInstanceVOS, instanceBO.getApplicationName(), instanceAddress);
 
         defaultInstanceVOListResult = defaultInstanceVOListResult.stream()
                 .sorted(((o1, o2) -> {
@@ -108,23 +101,25 @@ public class InstanceServiceImpl implements InstanceService {
     /**
      * 查找注册中心里的所有服务
      */
-    private List<DefaultInstanceVO> findAllInstanceOfRegistry(String applicationName,
-                                                              String instanceIp,
-                                                              Integer instancePort) {
+    private List<DefaultInstanceVO> findAllInstanceOfRegistry(InstanceBO instanceBO) {
         List<InstanceInfo> instanceInfoList = new ArrayList<>();
 
-        List<String> allApplicationNames = applicationService.findAllApplicationNames();
+        List<String> allApplicationNames = applicationService.findAllApplicationNames(
+                instanceBO.getNamespaceName());
         for (String applicationNameOfRegistry : allApplicationNames) {
-            List<InstanceInfo> instanceInfos =
-                    applicationService.findInstance(applicationNameOfRegistry);
+            List<InstanceInfo> instanceInfos = applicationService.findInstance(
+                    instanceBO.getNamespaceName(), applicationNameOfRegistry);
             instanceInfoList.addAll(instanceInfos);
         }
 
         List<DefaultInstanceVO> defaultInstanceVOS =
                 InstanceHelper.toDefaultInstanceVO(instanceInfoList);
 
-        List<DefaultInstanceVO> filterResult =
-                filter(defaultInstanceVOS, applicationName, instanceIp, instancePort);
+        List<DefaultInstanceVO> filterResult = filter(
+                defaultInstanceVOS,
+                instanceBO.getApplicationName(),
+                instanceBO.getInstanceIp(),
+                instanceBO.getInstancePort());
         fillIsRunning(filterResult);
 
         return filterResult;

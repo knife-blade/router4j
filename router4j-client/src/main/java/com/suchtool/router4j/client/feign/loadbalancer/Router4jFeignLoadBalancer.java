@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * 根据Redis配置路由到某个实例
  */
 @Slf4j
-public class Router4jLoadBalancer implements ReactorServiceInstanceLoadBalancer {
+public class Router4jFeignLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 
     private final String serviceId;
 
@@ -47,8 +47,8 @@ public class Router4jLoadBalancer implements ReactorServiceInstanceLoadBalancer 
      *                                            {@link ServiceInstanceListSupplier} that will be used to get available instances
      * @param serviceId                           id of the service for which to choose an instance
      */
-    public Router4jLoadBalancer(ObjectProvider<ServiceInstanceListSupplier> serviceInstanceListSupplierProvider,
-                                String serviceId) {
+    public Router4jFeignLoadBalancer(ObjectProvider<ServiceInstanceListSupplier> serviceInstanceListSupplierProvider,
+                                     String serviceId) {
         this.serviceId = serviceId;
         this.serviceInstanceListSupplierProvider = serviceInstanceListSupplierProvider;
     }
@@ -81,7 +81,8 @@ public class Router4jLoadBalancer implements ReactorServiceInstanceLoadBalancer 
         // 去Redis查找匹配的实例
         InstanceInfo matchedInstance = clientPathRuleUtil.findMatchedInstance(serviceId, path);
         if (matchedInstance == null) {
-            return selectRandomInstance(serviceInstances);
+            return null;
+            // return selectRandomInstance(serviceInstances);
         }
 
         // 将特定应用的请求路由到指定实例
@@ -97,8 +98,9 @@ public class Router4jLoadBalancer implements ReactorServiceInstanceLoadBalancer 
             }
         }
 
+        return null;
         // 如果指定的实例不可用，则随机取一个可用的服务
-        return selectRandomInstance(serviceInstances);
+        // return selectRandomInstance(serviceInstances);
     }
 
     private Response<ServiceInstance> selectRandomInstance(List<ServiceInstance> serviceInstances) {

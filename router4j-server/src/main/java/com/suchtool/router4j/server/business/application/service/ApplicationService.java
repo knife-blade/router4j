@@ -6,7 +6,7 @@ import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import java.util.List;
 
 public interface ApplicationService {
-    List<String> findAllApplicationNames();
+    List<String> findAllApplicationNames(String namespaceName);
 
-    List<InstanceInfo> findInstance(String applicationName);
+    List<InstanceInfo> findInstance(String namespaceName, String applicationName);
 }

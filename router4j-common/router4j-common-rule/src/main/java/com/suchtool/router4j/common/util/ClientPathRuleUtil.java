@@ -95,7 +95,8 @@ public class ClientPathRuleUtil {
             instanceInfo = InstanceInfoHelper.assembleInstanceAddress(instanceAddress);
         }
 
-        return filterOnline(instanceInfo, applicationName);
+        return instanceInfo;
+        // return filterOnline(instanceInfo, applicationName);
     }
 
     /**
@@ -155,20 +156,19 @@ public class ClientPathRuleUtil {
     /**
      * 实例在线才返回，否则返回null
      */
-    private InstanceInfo filterOnline(InstanceInfo instanceInfo, String applicationName) {
-        if (instanceInfo == null) {
-            return null;
-        }
-
-        List<InstanceInfo> instanceInfos =
-                applicationInfoService.findInstances();
-        for (InstanceInfo instanceOfRegistry : instanceInfos) {
-            if (instanceOfRegistry.getHost().equals(instanceInfo.getHost())
-                && instanceOfRegistry.getPort() == instanceInfo.getPort()) {
-                return instanceInfo;
-            }
-        }
-
-        return null;
-    }
+    // private InstanceInfo filterOnline(InstanceInfo instanceInfo, String applicationName) {
+    //     if (instanceInfo == null) {
+    //         return null;
+    //     }
+    //
+    //     List<InstanceInfo> instanceInfos = applicationInfoService.findInstances();
+    //     for (InstanceInfo instanceOfRegistry : instanceInfos) {
+    //         if (instanceOfRegistry.getHost().equals(instanceInfo.getHost())
+    //             && instanceOfRegistry.getPort() == instanceInfo.getPort()) {
+    //             return instanceInfo;
+    //         }
+    //     }
+    //
+    //     return null;
+    // }
 }
