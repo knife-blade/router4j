@@ -80,7 +80,9 @@ public class NacosApplicationInfoServiceImpl implements ApplicationInfoService {
         List<InstanceInfo> instanceInfos = new ArrayList<>();
         for (NacosInstanceVO nacosInstanceVO : nacosInstanceVOS) {
             InstanceInfo instanceInfo = new InstanceInfo();
-            instanceInfo.setApplicationName(nacosInstanceVO.getInstanceId());
+            // nacos的服务名是这种格式：DEFAULT_GROUP@@router4j
+            String applicationName = nacosInstanceVO.getServiceName().split("@@")[1];
+            instanceInfo.setApplicationName(applicationName);
             instanceInfo.setHost(nacosInstanceVO.getIp());
             instanceInfo.setPort(nacosInstanceVO.getPort());
             instanceInfos.add(instanceInfo);
