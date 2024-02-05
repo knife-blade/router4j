@@ -11,6 +11,18 @@
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <error-log class="errLog-container right-menu-item hover-effect" />
+
+        <el-card>
+          <el-form :inline="true">
+            <el-form-item label="命名空间">
+              <!--<el-select v-model="pageQuery.applicationName" placeholder="输入或选择"-->
+              <!--           filterable allow-create clearable style="width: 150px" class="filter-item"-->
+              <!--           @change="findInstanceAddressesForPage">-->
+              <!--  <el-option v-for="item in pageResultList.applicationNames" :key="item" :label="item" :value="item"/>-->
+              <!--</el-select>-->
+            </el-form-item>
+          </el-form>
+        </el-card>
       </template>
     </div>
   </div>

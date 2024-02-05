@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,6 +24,18 @@ import java.util.List;
 public class ApplicationController {
     @Autowired
     private ApplicationInfoService applicationInfoService;
+
+    @ApiOperation("是否存在命名空间")
+    @GetMapping("checkNamespaceExist")
+    public Boolean checkNamespaceExist() {
+        return applicationInfoService.checkNamespaceExist();
+    }
+
+    @ApiOperation("获取所有的命名空间")
+    @GetMapping("findAllNameSpaces")
+    public List<String> findAllNameSpaces() {
+        return applicationInfoService.findAllNameSpaces();
+    }
 
     @ApiOperation("获取所有的应用")
     @GetMapping("findAllApplication")

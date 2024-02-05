@@ -27,7 +27,7 @@ public class NacosApplicationInfoServiceImpl implements ApplicationInfoService {
     private NacosOpenApiUtil nacosOpenApiUtil;
 
     @Override
-    public Boolean namespaceExist() {
+    public Boolean checkNamespaceExist() {
         return true;
     }
 

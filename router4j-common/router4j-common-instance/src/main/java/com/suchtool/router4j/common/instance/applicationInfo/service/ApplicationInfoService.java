@@ -9,7 +9,7 @@ import com.suchtool.router4j.common.instance.applicationInfo.vo.ApplicationVO;
 import java.util.List;
 
 public interface ApplicationInfoService {
-    default Boolean namespaceExist(){
+    default Boolean checkNamespaceExist(){
         return false;
     }
 
