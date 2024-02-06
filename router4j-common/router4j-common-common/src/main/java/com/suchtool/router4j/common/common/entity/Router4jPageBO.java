@@ -9,5 +9,5 @@ public class Router4jPageBO {
     private long pageNo;
 
     @ApiModelProperty("每页项数")
-    private long pageSize;
+    private long pageSize = 10;
 }

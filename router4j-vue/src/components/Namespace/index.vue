@@ -27,12 +27,6 @@ export default {
     }
   },
 
-  computed: {
-    namespaceName() {
-      return this.$store.state.namespace.namespaceName;
-    }
-  },
-
   methods: {
     checkNamespaceExist() {
       APIFindNamespaceExist().then(response => {
@@ -47,8 +41,10 @@ export default {
         this.namespaceNameList = response.data;
       })
     },
-    updateActiveNamespace() {
-      this.$store.commit('namespace/WRITE_NAMESPACE_NAME', this.namespaceName);
+    updateActiveNamespace(namespaceName) {
+      console.log("更新:" + namespaceName)
+      this.$store.commit('namespace/WRITE_NAMESPACE_NAME', namespaceName);
+      console.log("读取：" + this.$store.state.namespace.namespaceName)
     },
   },
   created() {

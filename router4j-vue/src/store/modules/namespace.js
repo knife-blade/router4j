@@ -7,7 +7,7 @@ const state = {
 
 const mutations = {
     WRITE_NAMESPACE_NAME(state, namespaceName) {
-        this.state.namespaceName = namespaceName;
+        state.namespaceName = namespaceName;
     }
 }
 

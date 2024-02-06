@@ -172,7 +172,7 @@ export default {
       listMultipleSelection: [],
       total: 0,
       pageQuery: {
-        pageNo: 0,
+        pageNo: 1,
         pageSize: 10,
         applicationName: undefined,
         instanceAddress: undefined,
@@ -221,8 +221,10 @@ export default {
 
     getPage() {
       APIPage(this.pageQuery).then(response => {
-        this.list = response.data.dataList
-        this.total = response.data.total
+        if (response.data !== null) {
+          this.list = response.data.dataList;
+          this.total = response.data.total
+        }
       })
     },
     findData() {

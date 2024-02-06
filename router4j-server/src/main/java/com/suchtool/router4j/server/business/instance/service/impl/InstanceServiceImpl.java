@@ -41,8 +41,7 @@ public class InstanceServiceImpl implements InstanceService {
     @Override
     public Router4jPageVO<DefaultInstanceVO> findDefaultInstancePage(InstanceBO instanceBO,
                                                                      Router4jPageBO router4jPageBO) {
-        List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(
-                instanceBO);
+        List<DefaultInstanceVO> defaultInstanceList = findDefaultInstance(instanceBO);
         return Router4jPageUtil.toPage(defaultInstanceList, router4jPageBO);
     }
 

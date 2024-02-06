@@ -213,8 +213,9 @@ export default {
       },
       total: 0,
       pageQuery: {
-        pageNo: 0,
+        pageNo: 1,
         pageSize: 10,
+        namespaceName: '',
         applicationName: undefined,
         instanceIp: undefined,
         instancePort: undefined
@@ -222,6 +223,7 @@ export default {
       pageResultList: null,
       pageMultipleSelection: [],
       dialogData: {
+        namespaceName: '',
         applicationName: '',
         instanceIp: '',
         instancePort: null,
@@ -266,9 +268,12 @@ export default {
     },
 
     getPage() {
+      this.pageQuery.namespaceName = this.$store.state.namespace.namespaceName;
       APIFindDefaultInstancePage(this.pageQuery).then(response => {
-        this.pageResultList = response.data.dataList
-        this.total = response.data.total
+        if (response.data !== null) {
+          this.pageResultList = response.data.dataList;
+          this.total = response.data.total
+        }
       })
     },
     findData() {
@@ -293,18 +298,24 @@ export default {
     },
 
     findInstanceForHeader() {
+      this.pageQuery.namespaceName = this.$store.state.namespace.namespaceName;
       APIFindAllInstance(this.pageQuery).then((response) => {
-        this.headerResultArray.applicationNames = response.data.applicationNameList;
-        this.headerResultArray.instanceIps = response.data.instanceIpList;
-        this.headerResultArray.instancePorts = response.data.instancePortList;
+        if (response.data) {
+          this.headerResultArray.applicationNames = response.data.applicationNameList;
+          this.headerResultArray.instanceIps = response.data.instanceIpList;
+          this.headerResultArray.instancePorts = response.data.instancePortList;
+        }
       })
     },
 
     findInstanceForDialog() {
+      this.dialogData.namespaceName = this.$store.state.namespace.namespaceName;
       APIFindAllInstance(this.dialogData).then((response) => {
-        this.dialogResultArray.applicationNames = response.data.applicationNameList;
-        this.dialogResultArray.instanceIps = response.data.instanceIpList;
-        this.dialogResultArray.instancePorts = response.data.instancePortList;
+        if (response.data !== null) {
+          this.dialogResultArray.applicationNames = response.data.applicationNameList;
+          this.dialogResultArray.instanceIps = response.data.instanceIpList;
+          this.dialogResultArray.instancePorts = response.data.instancePortList;
+        }
       })
     },
 
