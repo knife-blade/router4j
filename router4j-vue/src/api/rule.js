@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchPage(query) {
+export function APIPage(query) {
   return request({
     url: '/rule/page',
     method: 'get',
@@ -8,7 +8,7 @@ export function fetchPage(query) {
   })
 }
 
-export function add(data) {
+export function APIAdd(data) {
   return request({
     url: '/rule/add',
     method: 'post',
@@ -16,7 +16,7 @@ export function add(data) {
   })
 }
 
-export function edit(data) {
+export function APIEdit(data) {
   return request({
     url: '/rule/edit',
     method: 'post',
@@ -24,7 +24,7 @@ export function edit(data) {
   })
 }
 
-export function deleteAccurate(data) {
+export function APIDeleteAccurate(data) {
   return request({
     url: '/rule/deleteAccurate',
     method: 'post',
@@ -32,7 +32,7 @@ export function deleteAccurate(data) {
   })
 }
 
-export function deleteAccurateBatch(data) {
+export function APIDeleteAccurateBatch(data) {
   return request({
     url: '/rule/deleteAccurateBatch',
     method: 'post',
@@ -40,7 +40,7 @@ export function deleteAccurateBatch(data) {
   })
 }
 
-export function deleteFuzzy(data) {
+export function APIDeleteFuzzy(data) {
   return request({
     url: '/rule/deleteFuzzy',
     method: 'post',
@@ -48,7 +48,7 @@ export function deleteFuzzy(data) {
   })
 }
 
-export function findApplicationNames(query) {
+export function APIFindApplicationNames(query) {
   return request({
     url: '/rule/findApplicationNames',
     method: 'get',
@@ -56,7 +56,7 @@ export function findApplicationNames(query) {
   })
 }
 
-export function findInstanceAddresses(query) {
+export function APIFindInstanceAddresses(query) {
   return request({
     url: '/rule/findInstanceAddresses',
     method: 'get',

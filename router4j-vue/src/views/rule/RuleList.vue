@@ -138,14 +138,14 @@
 
 <script>
 import {
-  fetchPage,
-  add,
-  edit,
-  deleteAccurate,
-  deleteAccurateBatch,
-  deleteFuzzy,
-  findApplicationNames,
-  findInstanceAddresses
+  APIPage,
+  APIAdd,
+  APIEdit,
+  APIDeleteAccurate,
+  APIDeleteAccurateBatch,
+  APIDeleteFuzzy,
+  APIFindApplicationNames,
+  APIFindInstanceAddresses
 } from '@/api/rule'
 import variables from '@/styles/variables.scss'
 import waves from '@/directive/waves' // waves directive
@@ -220,7 +220,7 @@ export default {
     },
 
     getPage() {
-      fetchPage(this.pageQuery).then(response => {
+      APIPage(this.pageQuery).then(response => {
         this.list = response.data.dataList
         this.total = response.data.total
       })
@@ -244,7 +244,7 @@ export default {
     },
 
     findAllApplicationNames() {
-      findApplicationNames(null).then((response) => {
+      APIFindApplicationNames(null).then((response) => {
         this.pageResultList.applicationNames = response.data
         this.dialogResultList.applicationNames = response.data
       })
@@ -254,7 +254,7 @@ export default {
       let query = {
         applicationName: this.pageQuery.applicationName
       }
-      findInstanceAddresses(query).then((response) => {
+      APIFindInstanceAddresses(query).then((response) => {
         this.pageResultList.instanceAddresses = response.data
       })
     },
@@ -263,7 +263,7 @@ export default {
       let query = {
         applicationName: this.dialogData.applicationName
       }
-      findInstanceAddresses(query).then((response) => {
+      APIFindInstanceAddresses(query).then((response) => {
         this.dialogResultList.instanceAddresses = response.data
       })
     },
@@ -280,7 +280,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          add(this.dialogData).then(() => {
+          APIAdd(this.dialogData).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -316,7 +316,7 @@ export default {
             newInstanceAddress: this.dialogData.instanceAddress,
             newPathPattern: this.dialogData.pathPattern,
           }
-          edit(requestBody).then(() => {
+          APIEdit(requestBody).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -331,7 +331,7 @@ export default {
     },
 
     deleteFuzzy() {
-      deleteFuzzy(this.pageQuery).then(() => {
+      APIDeleteFuzzy(this.pageQuery).then(() => {
         this.$notify({
           title: '成功',
           message: '删除成功',
@@ -343,7 +343,7 @@ export default {
     },
 
     deleteDataAccurate(row, index) {
-      deleteAccurate(row).then(() => {
+      APIDeleteAccurate(row).then(() => {
         this.$notify({
           title: '成功',
           message: '删除成功',
@@ -355,7 +355,7 @@ export default {
     },
 
     deleteDataAccurateBatch() {
-      deleteAccurateBatch(this.listMultipleSelection).then(() => {
+      APIDeleteAccurateBatch(this.listMultipleSelection).then(() => {
         this.$notify({
           title: '成功',
           message: '删除成功',

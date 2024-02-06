@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import {findNamespaceExist, findAllNamespaces} from "@/api/application";
+import {APIFindNamespaceExist, APIFindAllNamespaces} from "@/api/application";
 
 export default {
   name: "Namespace",
@@ -35,12 +35,15 @@ export default {
 
   methods: {
     checkNamespaceExist() {
-      findNamespaceExist().then(response => {
+      APIFindNamespaceExist().then(response => {
         this.namespaceExist = response.data;
+        if (this.namespaceExist) {
+          this.findAllNamespaces();
+        }
       })
     },
     findAllNamespaces() {
-      findAllNamespaces().then(response => {
+      APIFindAllNamespaces().then(response => {
         this.namespaceNameList = response.data;
       })
     },
@@ -50,7 +53,6 @@ export default {
   },
   created() {
     this.checkNamespaceExist();
-    this.findAllNamespaces();
   },
 }
 </script>

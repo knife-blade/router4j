@@ -191,9 +191,9 @@
 
 <script>
 import {
-  findAllInstance,
-  findDefaultInstancePage,
-  setupDefaultInstance
+  APIFindAllInstance,
+  APIFindDefaultInstancePage,
+  APISetupDefaultInstance
 } from '@/api/defaultInstance'
 import variables from '@/styles/variables.scss'
 import waves from '@/directive/waves' // waves directive
@@ -266,7 +266,7 @@ export default {
     },
 
     getPage() {
-      findDefaultInstancePage(this.pageQuery).then(response => {
+      APIFindDefaultInstancePage(this.pageQuery).then(response => {
         this.pageResultList = response.data.dataList
         this.total = response.data.total
       })
@@ -293,7 +293,7 @@ export default {
     },
 
     findInstanceForHeader() {
-      findAllInstance(this.pageQuery).then((response) => {
+      APIFindAllInstance(this.pageQuery).then((response) => {
         this.headerResultArray.applicationNames = response.data.applicationNameList;
         this.headerResultArray.instanceIps = response.data.instanceIpList;
         this.headerResultArray.instancePorts = response.data.instancePortList;
@@ -301,7 +301,7 @@ export default {
     },
 
     findInstanceForDialog() {
-      findAllInstance(this.dialogData).then((response) => {
+      APIFindAllInstance(this.dialogData).then((response) => {
         this.dialogResultArray.applicationNames = response.data.applicationNameList;
         this.dialogResultArray.instanceIps = response.data.instanceIpList;
         this.dialogResultArray.instancePorts = response.data.instancePortList;
@@ -334,7 +334,7 @@ export default {
         }
       }
 
-      setupDefaultInstance(requestBodyArray).then(() => {
+      APISetupDefaultInstance(requestBodyArray).then(() => {
         this.dialogFormVisible = false
         this.$notify({
           title: '成功',
@@ -365,7 +365,7 @@ export default {
       let requestBodyArray = [];
       requestBodyArray.push(requestBody);
 
-      setupDefaultInstance(requestBodyArray).then(() => {
+      APISetupDefaultInstance(requestBodyArray).then(() => {
         this.dialogFormVisible = false
         this.$notify({
           title: '成功',
@@ -383,7 +383,7 @@ export default {
           let requestBody = [];
           requestBody.push(this.dialogData);
 
-          setupDefaultInstance(requestBody).then(() => {
+          APISetupDefaultInstance(requestBody).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -425,7 +425,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          setupDefaultInstance(this.dialogData).then(() => {
+          APISetupDefaultInstance(this.dialogData).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

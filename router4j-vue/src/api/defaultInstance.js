@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-export function findAllInstance(query) {
+export function APIFindAllInstance(query) {
   return request({
     url: '/instance/findAllInstance',
     method: 'get',
@@ -7,7 +7,7 @@ export function findAllInstance(query) {
   })
 }
 
-export function findDefaultInstancePage(query) {
+export function APIFindDefaultInstancePage(query) {
   return request({
     url: '/instance/findDefaultInstancePage',
     method: 'get',
@@ -15,7 +15,7 @@ export function findDefaultInstancePage(query) {
   })
 }
 
-export function setupDefaultInstance(data) {
+export function APISetupDefaultInstance(data) {
   return request({
     url: '/instance/setupDefaultInstance',
     method: 'post',

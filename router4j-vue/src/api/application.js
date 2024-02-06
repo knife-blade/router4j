@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function findApplicationNames(query) {
+export function APIFindApplicationNames(query) {
   return request({
     url: '/application/findAllApplication',
     method: 'get',
@@ -8,7 +8,7 @@ export function findApplicationNames(query) {
   })
 }
 
-export function findInstanceAddresses(query) {
+export function APIInstanceAddresses(query) {
   return request({
     url: '/application/findInstance',
     method: 'get',
@@ -16,7 +16,7 @@ export function findInstanceAddresses(query) {
   })
 }
 
-export function findNamespaceExist(query) {
+export function APIFindNamespaceExist(query) {
   return request({
     url: '/application/checkNamespaceExist',
     method: 'get',
@@ -24,7 +24,7 @@ export function findNamespaceExist(query) {
   })
 }
 
-export function findAllNamespaces(query) {
+export function APIFindAllNamespaces(query) {
   return request({
     url: '/application/findAllNamespaces',
     method: 'get',
