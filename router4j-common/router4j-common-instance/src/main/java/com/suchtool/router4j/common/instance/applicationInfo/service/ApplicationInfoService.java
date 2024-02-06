@@ -17,7 +17,7 @@ public interface ApplicationInfoService {
      * 获得所有命名空间
      * @return 命名空间ID列表
      */
-    default List<String> findAllNameSpaces(){
+    default List<String> findAllNamespaces(){
         return null;
     }
 

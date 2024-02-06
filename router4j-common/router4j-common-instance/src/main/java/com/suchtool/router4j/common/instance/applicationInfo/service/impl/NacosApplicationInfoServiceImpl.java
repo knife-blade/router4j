@@ -32,7 +32,7 @@ public class NacosApplicationInfoServiceImpl implements ApplicationInfoService {
     }
 
     @Override
-    public List<String> findAllNameSpaces() {
+    public List<String> findAllNamespaces() {
         List<NacosNamespaceVO> nacosNamespaceVOS = nacosOpenApiUtil.queryAllNamespace();
         if (CollectionUtils.isEmpty(nacosNamespaceVOS)) {
             return null;

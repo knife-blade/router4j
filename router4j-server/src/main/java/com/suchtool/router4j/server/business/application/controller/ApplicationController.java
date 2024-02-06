@@ -32,9 +32,9 @@ public class ApplicationController {
     }
 
     @ApiOperation("获取所有的命名空间")
-    @GetMapping("findAllNameSpaces")
-    public List<String> findAllNameSpaces() {
-        return applicationInfoService.findAllNameSpaces();
+    @GetMapping("findAllNamespaces")
+    public List<String> findAllNamespaces() {
+        return applicationInfoService.findAllNamespaces();
     }
 
     @ApiOperation("获取所有的应用")
