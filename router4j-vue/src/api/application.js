@@ -15,3 +15,19 @@ export function findInstanceAddresses(query) {
     params: query
   })
 }
+
+export function findNamespaceExist(query) {
+  return request({
+    url: '/application/checkNamespaceExist',
+    method: 'get',
+    params: query
+  })
+}
+
+export function findAllNamespaces(query) {
+  return request({
+    url: '/application/findAllNamespaces',
+    method: 'get',
+    params: query
+  })
+}
