@@ -1,5 +1,5 @@
 server:
-  port: 8100
+  port: 9900
 
 spring:
   application:
@@ -24,4 +24,3 @@ suchtool:
   #     defaultInstancePrefix: "router4j:rule:defaultInstance"
   #   instruction:
   #     cacheKey: "router4j:instruction"
-

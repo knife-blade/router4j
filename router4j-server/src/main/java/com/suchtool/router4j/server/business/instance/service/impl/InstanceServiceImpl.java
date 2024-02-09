@@ -116,7 +116,9 @@ public class InstanceServiceImpl implements InstanceService {
         for (String applicationNameOfRegistry : allApplicationNames) {
             List<InstanceInfo> instanceInfos = applicationService.findInstance(
                     instanceBO.getNamespaceName(), applicationNameOfRegistry);
-            instanceInfoList.addAll(instanceInfos);
+            if (instanceInfos != null) {
+                instanceInfoList.addAll(instanceInfos);
+            }
         }
 
         List<DefaultInstanceVO> defaultInstanceVOS =

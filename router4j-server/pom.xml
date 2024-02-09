@@ -13,9 +13,6 @@
     <version>1.0.0</version>
     <name>router4j-server</name>
     <description>router4j-server Project</description>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
 
     <profiles>
 
@@ -103,12 +100,6 @@
         <dependency>
             <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-instance</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.suchtool</groupId>
-            <artifactId>nacos-open-api-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
 

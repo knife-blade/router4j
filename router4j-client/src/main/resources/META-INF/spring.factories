@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.suchtool.router4j.client.feign.configuration.Router4jFeignClientConfiguration
+  com.suchtool.router4j.client.feign.configuration.Router4jFeignClientConfiguration,\
+  com.suchtool.router4j.client.gateway.configuration.Router4jGatewayClientConfiguration

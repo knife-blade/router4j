@@ -81,8 +81,7 @@ public class Router4jFeignLoadBalancer implements ReactorServiceInstanceLoadBala
         // 去Redis查找匹配的实例
         InstanceInfo matchedInstance = clientPathRuleUtil.findMatchedInstance(serviceId, path);
         if (matchedInstance == null) {
-            return null;
-            // return selectRandomInstance(serviceInstances);
+            return selectRandomInstance(serviceInstances);
         }
 
         // 将特定应用的请求路由到指定实例
