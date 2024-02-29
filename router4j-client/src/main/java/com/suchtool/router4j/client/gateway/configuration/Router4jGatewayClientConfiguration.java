@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(value = "suchtool.router4j.gateway.enabled", havingValue = "true", matchIfMissing = true)
 @Configuration(proxyBeanMethods = false)
 public class Router4jGatewayClientConfiguration {
-    @Bean("com.suchtool.router4j.router4jClientFilter")
+    @Bean("com.suchtool.router4j.client.router4jClientFilter")
     public Router4jSpringCloudGatewayFilter router4jClientFilter() {
         return new Router4jSpringCloudGatewayFilter();
     }
 
-    @Bean("com.suchtool.router4j.router4jGatewayProperty")
+    @Bean("com.suchtool.router4j.client.router4jGatewayProperty")
     @ConfigurationProperties(prefix = "suchtool.router4j.gateway")
     public Router4jGatewayProperty router4jGatewayProperty() {
         return new Router4jGatewayProperty();

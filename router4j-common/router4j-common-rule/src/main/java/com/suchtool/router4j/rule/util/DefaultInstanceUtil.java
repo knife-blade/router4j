@@ -1,10 +1,10 @@
-package com.suchtool.router4j.common.util;
+package com.suchtool.router4j.rule.util;
 
-import com.suchtool.router4j.common.entity.DefaultInstanceInfo;
-import com.suchtool.router4j.common.helper.ParseRuleKeyHelper;
-import com.suchtool.router4j.common.helper.RuleKeyHelper;
-import com.suchtool.router4j.common.property.RuleProperties;
-import com.suchtool.router4j.common.redis.RedissonHolder;
+import com.suchtool.router4j.rule.entity.DefaultInstanceInfo;
+import com.suchtool.router4j.rule.helper.ParseRuleKeyHelper;
+import com.suchtool.router4j.rule.helper.RuleKeyHelper;
+import com.suchtool.router4j.rule.property.RuleProperties;
+import com.suchtool.router4j.rule.redis.RedissonHolder;
 import org.redisson.api.RBucket;
 import org.redisson.api.RKeys;
 import org.springframework.beans.factory.annotation.Autowired;

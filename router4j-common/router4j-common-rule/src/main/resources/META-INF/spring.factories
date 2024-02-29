@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.suchtool.router4j.common.config.UtilConfiguration,\
-  com.suchtool.router4j.common.config.PropertiesConfiguration
+  com.suchtool.router4j.rule.configuration.UtilConfiguration,\
+  com.suchtool.router4j.rule.configuration.PropertiesConfiguration

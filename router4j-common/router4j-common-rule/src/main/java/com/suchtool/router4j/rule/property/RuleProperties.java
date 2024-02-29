@@ -1,4 +1,4 @@
-package com.suchtool.router4j.common.property;
+package com.suchtool.router4j.rule.property;
 
 import lombok.Data;
 

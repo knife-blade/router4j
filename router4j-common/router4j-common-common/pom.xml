@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.suchtool</groupId>
         <artifactId>router4j-common</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>router4j-common-common</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>router4j-common-common</name>
     <description>router4j-common-common Project</description>
 

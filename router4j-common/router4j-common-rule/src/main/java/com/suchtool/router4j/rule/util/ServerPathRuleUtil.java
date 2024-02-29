@@ -1,13 +1,13 @@
-package com.suchtool.router4j.common.util;
+package com.suchtool.router4j.rule.util;
 
-import com.suchtool.router4j.common.constant.RedisConstant;
-import com.suchtool.router4j.common.entity.PathRuleRequest;
-import com.suchtool.router4j.common.entity.PathPatternInfo;
-import com.suchtool.router4j.common.helper.ParseRuleKeyHelper;
-import com.suchtool.router4j.common.helper.PathMatchHelper;
-import com.suchtool.router4j.common.helper.RuleKeyHelper;
-import com.suchtool.router4j.common.property.RuleProperties;
-import com.suchtool.router4j.common.redis.RedissonHolder;
+import com.suchtool.router4j.rule.constant.RedisConstant;
+import com.suchtool.router4j.rule.entity.PathRuleRequest;
+import com.suchtool.router4j.rule.entity.PathPatternInfo;
+import com.suchtool.router4j.rule.helper.ParseRuleKeyHelper;
+import com.suchtool.router4j.rule.helper.PathMatchHelper;
+import com.suchtool.router4j.rule.helper.RuleKeyHelper;
+import com.suchtool.router4j.rule.property.RuleProperties;
+import com.suchtool.router4j.rule.redis.RedissonHolder;
 import org.redisson.api.RKeys;
 import org.redisson.api.RList;
 import org.springframework.beans.factory.annotation.Autowired;

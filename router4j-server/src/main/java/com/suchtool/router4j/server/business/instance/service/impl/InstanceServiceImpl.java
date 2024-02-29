@@ -2,8 +2,8 @@ package com.suchtool.router4j.server.business.instance.service.impl;
 
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import com.suchtool.router4j.common.common.util.Router4jPageUtil;
-import com.suchtool.router4j.common.entity.DefaultInstanceInfo;
-import com.suchtool.router4j.common.util.DefaultInstanceUtil;
+import com.suchtool.router4j.rule.entity.DefaultInstanceInfo;
+import com.suchtool.router4j.rule.util.DefaultInstanceUtil;
 import com.suchtool.router4j.server.business.application.service.ApplicationService;
 import com.suchtool.router4j.server.business.instance.helper.InstanceHelper;
 import com.suchtool.router4j.server.business.instance.bo.DefaultInstanceBO;

@@ -1,4 +1,4 @@
-package com.suchtool.router4j.common.constant;
+package com.suchtool.router4j.rule.constant;
 
 public interface RedisConstant {
     String SEPARATOR = ":";

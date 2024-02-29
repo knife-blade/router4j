@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @LoadBalancerClients(defaultConfiguration = Router4jFeignLoadBalancerConfiguration.class)
 public class Router4jFeignClientConfiguration {
-    @Bean("com.suchtool.router4j.router4jFeignProperty")
+    @Bean("com.suchtool.router4j.client.router4jFeignProperty")
     @ConfigurationProperties(prefix = "suchtool.router4j.feign")
     public Router4jFeignProperty router4jFeignProperty() {
         return new Router4jFeignProperty();

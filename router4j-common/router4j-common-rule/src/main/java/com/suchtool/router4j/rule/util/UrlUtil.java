@@ -1,4 +1,4 @@
-package com.suchtool.router4j.common.util;
+package com.suchtool.router4j.rule.util;
 
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;

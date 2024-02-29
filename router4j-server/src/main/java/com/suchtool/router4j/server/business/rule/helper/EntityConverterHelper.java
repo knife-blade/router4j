@@ -1,6 +1,6 @@
 package com.suchtool.router4j.server.business.rule.helper;
 
-import com.suchtool.router4j.common.entity.PathRuleRequest;
+import com.suchtool.router4j.rule.entity.PathRuleRequest;
 import com.suchtool.router4j.server.business.rule.request.RuleAddReq;
 import com.suchtool.router4j.server.business.rule.request.RuleDeleteAccurateReq;
 import com.suchtool.router4j.server.business.rule.request.RuleDeleteFuzzyReq;

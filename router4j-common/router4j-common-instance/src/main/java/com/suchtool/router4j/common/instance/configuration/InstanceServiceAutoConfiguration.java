@@ -18,7 +18,7 @@ public class InstanceServiceAutoConfiguration {
     @ConditionalOnMissingClass("com.alibaba.cloud.nacos.NacosServiceAutoConfiguration")
     @Configuration(proxyBeanMethods = false)
     protected static class DefaultApplicationInfoServiceImplConfiguration {
-        @Bean("com.suchtool.router4j.defaultApplicationInfoServiceImpl")
+        @Bean("com.suchtool.router4j.instance.defaultApplicationInfoServiceImpl")
         public ApplicationInfoService defaultApplicationInfoServiceImpl() {
             return new DefaultApplicationInfoServiceImpl();
         }
@@ -27,7 +27,7 @@ public class InstanceServiceAutoConfiguration {
     @ConditionalOnClass(NacosServiceAutoConfiguration.class)
     @Configuration(proxyBeanMethods = false)
     protected static class NacosApplicationInfoServiceImplConfiguration {
-        @Bean("com.suchtool.router4j.nacosApplicationInfoServiceImplConfiguration")
+        @Bean("com.suchtool.router4j.instance.nacosApplicationInfoServiceImplConfiguration")
         public ApplicationInfoService nacosApplicationInfoServiceImplConfiguration() {
             return new NacosApplicationInfoServiceImpl();
         }

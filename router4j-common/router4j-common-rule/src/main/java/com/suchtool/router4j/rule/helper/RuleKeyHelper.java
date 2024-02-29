@@ -1,6 +1,6 @@
-package com.suchtool.router4j.common.helper;
+package com.suchtool.router4j.rule.helper;
 
-import com.suchtool.router4j.common.constant.RedisConstant;
+import com.suchtool.router4j.rule.constant.RedisConstant;
 import org.springframework.util.StringUtils;
 
 /**

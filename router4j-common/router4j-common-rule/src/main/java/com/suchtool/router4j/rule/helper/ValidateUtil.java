@@ -1,4 +1,4 @@
-package com.suchtool.router4j.common.helper;
+package com.suchtool.router4j.rule.helper;
 
 /**
  * 校验工具

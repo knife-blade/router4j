@@ -17,7 +17,7 @@
 package com.suchtool.router4j.client.feign.loadbalancer;
 
 import com.suchtool.router4j.common.common.entity.InstanceInfo;
-import com.suchtool.router4j.common.util.ClientPathRuleUtil;
+import com.suchtool.router4j.rule.util.ClientPathRuleUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
