@@ -87,7 +87,7 @@ gitee：[https://gitee.com/knifeedge/router4j](https://gitee.com/knifeedge/route
 <dependency>
     <groupId>com.suchtool</groupId>
     <artifactId>router4j-client-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 

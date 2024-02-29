@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.suchtool</groupId>
         <artifactId>router4j</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>router4j-client-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>router4j-client-spring-boot-starter</name>
 
     <description>dynamic router for client</description>
@@ -48,13 +48,13 @@
         <dependency>
             <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-rule</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
             <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-instance</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 

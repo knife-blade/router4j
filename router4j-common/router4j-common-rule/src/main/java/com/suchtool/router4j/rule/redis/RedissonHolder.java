@@ -1,7 +1,7 @@
-package com.suchtool.router4j.common.redis;
+package com.suchtool.router4j.rule.redis;
 
 import com.suchtool.niceutil.util.spring.ApplicationContextHolder;
-import com.suchtool.router4j.common.property.RedisProperties;
+import com.suchtool.router4j.rule.property.RedisProperties;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;

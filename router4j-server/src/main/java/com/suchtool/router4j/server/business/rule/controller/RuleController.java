@@ -1,9 +1,9 @@
 package com.suchtool.router4j.server.business.rule.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import com.suchtool.router4j.common.entity.PathPatternInfo;
-import com.suchtool.router4j.common.entity.PathRuleRequest;
-import com.suchtool.router4j.common.util.ServerPathRuleUtil;
+import com.suchtool.router4j.rule.entity.PathPatternInfo;
+import com.suchtool.router4j.rule.entity.PathRuleRequest;
+import com.suchtool.router4j.rule.util.ServerPathRuleUtil;
 import com.suchtool.router4j.server.business.rule.helper.EntityConverterHelper;
 import com.suchtool.router4j.server.business.rule.request.RuleAddReq;
 import com.suchtool.router4j.server.business.rule.request.RuleDeleteAccurateReq;

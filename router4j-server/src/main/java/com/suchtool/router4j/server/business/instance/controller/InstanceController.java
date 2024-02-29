@@ -1,7 +1,7 @@
 package com.suchtool.router4j.server.business.instance.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import com.suchtool.router4j.common.util.DefaultInstanceUtil;
+import com.suchtool.router4j.rule.util.DefaultInstanceUtil;
 import com.suchtool.router4j.server.business.instance.bo.DefaultInstanceBO;
 import com.suchtool.router4j.server.business.instance.service.InstanceService;
 import com.suchtool.router4j.server.business.instance.vo.DefaultInstanceVO;

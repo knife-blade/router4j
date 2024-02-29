@@ -1,4 +1,4 @@
-package com.suchtool.router4j.common.entity;
+package com.suchtool.router4j.rule.entity;
 
 import lombok.Data;
 

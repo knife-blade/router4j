@@ -1,9 +1,9 @@
-package com.suchtool.router4j.common.config;
+package com.suchtool.router4j.rule.configuration;
 
-import com.suchtool.router4j.common.util.ClientPathRuleUtil;
-import com.suchtool.router4j.common.util.DefaultInstanceUtil;
-import com.suchtool.router4j.common.util.ServerPathRuleUtil;
-import com.suchtool.router4j.common.util.UrlUtil;
+import com.suchtool.router4j.rule.util.ClientPathRuleUtil;
+import com.suchtool.router4j.rule.util.DefaultInstanceUtil;
+import com.suchtool.router4j.rule.util.ServerPathRuleUtil;
+import com.suchtool.router4j.rule.util.UrlUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
