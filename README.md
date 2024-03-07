@@ -12,11 +12,11 @@ Java后端在开发SpringCloud项目时如果同一个应用起了多个实例�
 1.  无法将指定的feign的url请求强制转到个人电脑。
 1.  如果有人打了断点调试，很可能影响测试环境，因为网关的请求和feign请求还是会经常请求到打了断点的那个电脑。
 
-本文介绍的router4j可以解决这个问题，是我个人写的中间件。它可以设置将指定的url的请求路由到指定的机器。
+本文的router4j可以解决这个问题：它可以设置将指定的url的请求路由到指定的机器。
 
 **官网网址**
 
-官网文档：[router4j官网](https://www.yuque.com/knifeblade/opensource/router4j "router4j官网")（首先在官网更新，不定时同步到[CSDN博客](https://knife.blog.csdn.net/article/details/126930621 "CSDN博客")）
+官网文档：
 
 github：[https://github.com/knife-blade/router4j](https://github.com/knife-blade/router4j "https://github.com/knife-blade/router4j")
 
@@ -87,7 +87,7 @@ gitee：[https://gitee.com/knifeedge/router4j](https://gitee.com/knifeedge/route
 <dependency>
     <groupId>com.suchtool</groupId>
     <artifactId>router4j-client-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
