@@ -7,12 +7,12 @@
     <parent>
         <groupId>com.suchtool</groupId>
         <artifactId>router4j</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>router4j-common</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
 
     <modules>

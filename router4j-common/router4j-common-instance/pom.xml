@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.suchtool</groupId>
         <artifactId>router4j-common</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>router4j-common-instance</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>router4j-common-instance</name>
     <description>router4j-common-instance Project</description>
 
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>com.suchtool</groupId>
             <artifactId>router4j-common-common</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
 
         <dependency>
